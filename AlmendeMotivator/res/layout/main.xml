@@ -15,18 +15,18 @@
             android:layout_height="wrap_content"
             android:text="Your Profile"
             android:id="@+id/profileBut" android:layout_marginLeft="20dp" android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
+            android:onClick="switchMessages" android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
     <Button android:layout_width="270dp" android:layout_height="wrap_content" android:text="Messages"
             android:id="@+id/messagesBut" android:layout_marginLeft="20dp" android:layout_marginTop="10dp"
             android:onClick="switchMessages" android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
     <Button android:layout_width="270dp" android:layout_height="wrap_content" android:text="Challenges"
             android:id="@+id/challengesBut" android:layout_marginLeft="20dp" android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
+            android:onClick="switchMessages" android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
     <Button android:layout_width="270dp" android:layout_height="wrap_content" android:text="My Friends"
             android:id="@+id/friendsBut" android:layout_marginLeft="20dp" android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
+            android:onClick="switchMessages" android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
     <Button android:layout_width="270dp" android:layout_height="wrap_content" android:text="Motivation Message"
             android:id="@+id/motivateBut" android:layout_marginLeft="20dp" android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
+            android:onClick="switchMessages" android:layout_marginBottom="10dp" android:layout_weight="0.05" android:textSize="26dp"/>
 </LinearLayout>
 

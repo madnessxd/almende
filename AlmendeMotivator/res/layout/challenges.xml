@@ -5,4 +5,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText" android:text="Challenges" android:textSize="60dp"/>
 </LinearLayout>

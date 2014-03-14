@@ -8,7 +8,7 @@
             android:id="@+id/picture"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/default"
+            android:src="@drawable/profilepic"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"/>
     <TextView
