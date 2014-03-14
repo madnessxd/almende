@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" >
+    <ImageView
+            android:id="@+id/picture"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/default"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
+    <TextView
+            android:id="@+id/name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Naam persoon"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/picture" />
+    <TextView
+            android:id="@+id/birthday"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Birthday"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/name"
+            android:layout_toRightOf="@+id/picture"/>
+    <TextView
+            android:id="@+id/goal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Goal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/birthday"
+            android:layout_toRightOf="@+id/picture"/>
+    <TextView
+            android:id="@+id/city"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="City"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/goal"
+            android:layout_toRightOf="@+id/picture"/>
+    <TextView
+            android:id="@+id/level"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Level"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/picture"/>
+    <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:max="80"
+            android:layout_below="@+id/level"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            />
+    <TextView
+            android:id="@+id/progressText"
+            android:layout_width="fill_parent"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="Experience points"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/progress"/>
+    <TextView
+            android:id="@+id/sports"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="My sports"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/progressText"/>
+    <TextView
+            android:id="@+id/sportsContent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum.."
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/sports"/>
+    <TextView
+            android:id="@+id/about"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="My sports"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/sportsContent"/>
+    <TextView
+            android:id="@+id/aboutContent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum.."
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/about"/>
+
+</RelativeLayout>
