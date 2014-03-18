@@ -22,6 +22,7 @@ public class Main extends Activity {
             case R.id.challengesBut : k = new Intent(Main.this, Challenges.class); break;
             case R.id.friendsBut : k = new Intent(Main.this, Friends.class); break;
             case R.id.motivateBut : k = new Intent(Main.this, Motivation.class); break;
+            case R.id.testBut : k = new Intent(Main.this, Test.class); break;
         }
         finish();
         startActivity(k);
