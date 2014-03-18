@@ -16,6 +16,7 @@ public class Profile extends Activity{
     }
     @Override
     public void onBackPressed() {
+        finish();
         home = new Intent(Profile.this, Main.class);
         startActivity(home);
         return;

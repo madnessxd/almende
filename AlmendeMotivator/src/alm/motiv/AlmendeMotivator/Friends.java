@@ -16,6 +16,7 @@ public class Friends extends Activity{
     }
     @Override
     public void onBackPressed() {
+        finish();
         home = new Intent(Friends.this, Main.class);
         startActivity(home);
         return;

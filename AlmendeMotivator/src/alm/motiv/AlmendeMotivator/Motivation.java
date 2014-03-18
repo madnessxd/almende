@@ -16,6 +16,7 @@ public class Motivation extends Activity{
     }
     @Override
     public void onBackPressed() {
+        finish();
         home = new Intent(Motivation.this, Main.class);
         startActivity(home);
         return;

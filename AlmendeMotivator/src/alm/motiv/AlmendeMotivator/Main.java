@@ -23,7 +23,7 @@ public class Main extends Activity {
             case R.id.friendsBut : k = new Intent(Main.this, Friends.class); break;
             case R.id.motivateBut : k = new Intent(Main.this, Motivation.class); break;
         }
-        System.out.println("2");
+        finish();
         startActivity(k);
     }
     @Override

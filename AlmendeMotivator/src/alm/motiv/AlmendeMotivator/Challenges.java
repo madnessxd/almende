@@ -16,6 +16,7 @@ public class Challenges extends Activity{
     }
     @Override
     public void onBackPressed() {
+        finish();
         home = new Intent(Challenges.this, Main.class);
         startActivity(home);
         return;

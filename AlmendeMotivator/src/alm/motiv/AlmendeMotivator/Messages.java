@@ -16,7 +16,7 @@ public class Messages extends Activity{
     }
     @Override
     public void onBackPressed() {
-        System.out.println("BACK");
+        finish();
         home = new Intent(Messages.this, Main.class);
         startActivity(home);
         return;
