@@ -1,22 +1,26 @@
 package alm.motiv.AlmendeMotivator;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Test extends Activity {
 
@@ -29,7 +33,7 @@ public class Test extends Activity {
     EditText inputDesc;
 
     // url to create new product
-    private static String url_create_product = "http://localhost/almende/create.php";
+   // private static String url_create_product = "https://oege.ie.hva.nl/~schulta001/almende/create.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -79,37 +83,23 @@ public class Test extends Activity {
          * Creating product
          * */
         protected String doInBackground(String... args) {
+            HttpResponse response = null;
             String title = inputTitle.getText().toString();
             System.out.println(title);
+
+            DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
+            HttpPost post = new HttpPost("http://145.109.160.96/almende/create.php");
+
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("title", title));
 
-            // getting JSON Object
-            // Note that create product url accepts POST method
-            JSONObject json = jsonParser.makeHttpRequest(url_create_product,
-                    "POST", params);
-
-            // check log cat fro response
-            //Log.d("Create Response", json.toString());
-
-            // check for success tag
-            /*try {
-                int success = json.getInt(TAG_SUCCESS);
-
-                if (success == 1) {
-                    // successfully created product
-                    //Intent i = new Intent(getApplicationContext(), AllProductsActivity.class);
-                    //startActivity(i);
-
-                    // closing this screen
-                    finish();
-                } else {
-                    // failed to create product
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
+            try {
+                post.setEntity(new UrlEncodedFormEntity(params));
+                response = httpclient.execute(post);
+            }catch (Exception e) {
+                System.out.println("PANIEK"+e);
+            }
 
             return null;
         }

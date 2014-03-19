@@ -11,7 +11,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="WARN" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="system.out" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c1a3fe6-b620-4fcb-a696-bfc508e9715e" name="Default" comment="" />
@@ -79,20 +79,20 @@
     <leaf>
       <file leaf-file-name="main.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="36" selection-start="2566" selection-end="2566" vertical-scroll-proportion="-5.06" vertical-offset="308" max-vertical-offset="714">
-              <folding />
-            </state>
-          </provider>
           <provider editor-type-id="android-designer">
             <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="33" column="36" selection-start="2566" selection-end="2566" vertical-scroll-proportion="0.0" vertical-offset="308" max-vertical-offset="714">
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="25" selection-start="271" selection-end="271" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="612">
+            <state line="12" column="25" selection-start="271" selection-end="271" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="680">
               <folding />
             </state>
           </provider>
@@ -101,17 +101,8 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="19" selection-start="1014" selection-end="1014" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="680">
-              <folding>
-                <element signature="e#300#318#0" expanded="true" />
-                <element signature="e#428#446#0" expanded="true" />
-                <element signature="e#746#764#0" expanded="true" />
-                <element signature="e#860#878#0" expanded="true" />
-                <element signature="e#975#993#0" expanded="true" />
-                <element signature="e#1092#1110#0" expanded="true" />
-                <element signature="e#1206#1224#0" expanded="true" />
-                <element signature="e#1317#1335#0" expanded="true" />
-              </folding>
+            <state line="6" column="6" selection-start="275" selection-end="275" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="697">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -119,12 +110,10 @@
       <file leaf-file-name="Test.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="36" selection-start="2762" selection-end="2762" vertical-scroll-proportion="0.7318612" vertical-offset="1298" max-vertical-offset="2227">
+            <state line="92" column="34" selection-start="2934" selection-end="2934" vertical-scroll-proportion="0.48300537" vertical-offset="1226" max-vertical-offset="1989">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1362#1587#0" expanded="true" />
-                <element signature="e#1576#1577#0" expanded="true" />
-                <element signature="e#2466#2481#0" expanded="true" />
+                <element signature="e#2989#3004#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -133,23 +122,21 @@
       <file leaf-file-name="JSONParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/JSONParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="26" selection-start="792" selection-end="792" vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="1785">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="83" column="33" selection-start="2864" selection-end="2864" vertical-scroll-proportion="0.0" vertical-offset="1411" max-vertical-offset="1785">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="test.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/layout/test.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="32" selection-start="400" selection-end="408" vertical-scroll-proportion="-3.06" vertical-offset="0" max-vertical-offset="374">
-              <folding />
-            </state>
-          </provider>
           <provider editor-type-id="android-designer">
             <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="32" selection-start="400" selection-end="408" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="374">
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
@@ -164,10 +151,10 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/res/layout/main.xml" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/res/layout/test.xml" />
         <option value="$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/JSONParser.java" />
         <option value="$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Main.java" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Test.java" />
       </list>
     </option>
@@ -246,24 +233,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AlmendeMotivator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AlmendeMotivator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AlmendeMotivator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -288,8 +257,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -309,6 +278,8 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="FullScreen" value="false" />
+    <property name="LayoutCode.rearrangeEntriesJava" value="false" />
   </component>
   <component name="RunManager" selected="Android Application.AlmendeMotivator">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
@@ -500,17 +471,16 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32966226" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4136808" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4144427" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2489019" sideWeight="0.50117093" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46153846" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.08163265" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -518,11 +488,12 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2489019" sideWeight="0.49882904" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -546,6 +517,108 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="36" selection-start="2566" selection-end="2566" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="25" selection-start="271" selection-end="271" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="6" selection-start="275" selection-end="275" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="697">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="89" column="88" selection-start="2836" selection-end="2878" vertical-scroll-proportion="0.0" vertical-offset="1513" max-vertical-offset="2023">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2989#3004#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/JSONParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="33" selection-start="2864" selection-end="2864" vertical-scroll-proportion="0.0" vertical-offset="1411" max-vertical-offset="1785">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/test.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="32" selection-start="400" selection-end="408" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="36" selection-start="2566" selection-end="2566" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="25" selection-start="271" selection-end="271" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="19" selection-start="1014" selection-end="1014" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="0" selection-start="3203" selection-end="3203" vertical-scroll-proportion="0.0" vertical-offset="1604" max-vertical-offset="2227">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2989#3004#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/JSONParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="78" column="31" selection-start="2695" selection-end="2695" vertical-scroll-proportion="0.0" vertical-offset="1326" max-vertical-offset="1785">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/test.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="32" selection-start="400" selection-end="408" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1666">
@@ -556,27 +629,18 @@
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="39" selection-start="265" selection-end="265" vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="680">
-          <folding>
-            <element signature="e#300#318#0" expanded="true" />
-            <element signature="e#428#446#0" expanded="true" />
-            <element signature="e#746#764#0" expanded="true" />
-            <element signature="e#860#878#0" expanded="true" />
-            <element signature="e#975#993#0" expanded="true" />
-            <element signature="e#1092#1110#0" expanded="true" />
-            <element signature="e#1206#1224#0" expanded="true" />
-            <element signature="e#1317#1335#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build.xml">
@@ -587,42 +651,18 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/friends.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306">
           <folding />
         </state>
       </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/test.xml">
+    <entry file="jar://C:/adt-bundle-windows/sdk/platforms/android-19/android.jar!/android/os/AsyncTask.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="32" selection-start="400" selection-end="408" vertical-scroll-proportion="-3.06" vertical-offset="0" max-vertical-offset="374">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/JSONParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="26" selection-start="792" selection-end="792" vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="1785">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="36" selection-start="2566" selection-end="2566" vertical-scroll-proportion="-5.06" vertical-offset="308" max-vertical-offset="714">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
+        <state line="51" column="0" selection-start="2155" selection-end="2155" vertical-scroll-proportion="0.6644737" vertical-offset="648" max-vertical-offset="952" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Main.java">
@@ -632,37 +672,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+    <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="19" selection-start="1014" selection-end="1014" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="680">
-          <folding>
-            <element signature="e#300#318#0" expanded="true" />
-            <element signature="e#428#446#0" expanded="true" />
-            <element signature="e#746#764#0" expanded="true" />
-            <element signature="e#860#878#0" expanded="true" />
-            <element signature="e#975#993#0" expanded="true" />
-            <element signature="e#1092#1110#0" expanded="true" />
-            <element signature="e#1206#1224#0" expanded="true" />
-            <element signature="e#1317#1335#0" expanded="true" />
-          </folding>
+        <state line="33" column="36" selection-start="2566" selection-end="2566" vertical-scroll-proportion="0.0" vertical-offset="308" max-vertical-offset="714">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/adt-bundle-windows/sdk/platforms/android-19/android.jar!/android/os/AsyncTask.class">
+    <entry file="jar://C:/adt-bundle-windows/sdk/platforms/android-19/android.jar!/java/lang/Thread.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="0" selection-start="2155" selection-end="2155" vertical-scroll-proportion="0.6644737" vertical-offset="648" max-vertical-offset="952">
+        <state line="148" column="0" selection-start="5233" selection-end="5233" vertical-scroll-proportion="0.6946108" vertical-offset="2267" max-vertical-offset="2601" />
+      </provider>
+    </entry>
+    <entry file="jar://C:/adt-bundle-windows/sdk/platforms/android-19/android.jar!/java/lang/System.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="19" selection-start="139" selection-end="167" vertical-scroll-proportion="0.24495678" vertical-offset="0" max-vertical-offset="1275" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/JSONParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="33" selection-start="2864" selection-end="2864" vertical-scroll-proportion="0.0" vertical-offset="962" max-vertical-offset="1462">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/test.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="32" selection-start="400" selection-end="408" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="374">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="6" selection-start="275" selection-end="275" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/alm/motiv/AlmendeMotivator/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="36" selection-start="2762" selection-end="2762" vertical-scroll-proportion="0.7318612" vertical-offset="1298" max-vertical-offset="2227">
+        <state line="92" column="34" selection-start="2934" selection-end="2934" vertical-scroll-proportion="0.48300537" vertical-offset="1226" max-vertical-offset="1989">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1362#1587#0" expanded="true" />
-            <element signature="e#1576#1577#0" expanded="true" />
-            <element signature="e#2466#2481#0" expanded="true" />
+            <element signature="e#2989#3004#0" expanded="true" />
           </folding>
         </state>
       </provider>
