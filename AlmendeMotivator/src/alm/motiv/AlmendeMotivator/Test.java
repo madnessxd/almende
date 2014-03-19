@@ -88,7 +88,7 @@ public class Test extends Activity {
             System.out.println(title);
 
             DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
-            HttpPost post = new HttpPost("http://145.109.160.96/almende/create.php");
+            HttpPost post = new HttpPost("http://145.92.203.241/~schulta001/almende/create.php");
 
             // Building Parameters
             List<NameValuePair> params = new ArrayList<NameValuePair>();
