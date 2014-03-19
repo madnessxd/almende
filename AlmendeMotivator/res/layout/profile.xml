@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp" >
+                android:paddingLeft="0dp"
+                android:paddingRight="5dp" >
     <ImageView
             android:id="@+id/picture"
             android:layout_width="100dp"
@@ -15,15 +15,15 @@
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Naam persoon"
+            android:text="NAME"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/picture" />
+            android:layout_toRightOf="@+id/picture" android:textSize="20dp" android:textStyle="bold"/>
     <TextView
             android:id="@+id/birthday"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Birthday"
+            android:text="Birthday:"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/name"
@@ -32,7 +32,7 @@
             android:id="@+id/goal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Goal"
+            android:text="Goal:"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/birthday"
@@ -41,7 +41,7 @@
             android:id="@+id/city"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="City"
+            android:text="City:"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/goal"
@@ -50,7 +50,7 @@
             android:id="@+id/level"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Level"
+            android:text="Level:"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/picture"/>
@@ -78,7 +78,7 @@
             android:id="@+id/sports"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="My sports"
+            android:text="My Sports:"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/progressText"/>
@@ -94,7 +94,7 @@
             android:id="@+id/about"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="My sports"
+            android:text="About:"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/sportsContent"/>
@@ -106,5 +106,19 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_below="@+id/about"/>
+    <Button
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:text="Edit"
+            android:id="@+id/button"
+            android:layout_alignTop="@+id/name" android:layout_alignRight="@+id/name"
+            />
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/almende" android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/city"
+            android:layout_alignLeft="@+id/aboutContent"/>
 
 </RelativeLayout>
