@@ -4,116 +4,96 @@
                 android:layout_height="fill_parent"
                 android:paddingLeft="0dp"
                 android:paddingRight="5dp"
-                android:background="#BBBBBF" >
+                android:background="#D8D8D8" >
     <ImageView
             android:id="@+id/picture"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/profilepic"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_alignParentLeft="true" android:layout_below="@+id/button" android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
     <TextView
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="NAME"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/picture" android:textSize="20dp" android:textStyle="bold"/>
+            android:text="Name:"
+            android:textSize="20dp" android:textStyle="bold" android:textColor="#000"
+            android:layout_toRightOf="@+id/picture" android:layout_below="@+id/button"/>
     <TextView
             android:id="@+id/birthday"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Birthday:"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/name"
-            android:layout_toRightOf="@+id/picture"/>
+            android:textColor="#000" android:layout_below="@+id/name" android:layout_toRightOf="@+id/picture"/>
     <TextView
             android:id="@+id/goal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Goal:"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/birthday"
-            android:layout_toRightOf="@+id/picture"/>
+            android:textColor="#000" android:layout_below="@+id/birthday" android:layout_toRightOf="@+id/picture"/>
     <TextView
             android:id="@+id/city"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="City:"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/goal"
-            android:layout_toRightOf="@+id/picture"/>
+            android:textColor="#000" android:layout_below="@+id/goal" android:layout_toRightOf="@+id/picture"/>
     <TextView
             android:id="@+id/level"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Level:"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/picture"/>
+            android:textColor="#000" android:layout_below="@+id/city" android:layout_toRightOf="@+id/picture"/>
     <ProgressBar
             android:id="@+id/progress"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleHorizontal"
             android:max="80"
-            android:layout_below="@+id/level"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_below="@+id/level" android:layout_alignParentLeft="true" android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp" android:layout_marginRight="10dp"/>
     <TextView
             android:id="@+id/progressText"
             android:layout_width="fill_parent"
             android:gravity="right"
             android:layout_height="wrap_content"
             android:text="Experience points"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/progress"/>
+            android:textColor="#000" android:layout_below="@+id/progress" android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp" android:layout_marginRight="10dp"/>
     <TextView
             android:id="@+id/sports"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="My Sports:"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/progressText"/>
+            android:textColor="#000" android:layout_below="@+id/progressText" android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp" android:layout_marginLeft="10dp"/>
     <TextView
             android:id="@+id/sportsContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Lorem ipsum.."
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/sports"/>
+            android:textColor="#000" android:layout_below="@+id/sports" android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"/>
     <TextView
             android:id="@+id/about"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="About:"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/sportsContent"/>
+            android:textColor="#000" android:layout_below="@+id/sportsContent" android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"/>
     <TextView
             android:id="@+id/aboutContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Lorem ipsum.."
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_below="@+id/about"/>
+            android:textColor="#000" android:layout_below="@+id/about" android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"/>
     <Button
             android:layout_width="70dp"
             android:layout_height="35dp"
             android:text="Edit"
             android:id="@+id/button"
-            android:layout_alignTop="@+id/name" android:layout_alignRight="@+id/name"
-            />
+            android:layout_alignParentTop="true" android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp" android:layout_marginRight="10dp"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,5 +101,12 @@
             android:src="@drawable/almende" android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/city"
             android:layout_alignLeft="@+id/aboutContent"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Henk de wit"
+            android:id="@+id/textView"
+            android:layout_alignTop="@+id/name" android:layout_toLeftOf="@+id/button" android:textColor="#000"/>
 
 </RelativeLayout>

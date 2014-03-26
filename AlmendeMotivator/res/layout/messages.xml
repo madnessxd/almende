@@ -3,7 +3,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:paddingLeft="0dp"
-                android:background="#BBBBBF"
+                android:background="#D8D8D8"
                 android:paddingRight="5dp" >
     <TextView
             android:layout_width="wrap_content"
@@ -12,5 +12,5 @@
             android:text="Messages"
             android:id="@+id/textView"
             android:textSize="24dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="5dp" android:textColor="#000"/>
 </RelativeLayout>
