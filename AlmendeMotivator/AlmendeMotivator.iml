@@ -16,6 +16,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="facebook" />
+    <orderEntry type="library" name="libs" level="project" />
   </component>
 </module>
 

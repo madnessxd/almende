@@ -1,5 +1,6 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.TestPackage.JSONParser;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -116,7 +117,7 @@ public class Test extends Activity {
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(Test.this, Main.class);
+        home = new Intent(Test.this, MainMenuActivity.class);
         startActivity(home);
         return;
     }

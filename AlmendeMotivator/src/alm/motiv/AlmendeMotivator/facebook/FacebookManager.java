@@ -1,22 +1,27 @@
 package alm.motiv.AlmendeMotivator.facebook;
 
+import alm.motiv.AlmendeMotivator.misc.CustomCallback;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.util.Log;
+import android.widget.Toast;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 
+import com.facebook.model.GraphUser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * FacebookManager controls connection with Facebook and gets requests from Facebook
@@ -86,6 +91,22 @@ public class FacebookManager {
             return true;
         }
         return false;
+    }
+
+    public static void getFriendsOfUser(final CustomCallback callback) {
+        Request.executeMyFriendsRequestAsync(Session.getActiveSession(), new Request.GraphUserListCallback() {
+
+            @Override
+            public void onCompleted(List<GraphUser> users, Response response) {
+                // TODO Auto-generated method stub
+                if (response.getError() == null) {
+
+                    callback.callback(users);
+
+
+                }
+            }
+        });
     }
 
 

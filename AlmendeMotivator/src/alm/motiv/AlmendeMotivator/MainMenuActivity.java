@@ -1,13 +1,19 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
+import alm.motiv.AlmendeMotivator.misc.CustomCallback;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import com.facebook.model.GraphUser;
+
+import java.util.List;
 
 public class MainMenuActivity extends Activity {
     Intent k;
@@ -16,7 +22,10 @@ public class MainMenuActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
+
+
     }
+
 
     public void switchMessages(View v) {
         switch (v.getId()) {
@@ -50,9 +59,10 @@ public class MainMenuActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.logoutFacebook:
                 FacebookManager.logout();
+                startActivity(new Intent(this, FacebookMainActivity.class));
                 finish();
                 break;
         }

@@ -187,6 +187,7 @@ public class FacebookMainFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), MainMenuActivity.class);
                 getActivity().startActivity(intent);
+                getActivity().finish();
             }
         }
     };
