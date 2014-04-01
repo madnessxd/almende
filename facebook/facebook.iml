@@ -3,10 +3,7 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
-        <proGuardCfgFiles>
-          <file>file://C:/Program Files/Java/jdk1.7.0_45/tools/proguard/proguard-android.txt</file>
-        </proGuardCfgFiles>
-        <option name="UPDATE_PROPERTY_FILES" value="true" />
+        <option name="LIBRARY_PROJECT" value="true" />
       </configuration>
     </facet>
   </component>
@@ -18,9 +15,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="facebook" />
-    <orderEntry type="library" name="libs" level="project" />
-    <orderEntry type="library" name="mongo-2.10.1" level="project" />
+    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
   </component>
 </module>
 

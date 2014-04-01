@@ -24,7 +24,6 @@ proguard/
 proguard_logs/
 
 # Intellij project files
-*.iml
 *.ipr
 *.iws
 .idea/
