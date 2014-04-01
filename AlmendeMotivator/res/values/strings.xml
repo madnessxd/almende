@@ -89,4 +89,11 @@
     <string name="com_facebook_requesterror_permissions">A Facebook application connection failed because permissions
                  insufficient, please grant application permissions to perform the operation.
     </string>
+    <string-array name="profile_array">
+        <item>Your Profile</item>
+        <item>Messages</item>
+        <item>Challenges</item>
+        <item>My Friends</item>
+        <item>Log Out</item>
+    </string-array>
 </resources>
