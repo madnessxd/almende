@@ -1,9 +1,12 @@
 package alm.motiv.AlmendeMotivator.facebook;
 
+import alm.motiv.AlmendeMotivator.Database;
 import alm.motiv.AlmendeMotivator.MainMenuActivity;
 import alm.motiv.AlmendeMotivator.R;
+import alm.motiv.AlmendeMotivator.models.User;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -21,6 +24,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.mongodb.*;
 
 import java.util.Arrays;
 
@@ -141,6 +145,7 @@ public class FacebookMainFragment extends Fragment {
                         if (currentSession == session) {
                             user = me;
                             updateUI(session);
+                            new DatabaseThread().execute();
                         }
                         if (response.getError() != null) {
                         }
@@ -191,5 +196,32 @@ public class FacebookMainFragment extends Fragment {
             }
         }
     };
+
+    /**
+     * Background Async Task to add the user to our own database, if it doesn't already exist*/
+    class DatabaseThread extends AsyncTask<String, String, String> {
+        protected String doInBackground(String... args) {
+            System.out.println("IS IT POSSIBLE?");
+            // To connect to mongodb server
+            MongoClient client = Database.getInstance();
+            DB db = client.getDB(Database.uri.getDatabase());
+
+            //get collection and attach class to it
+            DBCollection userCollection = db.getCollection("user");
+            userCollection.setObjectClass(User.class);
+
+            //query the database to see if the user is already known in our database
+            DBObject query = QueryBuilder.start("facebookID").is(user.getId()).get();
+
+            DBCursor cursor = userCollection.find(query);
+
+            if(cursor.count()==0){//if no result, add user
+                User appUser = new User(user.getId(), user.getName());
+                userCollection.insert(appUser, WriteConcern.ACKNOWLEDGED);
+            }
+
+            return null;
+        }
+    }
 
 }
