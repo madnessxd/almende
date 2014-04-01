@@ -52,7 +52,7 @@ public class MainMenuActivity extends Activity {
                 k = new Intent(MainMenuActivity.this, MessageActivity.class);
                 break;
             case 2:
-                k = new Intent(MainMenuActivity.this, ChallengeActivity.class);
+                k = new Intent(MainMenuActivity.this, ChallengesMenuActivity.class);
                 break;
             case 3:
                 k = new Intent(MainMenuActivity.this, FriendActivity.class);
@@ -74,16 +74,12 @@ public class MainMenuActivity extends Activity {
             case R.id.messagesBut:
                 k = new Intent(MainMenuActivity.this, MessageActivity.class);
                 break;
-            //case R.id.challengesBut : k = new Intent(MainMenuActivity.this, ChallengesMenuActivity.class); break;
             case R.id.challengesBut:
                 k = new Intent(MainMenuActivity.this, ChallengesMenuActivity.class);
                 break;
             case R.id.friendsBut:
                 k = new Intent(MainMenuActivity.this, FriendActivity.class);
                 break;
-
-            //This switch case enables the JSON Parser test button
-            //case R.id.testBut : k = new Intent(MainMenuActivity.this, Test.class); break;
         }
         finish();
         startActivity(k);
