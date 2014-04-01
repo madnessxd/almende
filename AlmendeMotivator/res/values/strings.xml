@@ -1,4 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sportopia</string>
+    <string name="challenger">Challenger</string>
+    <string name="challengee">Challengee</string>
+    <string name="the_challenge">The challenge</string>
+    <string name="required_evidence">Required evidence</string>
+    <string name="reward">Reward</string>
+    <string name="comments">Comments</string>
+    <string name="like">Like</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="insert_text">Insert text here...</string>
+
+    <!--
+        Copyright 2010-present Facebook.
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+        -->
+    <string name="app_id">1533091510248877</string>
+
+    <string name="ok_button">OK</string>
+    <string name="login">Login</string>
+    <string name="instructions">Login to create a link to fetch account data</string>
+    <string name="logout">Log out</string>
+    <string name="applicationId">1533091510248877</string>
+    <string name="twitter_not_loaded">Twitter could not be loaded</string>
+    <string name="rss_not_loaded">Rss could not be loaded</string>
+    <string name="facebook_not_loaded">Facebook could not be loaded</string>
+
+    <!--
+        Copyright 2010-present Facebook.
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+    -->
+
+    <string name="com_facebook_dialogloginactivity_ok_button">Accept</string>
+    <string name="com_facebook_loginview_log_out_button">Logout</string>
+    <string name="com_facebook_loginview_log_in_button">Login with Facebook</string>
+    <string name="com_facebook_loginview_logged_in_as">Logged in as:</string>
+    <string name="com_facebook_loginview_logged_in_using_facebook">Logged in with Facebook</string>
+    <string name="com_facebook_loginview_log_out_action">Logout</string>
+    <string name="com_facebook_loginview_cancel_action">Cancel</string>
+    <string name="com_facebook_logo_content_description">Logo of Facebook</string>
+    <string name="com_facebook_usersettingsfragment_log_in_button">Login&#8230;</string>
+    <string name="com_facebook_usersettingsfragment_logged_in">logged in</string>
+    <string name="com_facebook_usersettingsfragment_not_logged_in">Not logged in</string>
+    <string name="com_facebook_placepicker_subtitle_format">Subtitle</string>
+    <string name="com_facebook_placepicker_subtitle_catetory_only_format">Subtitle category</string>
+    <string name="com_facebook_placepicker_subtitle_were_here_only_format">es:%1$,d estuvieron aquí</string>
+    <string name="com_facebook_picker_done_button_text">Done</string>
+    <string name="com_facebook_choose_friends">Choose friends</string>
+    <string name="com_facebook_nearby">Nearby</string>
+    <string name="com_facebook_loading">Loading</string>
+    <string name="com_facebook_internet_permission_error_title">Error with AndroidManifest</string>
+    <string name="com_facebook_internet_permission_error_message">Error with Session Internet Permission</string>
+    <string name="com_facebook_requesterror_web_login">Please log in through https://www.facebook.com or
+                     https://m.facebook.com to re-enable the application to connect with Facebook.
+    </string>
+    <string name="com_facebook_requesterror_relogin">The application does not connect to Facebook login and re-
+                     connect this application.
+    </string>
+    <string name="com_facebook_requesterror_password_changed">Facebook Your password has changed, please re-
+                     connect the application with Facebook.
+    </string>
+    <string name="com_facebook_requesterror_reconnect">An error occurred connecting to Facebook, please try again
+                     connect the application with Facebook.
+    </string>
+    <string name="com_facebook_requesterror_permissions">A Facebook application connection failed because permissions
+                 insufficient, please grant application permissions to perform the operation.
+    </string>
 </resources>

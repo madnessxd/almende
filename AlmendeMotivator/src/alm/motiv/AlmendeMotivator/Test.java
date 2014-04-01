@@ -1,7 +1,9 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.TestPackage.JSONParser;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Test extends Activity {
-
+    Intent home;
     // Progress Dialog
     private ProgressDialog pDialog;
 
@@ -111,6 +113,12 @@ public class Test extends Activity {
             // dismiss the dialog once done
             //pDialog.dismiss();
         }
-
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+        home = new Intent(Test.this, MainMenuActivity.class);
+        startActivity(home);
+        return;
     }
 }

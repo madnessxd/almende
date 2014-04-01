@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#D8D8D8">
+    <TextView
+            android:id="@+id/txtChallengeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHALLENGE NAME"
+            android:visibility="visible"
+            android:layout_gravity="center"
+            android:paddingTop="10dp"
+            android:textColor="#000000"/>
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/layoutChallenger"
+                  android:orientation="horizontal"
+                  android:layout_marginTop="10dp">
+
+        <ImageView android:id="@+id/imgChallenger"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/profilepic"
+                   android:layout_marginLeft="10dp"
+                   android:layout_weight="1">
+        </ImageView>
+
+        <TextView
+                android:id="@+id/txtChallenger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/challenger"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="3"
+                android:textColor="#000000"/>
+        />
+
+        <TextView
+                android:id="@+id/txtChallengee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/challengee"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:textColor="#000000"/>
+        />
+
+        <ImageView android:id="@+id/imgChallengee"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/profilepic"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_weight="1">
+        </ImageView>
+    </LinearLayout>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/the_challenge"
+              android:layout_marginTop="10dp"
+              android:layout_marginLeft="10dp"
+              android:textColor="#000000"
+              android:textStyle="bold"/>
+
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:text="@string/insert_text"
+              android:layout_marginTop="5dp"
+              android:paddingLeft="10dp"
+              android:textColor="#000000"/>
+
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:text="@string/required_evidence"
+              android:layout_marginTop="10dp"
+              android:paddingLeft="10dp"
+              android:textColor="#000000"
+              android:textStyle="bold"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/insert_text"
+              android:textColor="#000000"
+              android:paddingLeft="10dp"
+              android:layout_marginTop="5dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/reward"
+              android:textStyle="bold"
+              android:textColor="#000000"
+              android:layout_marginLeft="10dp"
+              android:layout_marginTop="5dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/insert_text"
+              android:textColor="#000000"
+              android:layout_marginLeft="10dp"
+              android:layout_marginTop="5dp"/>
+
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:layout_gravity="bottom">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Comments"
+                  android:layout_marginTop="5dp"
+                  android:layout_marginLeft="10dp"
+                  android:textColor="#000000"
+                  android:textStyle="bold"
+                  android:layout_weight="5"/>
+
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/comments"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"/>
+    </LinearLayout>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="Amount comments"
+              android:textColor="#000000"
+              android:layout_marginLeft="10dp"/>
+
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:layout_marginTop="20dp">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Like" android:layout_marginLeft="5dp"
+                android:layout_weight="1"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Amount likes"
+                  android:textColor="#000000"
+                  android:layout_marginLeft="5dp"
+                  android:layout_weight="1"/>
+        <Button android:id="@+id/btnAccept" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accept"
+                android:layout_weight="1"/>
+        <Button android:id="@+id/btnDecline" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decline" android:layout_marginRight="5dp"
+                android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>
