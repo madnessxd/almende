@@ -76,7 +76,7 @@ public class MainMenuActivity extends Activity {
                 break;
             //case R.id.challengesBut : k = new Intent(MainMenuActivity.this, ChallengesMenuActivity.class); break;
             case R.id.challengesBut:
-                k = new Intent(MainMenuActivity.this, ChallengeActivity.class);
+                k = new Intent(MainMenuActivity.this, ChallengesMenuActivity.class);
                 break;
             case R.id.friendsBut:
                 k = new Intent(MainMenuActivity.this, FriendActivity.class);

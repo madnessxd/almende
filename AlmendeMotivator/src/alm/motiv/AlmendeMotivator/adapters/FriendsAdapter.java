@@ -80,8 +80,6 @@ public class FriendsAdapter extends BaseAdapter {
 
         viewHolder = (ViewHolder) convertView.getTag();
 
-
-
         String imgId = "https://graph.facebook.com/" + model.getId() + "/picture";
 
         // imgId = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/t1.0-1/c0.33.200.200/p200x200/248489_10150308474960968_2461155_n.jpg";

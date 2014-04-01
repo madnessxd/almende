@@ -10,14 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ChallengesMenuActivity extends Activity{
+public class ChallengesMenuActivity extends Activity {
     Intent home;
     Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challengesmenu);
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
@@ -55,6 +55,7 @@ public class ChallengesMenuActivity extends Activity{
         finish();
         startActivity(k);
     }
+
     @Override
     public void onBackPressed() {
         finish();
@@ -62,5 +63,9 @@ public class ChallengesMenuActivity extends Activity{
         startActivity(home);
 
         return;
+    }
+
+    public void onCreatePressed(View v) {
+        startActivity(new Intent(ChallengesMenuActivity.this, ChallengeActivity.class));
     }
 }

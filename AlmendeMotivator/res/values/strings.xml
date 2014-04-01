@@ -11,7 +11,10 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="insert_text">Insert text here...</string>
-
+    <string name="new_challenge">New challenges:</string>
+    <string name="challenges_in_progress">Challenges in progress:</string>
+    <string name="ended_challenges">Ended challenges:</string>
+    <string name="view">View</string>
     <!--
         Copyright 2010-present Facebook.
 
