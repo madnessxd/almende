@@ -29,7 +29,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Birthday:"
-            android:textColor="#000" android:layout_below="@+id/name" android:layout_toRightOf="@+id/picture"/>
+            android:textColor="#000"
+            android:layout_below="@+id/name"
+            android:layout_toRightOf="@+id/picture"/>
     <TextView
             android:id="@+id/goal"
             android:layout_width="fill_parent"
@@ -96,7 +98,8 @@
             android:layout_width="70dp"
             android:layout_height="35dp"
             android:text="Edit"
-            android:id="@+id/button"
+            android:id="@+id/btnEdit"
+            android:onClick="editUser"
             android:layout_alignParentTop="true" android:layout_alignParentRight="true"
             android:layout_marginTop="10dp" android:layout_marginRight="10dp"/>
     <ImageView

@@ -1,5 +1,6 @@
 package alm.motiv.AlmendeMotivator.facebook;
 
+import alm.motiv.AlmendeMotivator.Cookie;
 import alm.motiv.AlmendeMotivator.Database;
 import alm.motiv.AlmendeMotivator.MainMenuActivity;
 import alm.motiv.AlmendeMotivator.R;
@@ -144,6 +145,11 @@ public class FacebookMainFragment extends Fragment {
                     public void onCompleted(GraphUser me, Response response) {
                         if (currentSession == session) {
                             user = me;
+
+                            //need this so we can access the user's data in mongodb with database entry key
+                            Cookie entry = Cookie.getInstance();
+                            entry.userEntryId = user.getId();
+
                             updateUI(session);
                             new DatabaseThread().execute();
                         }
@@ -201,7 +207,6 @@ public class FacebookMainFragment extends Fragment {
      * Background Async Task to add the user to our own database, if it doesn't already exist*/
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            System.out.println("IS IT POSSIBLE?");
             // To connect to mongodb server
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
