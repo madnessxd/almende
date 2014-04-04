@@ -28,3 +28,6 @@ proguard_logs/
 *.ipr
 *.iws
 .idea/
+
+# Original files
+*.original
