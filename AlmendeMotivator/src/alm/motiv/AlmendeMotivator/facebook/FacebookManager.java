@@ -103,7 +103,6 @@ public class FacebookManager {
 
                     callback.callback(users);
 
-
                 }
             }
         });

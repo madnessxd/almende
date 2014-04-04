@@ -28,7 +28,8 @@ public class DatabaseManager {
             DBCollection challengeCollection = db.getCollection("challenge");
             challengeCollection.setObjectClass(Challenge.class);
 
-            Challenge challenge = new Challenge("testtitle", "testcontent");
+            //TODO create challenge with parameters
+            Challenge challenge = new Challenge();
             challengeCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }

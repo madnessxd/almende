@@ -66,6 +66,6 @@ public class ChallengesMenuActivity extends Activity {
     }
 
     public void onCreatePressed(View v) {
-        startActivity(new Intent(ChallengesMenuActivity.this, ChallengeActivity.class));
+        startActivity(new Intent(ChallengesMenuActivity.this, ChallengeCreateActivity.class));
     }
 }

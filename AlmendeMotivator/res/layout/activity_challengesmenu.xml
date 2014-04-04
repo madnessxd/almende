@@ -4,72 +4,72 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:paddingLeft="0dp"
-                android:background="#D8D8D8"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:paddingLeft="0dp"
+                    android:background="#D8D8D8"
                 >
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Challenges"
-            android:id="@+id/textView"
-            android:textSize="24dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:textColor="#000000"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Challenges"
+                android:id="@+id/textView"
+                android:textSize="24dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:textColor="#000000"/>
 
-    <TextView
-            android:id="@+id/txtnewChallenge"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="@string/new_challenge"
-            android:textColor="#000000"
-            android:layout_below="@id/textView"
-            android:layout_marginLeft="10dp"/>
+        <TextView
+                android:id="@+id/txtnewChallenge"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/new_challenge"
+                android:textColor="#000000"
+                android:layout_below="@id/textView"
+                android:layout_marginLeft="10dp"/>
 
-    <Button
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Create"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:onClick="onCreatePressed"
-            />
+        <Button
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Create"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:onClick="onCreatePressed"
+                />
 
-    <GridView android:id="@+id/grdNewChallenges"
-              android:layout_width="match_parent"
-              android:layout_height="140dp"
-              android:layout_below="@id/txtnewChallenge">
-    </GridView>
+        <GridView android:id="@+id/grdNewChallenges"
+                  android:layout_width="match_parent"
+                  android:layout_height="140dp"
+                  android:layout_below="@id/txtnewChallenge">
+        </GridView>
 
-    <TextView
-            android:id="@+id/txtProgressChallenge"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:text="@string/challenges_in_progress"
-            android:textColor="#000000"
-            android:layout_below="@id/grdNewChallenges"
-            android:layout_marginLeft="10dp"/>
+        <TextView
+                android:id="@+id/txtProgressChallenge"
+                android:layout_width="fill_parent" android:layout_height="wrap_content"
+                android:text="@string/challenges_in_progress"
+                android:textColor="#000000"
+                android:layout_below="@id/grdNewChallenges"
+                android:layout_marginLeft="10dp"/>
 
-    <GridView android:id="@+id/grdProgressChallenges"
-              android:layout_width="match_parent"
-              android:layout_height="140dp"
-              android:layout_below="@id/txtProgressChallenge">
-    </GridView>
+        <GridView android:id="@+id/grdProgressChallenges"
+                  android:layout_width="match_parent"
+                  android:layout_height="140dp"
+                  android:layout_below="@id/txtProgressChallenge">
+        </GridView>
 
-    <TextView
-            android:id="@+id/txtEndedChallenge"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:text="@string/ended_challenges"
-            android:textColor="#000000"
-            android:layout_below="@id/grdProgressChallenges"
-            android:layout_marginLeft="10dp"/>
+        <TextView
+                android:id="@+id/txtEndedChallenge"
+                android:layout_width="fill_parent" android:layout_height="wrap_content"
+                android:text="@string/ended_challenges"
+                android:textColor="#000000"
+                android:layout_below="@id/grdProgressChallenges"
+                android:layout_marginLeft="10dp"/>
 
-    <GridView android:id="@+id/grdEndedChallenges"
-              android:layout_width="match_parent"
-              android:layout_height="140dp"
-              android:layout_below="@id/txtEndedChallenge">
-    </GridView>
-</RelativeLayout>
+        <GridView android:id="@+id/grdEndedChallenges"
+                  android:layout_width="match_parent"
+                  android:layout_height="140dp"
+                  android:layout_below="@id/txtEndedChallenge">
+        </GridView>
+    </RelativeLayout>
     <ListView android:id="@+id/left_drawer"
               android:layout_width="240dp"
               android:layout_height="match_parent"

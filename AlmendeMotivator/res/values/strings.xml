@@ -15,6 +15,19 @@
     <string name="challenges_in_progress">Challenges in progress:</string>
     <string name="ended_challenges">Ended challenges:</string>
     <string name="view">View</string>
+    <string name="Follow">Follow</string>
+
+    <string-array name="evidence_amounts">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="evidence_types">
+        <item>Photo</item>
+    </string-array>
+
+
     <!--
         Copyright 2010-present Facebook.
 
@@ -31,7 +44,6 @@
         limitations under the License.
         -->
     <string name="app_id">1533091510248877</string>
-
     <string name="ok_button">OK</string>
     <string name="login">Login</string>
     <string name="instructions">Login to create a link to fetch account data</string>
