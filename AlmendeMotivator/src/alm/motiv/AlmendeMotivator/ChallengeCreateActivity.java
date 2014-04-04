@@ -2,14 +2,18 @@ package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Kevin on 02/04/2014.
@@ -24,10 +28,16 @@ public class ChallengeCreateActivity extends Activity {
 
     private static final String REQUEST_FIELDS = TextUtils.join(",", new String[]{ID, NAME, PICTURE});
 
+    //Layout variables
     private Button btnCreateChallenge;
     private Spinner spinnerAmount;
     private Spinner spinnerType;
+    private EditText textTitle;
+    private EditText textContent;
+    private EditText textReward;
+    private ImageView userPic;
 
+    //create challenge variables
     private String title;
     private String challenger;
     private String challengee;
@@ -37,8 +47,10 @@ public class ChallengeCreateActivity extends Activity {
     private String reward;
     private String status;
 
+    //Facebook variables
     private GraphUser user;
     private Session userInfoSession;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +64,9 @@ public class ChallengeCreateActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 evidence_amount = Integer.parseInt(adapterView.getSelectedItem().toString());
+                TextView xp = (TextView) findViewById(R.id.txtExperiencePoints);
+                int xpAmount = Integer.parseInt(adapterView.getSelectedItem().toString()) * 300;
+                xp.setText(xpAmount + "XP");
             }
 
             @Override
@@ -73,6 +88,10 @@ public class ChallengeCreateActivity extends Activity {
             }
         });
 
+        textTitle = (EditText) findViewById(R.id.txtChallengeName);
+        textContent = (EditText) findViewById(R.id.txtChallengeContent);
+        textReward = (EditText) findViewById(R.id.txtReward);
+
         btnCreateChallenge = (Button) findViewById(R.id.btnCreateChallenge);
         btnCreateChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,32 +101,49 @@ public class ChallengeCreateActivity extends Activity {
         });
     }
 
-    public void createChallenge() {
-        setChallengeInfo();
-        DatabaseThread db = new DatabaseThread();
-        db.execute();
-        Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
+    public boolean checkFields() {
+        boolean allFieldsEntered = true;
+        StringBuilder error = new StringBuilder();
+        if (textTitle.getText().toString().matches("")) {
+            allFieldsEntered = false;
+            error.append("You forgot to enter a challenge title!\n");
+        }
+        if (textContent.getText().toString().matches("")) {
+            allFieldsEntered = false;
+            error.append("You forgot to enter a challenge description!");
+        }
 
+        //If errors are added to the StringBuilder
+        if (error.length() != 0) {
+            Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+        }
+        return allFieldsEntered;
+    }
+
+    public void createChallenge() {
+        if (checkFields()) {
+            setChallengeInfo();
+            DatabaseThread db = new DatabaseThread();
+            db.execute();
+            Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void updateUI() {
-        if(user.getName() != null) {
+        if (user.getName() != null) {
             TextView txtChallenger = (TextView) findViewById(R.id.txtChallenger);
-            txtChallenger.setText(user.getName());
+            txtChallenger.setText("Challenger:\n" + user.getName());
+
+            String imgId = "https://graph.facebook.com/" + user.getId() + "/picture";
+            userPic = (ImageView)findViewById(R.id.imgChallenger);
+            Picasso.with(getApplicationContext()).load(imgId).into(userPic);
         }
     }
 
     public void setChallengeInfo() {
-
-        EditText textTitle = (EditText) findViewById(R.id.txtChallengeName);
         title = textTitle.getText().toString();
-
-        EditText textContent = (EditText) findViewById(R.id.txtChallengeContent);
         content = textContent.getText().toString();
-
-        EditText textReward = (EditText) findViewById(R.id.txtReward);
         reward = textReward.getText().toString();
-
         challenger = user.getId();
         status = "new_challenge";
     }
@@ -124,7 +160,6 @@ public class ChallengeCreateActivity extends Activity {
                     public void onCompleted(GraphUser me, Response response) {
                         if (currentSession == session) {
                             user = me;
-                            System.out.println(user.getName());
                             updateUI();
                         }
                     }
@@ -150,7 +185,7 @@ public class ChallengeCreateActivity extends Activity {
             DBCollection userCollection = db.getCollection("challenge");
             userCollection.setObjectClass(Challenge.class);
 
-            //TODO Add challenger from FacebookSession and Challengee from appFriendslist
+            //TODO Add Challengee from appFriendslist
             Challenge challenge = new Challenge(title, challenger, "Dennis Reep", content, evidence_amount, evidence_type, reward, status);
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
