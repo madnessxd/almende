@@ -12,7 +12,7 @@ public class Challenge extends BasicDBObject {
 
     }
 
-    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward) {
+    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status) {
         put("title", title);
         put("challenger", challenger);
         put("challengee", challengee);
@@ -20,5 +20,6 @@ public class Challenge extends BasicDBObject {
         put("evidence_amount", evidence_amount);
         put("evidence_type", evidence_type);
         put("reward", reward);
+        put("status", status);
     }
 }
