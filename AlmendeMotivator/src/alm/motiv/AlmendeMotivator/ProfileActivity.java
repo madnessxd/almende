@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import com.mongodb.*;
 
+import java.util.concurrent.ExecutionException;
+
 public class ProfileActivity extends Activity{
     Intent home;
     Intent k;
@@ -21,12 +23,12 @@ public class ProfileActivity extends Activity{
     private ListView mDrawerList;
 
     //edit fields
-    private EditText aboutInput;
     private EditText sportsInput;
     private EditText nameInput;
     private EditText ageInput;
     private EditText goalInput;
     private EditText cityInput;
+    private EditText aboutInput;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -38,18 +40,44 @@ public class ProfileActivity extends Activity{
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
 
-    public void editUser(View v){
+    public void editUserBtn(View v){
+        //change layout
         setContentView(R.layout.activity_profileviewedit);
-    }
 
-    public void updateUser(View v){
+        //fields
         aboutInput = (EditText)findViewById(R.id.aboutInput);
         sportsInput = (EditText)findViewById(R.id.sportsInput);
         nameInput = (EditText)findViewById(R.id.nameInput);
         ageInput = (EditText)findViewById(R.id.ageInput);
         goalInput = (EditText)findViewById(R.id.goalInput);
         cityInput = (EditText)findViewById(R.id.cityInput);
-        new DatabaseThread().execute();
+
+        //get the user
+        User user = null;
+        try {
+             user = new DatabaseThread().execute("select").get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        //set content fields with existing data
+        nameInput.setText(user.getName());
+        goalInput.setText(user.getGoal());
+        aboutInput.setText(user.getAbout());
+        ageInput.setText(user.getAge());
+        cityInput.setText(user.getCity());
+        sportsInput.setText(user.getSports());
+    }
+
+    public void cancelEditBtn(View v){
+        setContentView(R.layout.activity_profileview);
+    }
+
+    public void saveUserBtn(View v){
+
+        new DatabaseThread().execute("insert");
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -89,11 +117,11 @@ public class ProfileActivity extends Activity{
         return;
     }
 
-    class DatabaseThread extends AsyncTask<String, String, String> {
+    class DatabaseThread extends AsyncTask<String, String, User> {
         /**
          * Creating product
          * */
-        protected String doInBackground(String... args) {
+        protected User doInBackground(String... args) {
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
             DBCollection userCollection = db.getCollection("user");
@@ -102,7 +130,18 @@ public class ProfileActivity extends Activity{
             // get the current user from database
             User current = new User();
             current.put("facebookID", Cookie.getInstance().userEntryId);
+            User newUser = (User) userCollection.find(current).toArray().get(0);
 
+            if(args[0]=="select"){
+                return newUser;
+            }else if(args[0]=="insert"){
+                insertQuery(current, userCollection);
+            }
+
+            return null;
+        }
+
+        private void insertQuery(User current, DBCollection userCollection){
             // make a new user, based upon the data of the current
             User newUser = (User) userCollection.find(current).toArray().get(0);
             newUser.setAbout(String.valueOf(aboutInput.getText()));
@@ -114,8 +153,6 @@ public class ProfileActivity extends Activity{
 
             //overwrite the old one with the new one
             userCollection.findAndModify(current, newUser);
-
-            return null;
         }
     }
 }

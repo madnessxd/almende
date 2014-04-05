@@ -96,13 +96,14 @@
                 android:id="@+id/aboutInput"
                 android:layout_width="fill_parent"
                 android:layout_height="150dp"
-                android:layout_below="@id/about"/>
+                android:layout_below="@id/about"
+                android:gravity="top"/>
         <Button
                 android:layout_width="70dp"
                 android:layout_height="35dp"
                 android:text="Save"
                 android:id="@+id/btnSave"
-                android:onClick="updateUser"
+                android:onClick="saveUserBtn"
                 android:layout_below="@id/aboutInput"
                 android:layout_toRightOf="@+id/btnCancel"/>
         <Button
@@ -110,7 +111,7 @@
                 android:layout_height="35dp"
                 android:text="Cancel"
                 android:id="@+id/btnCancel"
-                android:onClick="goBack"
+                android:onClick="cancelEditBtn"
                 android:layout_below="@id/aboutInput"/>
 
     </RelativeLayout>

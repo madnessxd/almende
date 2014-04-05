@@ -21,12 +21,24 @@ public class User extends BasicDBObject {
         put("about", about);
     }
 
+    public String getAbout(){
+        return this.getString("about");
+    }
+
     public void setAge(String age){
         put("age", age);
     }
 
+    public String getAge(){
+        return this.getString("age");
+    }
+
     public void setCity(String city){
         put("city", city);
+    }
+
+    public String getCity(){
+        return this.getString("city");
     }
 
     //TODO make arraylist, subarray inside user
@@ -34,12 +46,24 @@ public class User extends BasicDBObject {
         put("sports", sports);
     }
 
+    public String getSports(){
+        return this.getString("sports");
+    }
+
     public void setName(String name){
         put("name", name);
     }
 
+    public String getName(){
+        return this.getString("name");
+    }
+
     public void setGoal(String goal){
         put("goal",goal);
+    }
+
+    public String getGoal(){
+        return this.getString("goal");
     }
 
 }

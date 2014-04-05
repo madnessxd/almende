@@ -99,7 +99,7 @@
             android:layout_height="35dp"
             android:text="Edit"
             android:id="@+id/btnEdit"
-            android:onClick="editUser"
+            android:onClick="editUserBtn"
             android:layout_alignParentTop="true" android:layout_alignParentRight="true"
             android:layout_marginTop="10dp" android:layout_marginRight="10dp"/>
     <ImageView
