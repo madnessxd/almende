@@ -76,8 +76,9 @@ public class ProfileActivity extends Activity{
     }
 
     public void saveUserBtn(View v){
-
-        new DatabaseThread().execute("insert");
+        if(validation()){
+            new DatabaseThread().execute("insert");
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -115,6 +116,18 @@ public class ProfileActivity extends Activity{
         home = new Intent(ProfileActivity.this, MainMenuActivity.class);
         startActivity(home);
         return;
+    }
+
+    //for validation
+    private boolean validation(){
+        boolean succes = true;
+        if(!Validation.hasText(aboutInput))succes=false;
+        if(!Validation.isNumeric(ageInput,true))succes=false;
+        if(!Validation.isLetters(cityInput, false))succes=false;
+        if(!Validation.isLetters(nameInput,true))succes=false;
+        if(!Validation.hasText(sportsInput))succes=false;
+        if(!Validation.isLetters(goalInput,false))succes=false;
+        return succes;
     }
 
     class DatabaseThread extends AsyncTask<String, String, User> {
