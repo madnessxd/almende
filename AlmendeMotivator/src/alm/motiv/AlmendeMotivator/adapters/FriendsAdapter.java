@@ -38,6 +38,11 @@ public class FriendsAdapter extends BaseAdapter {
         ImageView friendImage;
     }
 
+    public void removeModel(int position){
+        this.models.remove(position);
+        notifyDataSetChanged();
+    }
+
     public void setModels(ArrayList<GraphUser> models) {
         this.models = models;
         notifyDataSetChanged();

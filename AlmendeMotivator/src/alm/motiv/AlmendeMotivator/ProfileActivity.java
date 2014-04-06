@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.*;
 import com.mongodb.*;
+import org.w3c.dom.Text;
 
 import java.util.concurrent.ExecutionException;
 
@@ -21,6 +19,9 @@ public class ProfileActivity extends Activity{
     Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
+
+    //our user
+    User user=null;
 
     //edit fields
     private EditText sportsInput;
@@ -38,9 +39,45 @@ public class ProfileActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        initLabels();
+
+    }
+
+    private void initLabels(){
+        //user can be updated when edit has been done, that is why we get the user here and not in the
+        //oncreate
+        getUser();
+
+        //set labels
+        TextView nameContent = (TextView)findViewById(R.id.name);
+        TextView aboutContent = (TextView)findViewById(R.id.aboutContent);
+        TextView sportsContent = (TextView)findViewById(R.id.sportsContent);
+        TextView cityContent = (TextView)findViewById(R.id.cityContent);
+        TextView ageContent = (TextView)findViewById(R.id.ageContent);
+        TextView goalContent = (TextView)findViewById(R.id.goalContent);
+
+        nameContent.setText(user.getName());
+        aboutContent.setText(user.getAbout());
+        sportsContent.setText(user.getSports());
+        cityContent.setText(user.getCity());
+        ageContent.setText(user.getAge());
+        goalContent.setText(user.getGoal());
+    }
+
+    private void getUser(){
+        //get the user
+        try {
+            user = new DatabaseThread().execute("select").get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public void editUserBtn(View v){
+        getUser();
         //change layout
         setContentView(R.layout.activity_profileviewedit);
 
@@ -51,16 +88,6 @@ public class ProfileActivity extends Activity{
         ageInput = (EditText)findViewById(R.id.ageInput);
         goalInput = (EditText)findViewById(R.id.goalInput);
         cityInput = (EditText)findViewById(R.id.cityInput);
-
-        //get the user
-        User user = null;
-        try {
-             user = new DatabaseThread().execute("select").get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
 
         //set content fields with existing data
         nameInput.setText(user.getName());
@@ -73,6 +100,7 @@ public class ProfileActivity extends Activity{
 
     public void cancelEditBtn(View v){
         setContentView(R.layout.activity_profileview);
+        initLabels();
     }
 
     public void saveUserBtn(View v){
@@ -124,9 +152,9 @@ public class ProfileActivity extends Activity{
         if(!Validation.hasText(aboutInput))succes=false;
         if(!Validation.isNumeric(ageInput,true))succes=false;
         if(!Validation.isLetters(cityInput, false))succes=false;
-        if(!Validation.isLetters(nameInput,true))succes=false;
+        if(!Validation.isLetters(nameInput, true))succes=false;
         if(!Validation.hasText(sportsInput))succes=false;
-        if(!Validation.isLetters(goalInput,false))succes=false;
+        if(!Validation.isLetters(goalInput, false))succes=false;
         return succes;
     }
 
@@ -143,20 +171,18 @@ public class ProfileActivity extends Activity{
             // get the current user from database
             User current = new User();
             current.put("facebookID", Cookie.getInstance().userEntryId);
-            User newUser = (User) userCollection.find(current).toArray().get(0);
+            User aUser = (User) userCollection.find(current).toArray().get(0);
 
             if(args[0]=="select"){
-                return newUser;
+                return aUser;
             }else if(args[0]=="insert"){
-                insertQuery(current, userCollection);
+                insertQuery(current,aUser, userCollection);
             }
 
             return null;
         }
 
-        private void insertQuery(User current, DBCollection userCollection){
-            // make a new user, based upon the data of the current
-            User newUser = (User) userCollection.find(current).toArray().get(0);
+        private void insertQuery(User current, User newUser, DBCollection userCollection){
             newUser.setAbout(String.valueOf(aboutInput.getText()));
             newUser.setName(String.valueOf(nameInput.getText()));
             newUser.setAge(String.valueOf(ageInput.getText()));
