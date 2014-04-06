@@ -38,6 +38,11 @@
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
         </activity>
+        <activity android:name=".NewMessageActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+        </activity>
         <activity android:name=".ProfileActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"
