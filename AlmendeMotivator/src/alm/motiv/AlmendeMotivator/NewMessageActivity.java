@@ -26,12 +26,13 @@ public class NewMessageActivity extends Activity{
     private String message;
     private String date;
 
-    private GraphUser user;
-
+    private String facebookId;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+        getFacebookID(Session.getActiveSession());
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -57,6 +58,28 @@ public class NewMessageActivity extends Activity{
         DatabaseThread db = new DatabaseThread();
         db.execute();
         Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
+        mEdit.setText("");
+    }
+
+    private void getFacebookID(final Session session) {
+        Request request = Request.newMeRequest(session,
+                new Request.GraphUserCallback() {
+
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        // If the response is successful
+                        if (session == Session.getActiveSession()) {
+                            if (user != null) {
+                                facebookId = user.getId();
+                                System.out.println(facebookId);
+                            }
+                        }
+                        if (response.getError() != null) {
+                            // Handle error
+                        }
+                    }
+                });
+        request.executeAsync();
     }
 
     class DatabaseThread extends AsyncTask<String, String, String> {
@@ -70,8 +93,7 @@ public class NewMessageActivity extends Activity{
             userCollection.setObjectClass(Message.class);
 
             //TODO Add Challengee from appFriendslist
-            //System.out.println(user.getId());
-            Message challenge = new Message("a", "b", "Test Message", message, date, "Normal message", "0");
+            Message challenge = new Message(facebookId, facebookId, "Test Message", message, date, "Normal message", "0");
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }

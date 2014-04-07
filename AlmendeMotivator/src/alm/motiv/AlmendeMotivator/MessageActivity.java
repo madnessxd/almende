@@ -29,12 +29,6 @@ public class MessageActivity extends Activity{
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        //messageList = (ListView) findViewById(R.id.messagesGrid);
-        //messageList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_message, mMenuOptions));
-        //messageList.setOnItemClickListener(new DrawerItemClickListener());
-
-        //GridView messageListView = (GridView) findViewById(R.id.messagesGrid);
-        //messageListView.setAdapter(new MessagesAdapter(this));
 
     }
 
