@@ -80,6 +80,9 @@ public class MainMenuActivity extends Activity {
             case R.id.friendsBut:
                 k = new Intent(MainMenuActivity.this, FriendActivity.class);
                 break;
+            case R.id.evidenceBut:
+                k = new Intent(MainMenuActivity.this, ChallengeEvidence.class);
+                break;
         }
         finish();
         startActivity(k);
