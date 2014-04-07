@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <TextView android:id="@+id/txtMessageTitle"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="Message title"
+                    />
+
+            <TextView
+                    android:id="@+id/txtChallengerName"
+                    android:text="@string/challenger"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtMessageTitle"/>
+
+            <TextView android:id="@+id/txtDate"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:layout_below="@+id/txtChallengerName"
+                      android:text="Date"/>
+
+            <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/view"
+                    android:layout_toRightOf="@+id/txtChallengerName"
+                    android:layout_marginLeft="100dp"
+                    />
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>

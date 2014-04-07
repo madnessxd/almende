@@ -16,8 +16,18 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Messages"
             android:id="@+id/textView"
-            android:textSize="24dp" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp" android:textColor="#000"/>
+            android:textSize="24dp"
+            android:textColor="#000" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Message"
+            android:onClick="createMessage"
+            android:id="@+id/button" android:layout_alignTop="@+id/textView" android:layout_alignParentRight="true"/>
+    <GridView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gridView" android:layout_below="@+id/button" android:layout_alignParentRight="true"/>
 </RelativeLayout>
     <ListView android:id="@+id/left_drawer"
               android:layout_width="240dp"

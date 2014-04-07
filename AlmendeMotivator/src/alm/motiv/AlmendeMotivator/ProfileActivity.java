@@ -173,6 +173,7 @@ public class ProfileActivity extends Activity{
             current.put("facebookID", Cookie.getInstance().userEntryId);
             User aUser = (User) userCollection.find(current).toArray().get(0);
 
+
             if(args[0]=="select"){
                 return aUser;
             }else if(args[0]=="insert"){

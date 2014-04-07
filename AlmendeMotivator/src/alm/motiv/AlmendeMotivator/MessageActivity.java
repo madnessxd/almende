@@ -1,14 +1,16 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.adapters.MessagesAdapter;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
+import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.*;
 
 public class MessageActivity extends Activity{
     Intent home;
@@ -20,11 +22,14 @@ public class MessageActivity extends Activity{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messagesmenu);
+
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
+
+
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -33,6 +38,12 @@ public class MessageActivity extends Activity{
         }
     }
 
+    public void createMessage(View v){
+        System.out.println("Er was eens een sout");
+        k = new Intent(MessageActivity.this, NewMessageActivity.class);
+        finish();
+        startActivity(k);
+    }
     public void selectItem(int pos){
         switch (pos){
             case 0:
@@ -62,4 +73,5 @@ public class MessageActivity extends Activity{
         startActivity(home);
         return;
     }
+
 }
