@@ -2,6 +2,8 @@ package alm.motiv.AlmendeMotivator.models;
 
 import com.mongodb.BasicDBObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -64,6 +66,10 @@ public class User extends BasicDBObject {
 
     public String getGoal(){
         return this.getString("goal");
+    }
+
+    public ArrayList<BasicDBObject> getFriends(){
+        return (ArrayList<BasicDBObject>) this.get("friends");
     }
 
 }

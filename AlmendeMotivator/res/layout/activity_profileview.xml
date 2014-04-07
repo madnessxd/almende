@@ -21,42 +21,72 @@
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Name:"
+            android:text="Name"
             android:textSize="20dp" android:textStyle="bold" android:textColor="#000"
             android:layout_toRightOf="@+id/picture" android:layout_below="@+id/button"/>
     <TextView
-            android:id="@+id/birthday"
-            android:layout_width="fill_parent"
+            android:id="@+id/age"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="Birthday:"
+            android:text="Age:"
             android:textColor="#000"
             android:layout_below="@+id/name"
             android:layout_toRightOf="@+id/picture"/>
     <TextView
+            android:id="@+id/ageContent"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_above="@+id/goalContent"
+            android:layout_toRightOf="@id/age"/>
+    <TextView
             android:id="@+id/goal"
-            android:layout_width="fill_parent"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="Goal:"
-            android:textColor="#000" android:layout_below="@+id/birthday" android:layout_toRightOf="@+id/picture"/>
+            android:textColor="#000"
+            android:layout_below="@+id/age"
+            android:layout_toRightOf="@+id/picture"/>
+    <TextView
+            android:id="@+id/goalContent"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_above="@+id/cityContent"
+            android:layout_toRightOf="@id/goal"/>
     <TextView
             android:id="@+id/city"
-            android:layout_width="fill_parent"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="City:"
-            android:textColor="#000" android:layout_below="@+id/goal" android:layout_toRightOf="@+id/picture"/>
+            android:textColor="#000"
+            android:layout_below="@+id/goal"
+            android:layout_toRightOf="@+id/picture"/>
+    <TextView
+            android:id="@+id/cityContent"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="aa"
+            android:layout_below="@+id/goal"
+            android:layout_toRightOf="@+id/city"/>
     <TextView
             android:id="@+id/level"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Level:"
-            android:textColor="#000" android:layout_below="@+id/city" android:layout_toRightOf="@+id/picture"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000"
+            android:layout_below="@+id/picture" />
     <ProgressBar
             android:id="@+id/progress"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleHorizontal"
             android:max="80"
-            android:layout_below="@+id/level" android:layout_alignParentLeft="true" android:layout_marginTop="20dp"
+            android:layout_below="@+id/level" android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp" android:layout_marginRight="10dp"/>
     <TextView
             android:id="@+id/progressText"
@@ -92,7 +122,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Lorem ipsum.."
-            android:textColor="#000" android:layout_below="@+id/about" android:layout_alignParentLeft="true"
+            android:textColor="#000"
+            android:layout_below="@+id/about"
+            android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"/>
     <Button
             android:layout_width="70dp"
