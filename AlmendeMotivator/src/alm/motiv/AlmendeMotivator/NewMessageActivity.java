@@ -1,5 +1,6 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.adapters.FriendsAdapter;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Message;
@@ -33,6 +34,13 @@ public class NewMessageActivity extends Activity{
     private String facebookId;
 
     private ArrayList<String> receivedMessages = new ArrayList<String>();
+
+    FriendsAdapter adapter;
+    GraphUser friend;
+    User user = null;
+    GridView friendListView;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -57,7 +65,6 @@ public class NewMessageActivity extends Activity{
 
     public void showMessages(){
         listView = (ListView) findViewById(R.id.listView);
-        //System.out.println(receivedMessages.toString());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, receivedMessages);
@@ -107,8 +114,9 @@ public class NewMessageActivity extends Activity{
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
+
+
             Message current = new Message();
-            current.put("Receiver", Cookie.getInstance().userEntryId);
 
             Message challenge = new Message(facebookId, facebookId, "Test Message", message, date, "Normal message", "0");
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
