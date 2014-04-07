@@ -89,18 +89,18 @@ public class FriendsAdapter extends BaseAdapter {
 
         // imgId = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/t1.0-1/c0.33.200.200/p200x200/248489_10150308474960968_2461155_n.jpg";
 
-        Log.d("facebook", "url = " + imgId);
+        //Log.d("facebook", "url = " + imgId);
 
         Picasso.with(context).load(imgId).into(viewHolder.friendImage, new Callback() {
             @Override
             public void onSuccess() {
-                Log.d("facebook", "success = ");
+               // Log.d("facebook", "success = ");
 
             }
 
             @Override
             public void onError() {
-                Log.d("facebook", "error = ");
+               // Log.d("facebook", "error = ");
 
 
             }

@@ -69,7 +69,7 @@ public class User extends BasicDBObject {
     }
 
     public ArrayList<BasicDBObject> getFriends(){
-        return (ArrayList) this.get("friends");
+        return (ArrayList<BasicDBObject>) this.get("friends");
     }
 
 }

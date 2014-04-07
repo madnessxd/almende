@@ -6,6 +6,7 @@ import alm.motiv.AlmendeMotivator.misc.CustomCallback;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,16 +21,15 @@ import com.facebook.model.GraphUser;
 import com.mongodb.*;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class FriendActivity extends Activity {
     FriendsAdapter adapter;
     GraphUser friend;
     User user = null;
     GridView friendListView;
+
+    boolean initializedFriends = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,10 +40,9 @@ public class FriendActivity extends Activity {
         if (user == null) {
             new DatabaseThread().execute("select");
         }
-        initFriends();
     }
 
-    public void initFriends() {
+    public void initFriends(){
         FacebookManager.getFriendsOfUser(new CustomCallback() {
             @Override
             public Object callback(Object object) {
@@ -52,7 +51,13 @@ public class FriendActivity extends Activity {
 
                     ArrayList<GraphUser> usersArray = new ArrayList<GraphUser>();
                     usersArray.addAll(users);
-                    addFriendsToList(usersArray);
+
+                    //we want to save the facebookfriends in case we need to access it somewhere else?
+                    if(Cookie.getInstance().facebookFriends==null){
+                        Cookie.getInstance().facebookFriends=usersArray;
+                    }
+
+                    addFriendsToList(compareFriends());
                 }
                 return null;
             }
@@ -93,31 +98,29 @@ public class FriendActivity extends Activity {
     }
 
     public void addFriendsToList(ArrayList<GraphUser> users) {
-        //our array with facebook friends minus the friends the user already follows
-        /*ArrayList<GraphUser> displayFriends=new ArrayList<GraphUser>();
-        ArrayList currentFriends = user.getFriends();
-
-        if(currentFriends!=null){
-            //loop through all the friends the user is following
-            Iterator<BasicDBObject> iterator = currentFriends.iterator();
-            while (iterator.hasNext()) {
-                BasicDBObject userFriend = iterator.next();
-                for (GraphUser facebookFriend : users) {
-                    if (!facebookFriend.getId().equals(userFriend.get("facebookID"))) {
-                        //add friend to final facebook friends array when he/she doesn't equal current friends (followers)
-                        displayFriends.add(facebookFriend);
-                    }else{
-                        System.out.println("i already follow youuu");
-                    }
-                }
-            }
-            adapter.setModels(displayFriends);
-        }else{
-            adapter.setModels(users);
-        }
-        friendListView.setAdapter(adapter);
-        */
         adapter.setModels(users);
+    }
+
+    public ArrayList compareFriends(){
+        ArrayList<GraphUser> facebookFriends = Cookie.getInstance().facebookFriends;
+
+        ArrayList<BasicDBObject> currentFriends = user.getFriends();
+
+        ArrayList<GraphUser> result =new ArrayList<GraphUser>();
+
+        Set<String> set = new HashSet<String>();
+        //fill our set, we are going to compare strings
+        for(BasicDBObject aFriend: currentFriends){
+            set.add((String) aFriend.get("facebookID"));
+        }
+
+        //compare strings and put the facebook user that's not yet followed by the user in result
+        for(GraphUser facebookFriend: facebookFriends){
+            if(!set.contains(facebookFriend.getId())){
+                result.add(facebookFriend);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -128,9 +131,6 @@ public class FriendActivity extends Activity {
     }
 
     class DatabaseThread extends AsyncTask<String, String, String> {
-        /**
-         * Creating product
-         */
         protected String doInBackground(String... args) {
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
@@ -149,16 +149,17 @@ public class FriendActivity extends Activity {
                 BasicDBObject update = new BasicDBObject();
                 update.put("$push", new BasicDBObject("friends", newFriend));
 
-                userCollection.update(match,update);
+                userCollection.update(match, update);
             }
 
             return null;
         }
 
-        /*protected void onPostExecute(String result) {
-            //we have to do the friends bit here, because we need the user's followers list to filter the facebook friends
-            System.out.println("RESSULTOO" +  result);
-            initFriends();
-        }*/
+       protected void onPostExecute(String result) {
+          if(!initializedFriends){
+              initFriends();
+              initializedFriends=true;
+          }
+        }
     }
 }
