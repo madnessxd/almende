@@ -22,7 +22,6 @@ import java.util.ArrayList;
  */
 public class FriendsAdapter extends BaseAdapter {
 
-
     private ArrayList<GraphUser> models;
     private LayoutInflater inflater;
     private Context context;

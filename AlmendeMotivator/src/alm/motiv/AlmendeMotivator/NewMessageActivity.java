@@ -17,22 +17,30 @@ import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
 
+import java.util.ArrayList;
+
 public class NewMessageActivity extends Activity{
     Intent home;
     Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
 
+    private ListView listView;
+
     private String message;
     private String date;
 
     private String facebookId;
+
+    private ArrayList<String> receivedMessages = new ArrayList<String>();
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
         getFacebookID(Session.getActiveSession());
+
+        showMessages();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -46,19 +54,30 @@ public class NewMessageActivity extends Activity{
             selectItem(position);
         }
     }
+
+    public void showMessages(){
+        listView = (ListView) findViewById(R.id.listView);
+        //System.out.println(receivedMessages.toString());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, receivedMessages);
+
+        listView.setAdapter(adapter);
+    }
+
     public void sendMessage(View v){
         EditText mEdit = (EditText)findViewById(R.id.messageInput);
         message = mEdit.getText().toString();
-        System.out.println(message);
 
         Time now = new Time();
         now.setToNow();
-        date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute);
+        date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);
 
         DatabaseThread db = new DatabaseThread();
         db.execute();
         Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
         mEdit.setText("");
+        showMessages();
     }
 
     private void getFacebookID(final Session session) {
@@ -71,7 +90,6 @@ public class NewMessageActivity extends Activity{
                         if (session == Session.getActiveSession()) {
                             if (user != null) {
                                 facebookId = user.getId();
-                                System.out.println(facebookId);
                             }
                         }
                         if (response.getError() != null) {
@@ -84,17 +102,25 @@ public class NewMessageActivity extends Activity{
 
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            // To connect to mongodb server
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
-
-            //get collection and attach class to it
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-            //TODO Add Challengee from appFriendslist
+            Message current = new Message();
+            current.put("Receiver", Cookie.getInstance().userEntryId);
+
             Message challenge = new Message(facebookId, facebookId, "Test Message", message, date, "Normal message", "0");
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+
+            //get messages
+            int noOfMessages = userCollection.find(current).toArray().size();
+            for(int i = 0; i < noOfMessages; i++){
+                Message newUser = (Message) userCollection.find(current).toArray().get(i);
+                System.out.println(newUser.values().toArray()[4]);
+                if(!receivedMessages.contains((String) newUser.values().toArray()[4]))
+                receivedMessages.add((String) newUser.values().toArray()[4]);
+            }
             return null;
         }
     }

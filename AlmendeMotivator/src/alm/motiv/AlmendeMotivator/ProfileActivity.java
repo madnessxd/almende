@@ -145,6 +145,7 @@ public class ProfileActivity extends Activity{
             current.put("facebookID", Cookie.getInstance().userEntryId);
             User newUser = (User) userCollection.find(current).toArray().get(0);
 
+
             if(args[0]=="select"){
                 return newUser;
             }else if(args[0]=="insert"){
