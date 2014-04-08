@@ -108,19 +108,23 @@ public class FriendActivity extends Activity {
 
         ArrayList<GraphUser> result =new ArrayList<GraphUser>();
 
-        Set<String> set = new HashSet<String>();
-        //fill our set, we are going to compare strings
-        for(BasicDBObject aFriend: currentFriends){
-            set.add((String) aFriend.get("facebookID"));
-        }
-
-        //compare strings and put the facebook user that's not yet followed by the user in result
-        for(GraphUser facebookFriend: facebookFriends){
-            if(!set.contains(facebookFriend.getId())){
-                result.add(facebookFriend);
+        if(currentFriends!=null){
+            Set<String> set = new HashSet<String>();
+            //fill our set, we are going to compare strings
+            for(BasicDBObject aFriend: currentFriends){
+                set.add((String) aFriend.get("facebookID"));
             }
+
+            //compare strings and put the facebook user that's not yet followed by the user in result
+            for(GraphUser facebookFriend: facebookFriends){
+                if(!set.contains(facebookFriend.getId())){
+                    result.add(facebookFriend);
+                }
+            }
+            return result;
         }
-        return result;
+        return facebookFriends;
+
     }
 
     @Override
