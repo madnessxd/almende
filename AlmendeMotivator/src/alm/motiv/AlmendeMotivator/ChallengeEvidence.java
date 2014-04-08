@@ -24,6 +24,8 @@ public class ChallengeEvidence extends Activity {
     //captured picture uri
     private Uri picUri;
 
+    private Intent home;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -78,6 +80,13 @@ public class ChallengeEvidence extends Activity {
                 picView.setImageURI(selectedImageUri);
             }
         }
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+        home = new Intent(ChallengeEvidence.this, MainMenuActivity.class);
+        startActivity(home);
+        return;
     }
 
 }

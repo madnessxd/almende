@@ -4,6 +4,8 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.misc.CustomCallback;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -109,6 +111,28 @@ public class MainMenuActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        android.os.Process.killProcess(android.os.Process.myPid());
+        showPopUp();
+    }
+
+    private void showPopUp() {
+        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
+        helpBuilder.setTitle("Exit");
+        helpBuilder.setMessage("Are you sure you want to exit Sportopia?");
+        helpBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    }
+                });
+
+        helpBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing
+            }
+        });
+
+        AlertDialog helpDialog = helpBuilder.create();
+        helpDialog.show();
     }
 }
