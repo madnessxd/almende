@@ -71,7 +71,7 @@ public class ChallengeCreateActivity extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                //Do nothing
+                //Isn't possible so, do nothing
             }
         });
 
@@ -84,7 +84,7 @@ public class ChallengeCreateActivity extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                //Do nothing
+                //Isn't possible so, do nothing
             }
         });
 
@@ -186,7 +186,7 @@ public class ChallengeCreateActivity extends Activity {
             userCollection.setObjectClass(Challenge.class);
 
             //TODO Add Challengee from appFriendslist
-            Challenge challenge = new Challenge(title, challenger, "Dennis Reep", content, evidence_amount, evidence_type, reward, status);
+            Challenge challenge = new Challenge(title, challenger, challenger, content, evidence_amount, evidence_type, reward, status);
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }
