@@ -67,7 +67,8 @@
         <ListView
                 android:layout_width="match_parent"
                 android:layout_height="366dp"
-                android:id="@+id/listView" android:layout_gravity="center_horizontal" android:layout_weight="0.73"/>
+                android:id="@+id/listView" android:layout_gravity="center_horizontal" android:layout_weight="0.73"
+                android:fastScrollAlwaysVisible="false"/>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"

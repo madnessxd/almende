@@ -35,12 +35,6 @@ public class NewMessageActivity extends Activity{
 
     private ArrayList<String> receivedMessages = new ArrayList<String>();
 
-    FriendsAdapter adapter;
-    GraphUser friend;
-    User user = null;
-    GridView friendListView;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,6 +43,9 @@ public class NewMessageActivity extends Activity{
         getFacebookID(Session.getActiveSession());
 
         showMessages();
+
+        UpdateMessages u = new UpdateMessages();
+        u.execute();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -107,6 +104,24 @@ public class NewMessageActivity extends Activity{
         request.executeAsync();
     }
 
+    class UpdateMessages extends AsyncTask<String, String, String> {
+        protected String doInBackground(String... args) {
+            MongoClient client = Database.getInstance();
+            DB db = client.getDB(Database.uri.getDatabase());
+            DBCollection userCollection = db.getCollection("messages");
+            userCollection.setObjectClass(Message.class);
+
+            //Message current = new Message();
+
+            //DBObject query = QueryBuilder.start("Author").is(facebookId).get();
+            //DBCursor cursor = userCollection.find(query);
+
+            getMessages(userCollection);
+
+            return null;
+        }
+    }
+
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
             MongoClient client = Database.getInstance();
@@ -114,22 +129,51 @@ public class NewMessageActivity extends Activity{
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-
-
             Message current = new Message();
 
-            Message challenge = new Message(facebookId, facebookId, "Test Message", message, date, "Normal message", "0");
-            userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+            DBObject query = QueryBuilder.start("Author").is(facebookId).get();
+            DBCursor cursor = userCollection.find(query);
 
-            //get messages
-            int noOfMessages = userCollection.find(current).toArray().size();
-            for(int i = 0; i < noOfMessages; i++){
-                Message newUser = (Message) userCollection.find(current).toArray().get(i);
-                System.out.println(newUser.values().toArray()[4]);
-                if(!receivedMessages.contains((String) newUser.values().toArray()[4]))
-                receivedMessages.add((String) newUser.values().toArray()[4]);
+            if(cursor.count()==0){
+                ArrayList<String> messages = new ArrayList<String>();
+                messages.add(message);
+
+                Message challenge = new Message(facebookId, facebookId, "Test Message", messages, date, "Normal message", "0");
+                userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+
+            } else{
+                BasicDBObject update = new BasicDBObject();
+                update.put("$push", new BasicDBObject("Content", message));
+
+                Message newFriend = new Message();
+                newFriend.put("Receiver", facebookId);
+
+                userCollection.update(newFriend, update);
             }
+
+            getMessages(userCollection);
+
+            /*//get messages
+            Message newUser = (Message) userCollection.find(current).toArray().get(0);
+            ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("Content");
+            int noOfMessages = arrayMessages.size();
+            receivedMessages.clear();
+            for(int i = 0; i < noOfMessages; i++){
+                receivedMessages.add(arrayMessages.get(i));
+            }*/
             return null;
+        }
+    }
+
+    public void getMessages(DBCollection userCollection){
+        Message current = new Message();
+
+        Message newUser = (Message) userCollection.find(current).toArray().get(0);
+        ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("Content");
+        int noOfMessages = arrayMessages.size();
+        receivedMessages.clear();
+        for(int i = 0; i < noOfMessages; i++){
+            receivedMessages.add(arrayMessages.get(i));
         }
     }
 

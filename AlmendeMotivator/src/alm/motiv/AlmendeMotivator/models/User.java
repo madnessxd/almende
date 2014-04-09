@@ -15,7 +15,7 @@ public class User extends BasicDBObject {
     public User(){}
 
     public User(String facebookID, String name){
-        put("facebookID",facebookID);
+        put("facebookID", facebookID);
         setName(name);
     }
 
@@ -71,5 +71,4 @@ public class User extends BasicDBObject {
     public ArrayList<BasicDBObject> getFriends(){
         return (ArrayList<BasicDBObject>) this.get("friends");
     }
-
 }

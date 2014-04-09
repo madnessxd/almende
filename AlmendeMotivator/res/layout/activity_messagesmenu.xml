@@ -27,7 +27,8 @@
     <GridView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gridView" android:layout_below="@+id/button" android:layout_alignParentRight="true"/>
+            android:id="@+id/gridView" android:layout_below="@+id/button" android:layout_alignParentRight="true"
+            />
 </RelativeLayout>
     <ListView android:id="@+id/left_drawer"
               android:layout_width="240dp"
