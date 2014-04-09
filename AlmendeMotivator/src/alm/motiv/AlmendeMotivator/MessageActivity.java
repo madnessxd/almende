@@ -29,8 +29,6 @@ public class MessageActivity extends Activity{
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
 
-
-
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -39,7 +37,6 @@ public class MessageActivity extends Activity{
     }
 
     public void createMessage(View v){
-        System.out.println("Er was eens een sout");
         k = new Intent(MessageActivity.this, NewMessageActivity.class);
         finish();
         startActivity(k);
