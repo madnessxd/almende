@@ -1,11 +1,14 @@
 package alm.motiv.AlmendeMotivator.models;
 
+import android.os.Parcelable;
 import com.mongodb.BasicDBObject;
+
+import java.io.Serializable;
 
 /**
  * Created by AsterLaptop on 3/31/14.
  */
-public class Challenge extends BasicDBObject {
+public class Challenge extends BasicDBObject implements Serializable{
     private static final long serialVersionUID = 1L;
 
     public Challenge() {
