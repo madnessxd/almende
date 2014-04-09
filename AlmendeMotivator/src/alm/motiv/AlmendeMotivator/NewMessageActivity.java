@@ -129,7 +129,7 @@ public class NewMessageActivity extends Activity{
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-            Message current = new Message();
+            //Message current = new Message();
 
             DBObject query = QueryBuilder.start("Author").is(facebookId).get();
             DBCursor cursor = userCollection.find(query);
