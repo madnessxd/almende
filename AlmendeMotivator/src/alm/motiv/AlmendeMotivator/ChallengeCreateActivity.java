@@ -164,6 +164,7 @@ public class ChallengeCreateActivity extends Activity {
             DatabaseThread db = new DatabaseThread();
             db.execute();
             Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
@@ -252,8 +253,6 @@ public class ChallengeCreateActivity extends Activity {
             ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("friends");
             facebookFriends = new String[arrayMessages.toArray().length];
             facebookFriendsName = new String[arrayMessages.toArray().length];
-
-
 
             for(int i = 0 ; i < arrayMessages.toArray().length ; i++){
                 facebookFriends[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
