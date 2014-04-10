@@ -153,14 +153,6 @@ public class NewMessageActivity extends Activity{
 
             getMessages(userCollection);
 
-            /*//get messages
-            Message newUser = (Message) userCollection.find(current).toArray().get(0);
-            ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("Content");
-            int noOfMessages = arrayMessages.size();
-            receivedMessages.clear();
-            for(int i = 0; i < noOfMessages; i++){
-                receivedMessages.add(arrayMessages.get(i));
-            }*/
             return null;
         }
     }

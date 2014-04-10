@@ -99,9 +99,6 @@ public class ChallengeCreateActivity extends Activity {
         DatabaseThread2 dbT = new DatabaseThread2();
         dbT.execute();
 
-        //ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, facebookFriends);
-        //spinnerFriends.setAdapter(spinnerArrayAdapter);
-
         spinnerType = (Spinner) findViewById(R.id.spinner_evidence_type);
         spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -240,22 +237,30 @@ public class ChallengeCreateActivity extends Activity {
             DBCollection userCollection = db.getCollection("user");
             userCollection.setObjectClass(User.class);
 
-            User current = new User();
+            Session session = Session.getActiveSession();
 
-            User newUser = (User) userCollection.find(current).toArray().get(0);
+            Request request = new Request(session, "me", null, HttpMethod.GET);
+            Response response = request.executeAndWait();
+
+            System.out.println(Cookie.getInstance().userEntryId);
+
+            User curUser = new User();
+            curUser.put("facebookID", Cookie.getInstance().userEntryId);
+            User newUser = (User) userCollection.find(curUser).toArray().get(0);
+            System.out.println(newUser.values());
 
             ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("friends");
-
             facebookFriends = new String[arrayMessages.toArray().length];
             facebookFriendsName = new String[arrayMessages.toArray().length];
 
-            Session session = Session.getActiveSession();
+
 
             for(int i = 0 ; i < arrayMessages.toArray().length ; i++){
                 facebookFriends[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
 
-                Request request = new Request(session, facebookFriends[i], null, HttpMethod.GET);
-                Response response = request.executeAndWait();
+                request = new Request(session, facebookFriends[i], null, HttpMethod.GET);
+                response = request.executeAndWait();
+
                 if (response.getError() != null) {
                     System.out.println("NOPE");
                 } else {
