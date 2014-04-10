@@ -143,11 +143,13 @@
         <Button android:id="@+id/btnAccept" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accept"
+                android:onClick="onAcceptPressed"
                 android:layout_weight="1"/>
         <Button android:id="@+id/btnDecline" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Decline" android:layout_marginRight="5dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:onClick="onDeclinePressed"/>
     </LinearLayout>
 </LinearLayout>
     <ListView android:id="@+id/left_drawer"

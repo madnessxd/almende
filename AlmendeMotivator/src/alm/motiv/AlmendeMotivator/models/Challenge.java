@@ -26,6 +26,14 @@ public class Challenge extends BasicDBObject implements Serializable{
         put("status", status);
     }
 
+    public void setStatus(String status){
+        put("status", status);
+    }
+
+    public Object getID(){
+        return this.get("_id");
+    }
+
     public String getTitle() {
         return this.getString("title");
     }

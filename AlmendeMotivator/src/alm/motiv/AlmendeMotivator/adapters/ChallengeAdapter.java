@@ -75,7 +75,6 @@ public class ChallengeAdapter extends BaseAdapter implements Serializable {
         viewHolder.viewChallenge = (Button) convertView.findViewById(R.id.btnViewChallenge);
         convertView.setTag(viewHolder);
 
-
         viewHolder.challengeTitle.setText(currentChallenge.getTitle());
         viewHolder.challengerName.setText(currentChallenge.getChallenger());
         viewHolder.viewChallenge.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +91,7 @@ public class ChallengeAdapter extends BaseAdapter implements Serializable {
                 intent.putExtra("evidenceType", currentChallenge.getEvidenceType());
                 intent.putExtra("reward", currentChallenge.getReward());
                 intent.putExtra("status", currentChallenge.getStatus());
+                intent.putExtra("id", currentChallenge.getID().toString());
                 context.startActivity(intent);
             }
         });

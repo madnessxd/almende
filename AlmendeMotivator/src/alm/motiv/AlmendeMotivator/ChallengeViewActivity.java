@@ -3,14 +3,20 @@ package alm.motiv.AlmendeMotivator;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
+import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+import org.bson.types.ObjectId;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -29,6 +35,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     TextView content;
     TextView evidence;
     TextView reward;
+    String id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,14 +50,15 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         updateUI();
     }
 
-    public void updateUI(){
+    public void updateUI() {
         Intent intent = getIntent();
-        title = (TextView)findViewById(R.id.txtStaticChallengeName);
-        challenger = (TextView)findViewById(R.id.txtChallenger);
-        challengee = (TextView)findViewById(R.id.txtChallengee);
-        content = (TextView)findViewById(R.id.viewChallengeContent);
-        evidence = (TextView)findViewById(R.id.viewChallengeEvidence);
-        reward = (TextView)findViewById(R.id.viewChallengeReward);
+        title = (TextView) findViewById(R.id.txtStaticChallengeName);
+        challenger = (TextView) findViewById(R.id.txtChallenger);
+        challengee = (TextView) findViewById(R.id.txtChallengee);
+        content = (TextView) findViewById(R.id.viewChallengeContent);
+        evidence = (TextView) findViewById(R.id.viewChallengeEvidence);
+        reward = (TextView) findViewById(R.id.viewChallengeReward);
+        id = intent.getExtras().getString("id");
 
         title.setText(intent.getExtras().getString("title"));
         challenger.setText(intent.getExtras().getString("challenger"));
@@ -90,11 +98,50 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         startActivity(k);
     }
 
+    public void onAcceptPressed(View v) {
+        DatabaseThread db = new DatabaseThread();
+        db.execute("accept");
+    }
+
+    public void onDeclinePressed(View v) {
+        DatabaseThread db = new DatabaseThread();
+        db.execute("decline");
+    }
+
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(ChallengeViewActivity.this, MainMenuActivity.class);
+        home = new Intent(ChallengeViewActivity.this, ChallengesMenuActivity.class);
         startActivity(home);
         return;
+    }
+
+    class DatabaseThread extends AsyncTask<String, String, Challenge> {
+        protected Challenge doInBackground(String... args) {
+            MongoClient client = Database.getInstance();
+            DB db = client.getDB(Database.uri.getDatabase());
+            DBCollection challengeCollection = db.getCollection("challenge");
+            challengeCollection.setObjectClass(Challenge.class);
+
+            // get the current user from database
+            Challenge current = new Challenge();
+            current.put("_id", new ObjectId(id));
+            Challenge aChallenge = (Challenge) challengeCollection.findOne(current);
+
+
+            if (args[0].matches("accept")) {
+                updateQuery(current, aChallenge, challengeCollection, "accepted");
+            } else if (args[0].matches("decline")) {
+                updateQuery(current, aChallenge, challengeCollection, "declined");
+            }
+            return null;
+        }
+
+        private void updateQuery(Challenge current, Challenge newChallenge, DBCollection challengeCollection, String status) {
+            newChallenge.setStatus(status);
+
+            //overwrite the old one with the new one
+            challengeCollection.findAndModify(current, newChallenge);
+        }
     }
 }
