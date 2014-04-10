@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,8 @@ import org.apache.http.util.ByteArrayBuffer;
 import org.bson.types.ObjectId;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by AsterLaptop on 4/7/14.
@@ -56,8 +59,10 @@ public class ChallengeEvidence extends Activity {
     private ProgressDialog simpleWaitDialog;
     ImageView temp;
 
-
     private Intent home;
+
+    //the picture uri collection
+    private ArrayList<String> pictureUriList;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -67,8 +72,12 @@ public class ChallengeEvidence extends Activity {
        temp = (ImageView)findViewById(R.id.tempimg);
 
        TextView challengeLabel = (TextView)findViewById(R.id.numberOfEvidenceLbl);
+
         //TODO fill with challenge data
+        //number of evidence the challenger wants
         numberOfEvidence=3;
+        //list in which we will store the uploaded pictures their URI
+        pictureUriList = new ArrayList<String>();
         challengeLabel.setText("Your challenger wants you to upload " +numberOfEvidence+" photo's");
         }
 
@@ -84,8 +93,6 @@ public class ChallengeEvidence extends Activity {
         referenceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //realpath = getRealPathFromURI(picUri);
-                //new DatabaseThread().execute();
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.setDataAndType(uri, "image/*");
@@ -102,14 +109,15 @@ public class ChallengeEvidence extends Activity {
             Button addEvidenceBtn = (Button)findViewById(R.id.addEvidenceBtn);
             addEvidenceBtn.setEnabled(false);
 
+            System.out.println(pictureUriList);
             //Add our send button
             Button sendEvidence = new Button(this);
             sendEvidence.setText("Send evidence");
-            sendEvidence.setEnabled(false);
+            sendEvidence.setWidth(100);
             sendEvidence.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   // new DatabaseThread().execute();
+                   new DatabaseThread().execute("insert");
                 }
             });
             theLayout.addView(sendEvidence);
@@ -137,18 +145,13 @@ public class ChallengeEvidence extends Activity {
                 //get the Uri for the captured image
                 picUri = data.getData();
                 addReference(picUri);
+                pictureUriList.add(getRealPathFromURI(picUri));
             }else if(requestCode == SELECT_PICTURE){
                 picUri = data.getData();
                 addReference(picUri);
+                pictureUriList.add(getRealPathFromURI(picUri));
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        startActivity(new Intent(ChallengeEvidence.this, MainMenuActivity.class));
-        return;
     }
 
     private void showPopUp() {
@@ -195,12 +198,13 @@ public class ChallengeEvidence extends Activity {
         protected void onPreExecute() {
             Log.i("Async-Example", "onPreExecute Called");
             simpleWaitDialog = ProgressDialog.show(ChallengeEvidence.this,
-                    "Wait", "Downloading Image");
+                    "Please wait", "Processing");
 
         }
 
         protected void onPostExecute(byte[] result) {
             Log.i("Async-Example", "onPostExecute Called");
+            simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
 
         }
@@ -208,34 +212,81 @@ public class ChallengeEvidence extends Activity {
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
 
-            /*File imageFile = new File(realpath);
-            GridFS gfsPhoto = new GridFS(db, "challenge");
-            GridFSInputFile gfsFile = null;
-            try {
-                gfsFile = gfsPhoto.createFile(imageFile);
-            } catch (IOException e) {
-                e.printStackTrace();
+            DBCollection challengeCollection = db.getCollection("challenge");
+            challengeCollection.setObjectClass(Challenge.class);
+
+            //TODO make dynamic. Use challenge data.
+            Challenge match = new Challenge();
+            match.put("_id", new ObjectId("53401c1620a08841cc4226cf"));
+
+            if(args[0]=="insert"){
+                GridFS gfsPhoto = new GridFS(db, "challenge");
+
+                //loop through the picture uri list
+                for(String uri : pictureUriList){
+                    File imageFile = new File(uri);
+                    GridFSInputFile gfsFile = null;
+                    try {
+                        gfsFile = gfsPhoto.createFile(imageFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    gfsFile.setFilename("challenge");
+                    gfsFile.save();
+
+                    BasicDBObject evidence = new BasicDBObject();
+                    evidence.put("evidenceID",gfsFile.getId().toString());
+
+                    BasicDBObject update = new BasicDBObject();
+                    update.put("$push", new BasicDBObject("evidence", evidence));
+
+                    challengeCollection.update(match, update);
+                }
+
+            }else if(args[0]=="somethingelse"){
+                GridFS gfsPhoto = new GridFS(db, "challenge");
+                //TODO set this piece of code where the challengee will validate the evidence and use challenge data
+                GridFSDBFile image = gfsPhoto.findOne(new ObjectId("53458331726c7e2f54bd529f"));
+
+                InputStream inputStream = image.getInputStream();
+
+                OutputStream outputStream = null;
+
+                try {
+
+                    // write the inputStream to a FileOutputStream
+                    outputStream =
+                            new FileOutputStream(new File(android.os.Environment.getExternalStorageDirectory()+"/"+Environment.DIRECTORY_DOWNLOADS+"/temp.jpg"));
+
+                    int read = 0;
+                    byte[] bytes = new byte[1024];
+
+                    while ((read = inputStream.read(bytes)) != -1) {
+                        outputStream.write(bytes, 0, read);
+                    }
+
+                    System.out.println("Done!");
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (outputStream != null) {
+                        try {
+                            // outputStream.flush();
+                            outputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
-            gfsFile.setFilename("img");
-            gfsFile.save();*/
-
-            GridFS gfsPhoto = new GridFS(db, "challenge");
-
-            GridFSDBFile image = gfsPhoto.findOne(new ObjectId("53458331726c7e2f54bd529f"));
-
-            InputStream is = image.getInputStream();
-
-
-            /*GridFSInputFile file = myChallenges.createFile(data);
-                file.setFilename("tempppp");
-                file.save();
-                String id = file.getId().toString();
-
-            GridFS gfsPhoto = new GridFS(db, "challenge");
-
-            GridFSDBFile image = gfsPhoto.findOne(new ObjectId(id));
-
-            InputStream stream = image.getInputStream();*/
             return null;
         }
 
