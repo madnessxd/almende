@@ -144,13 +144,6 @@ public class ChallengeEvidence extends Activity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-        startActivity(new Intent(ChallengeEvidence.this, MainMenuActivity.class));
-        return;
-    }
-
     private void showPopUp() {
         LayoutInflater inflater = getLayoutInflater();
 
