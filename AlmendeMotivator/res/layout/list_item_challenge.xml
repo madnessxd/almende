@@ -3,29 +3,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="#D8D8D8">
 
     <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
 
         <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-            <TextView android:id="@+id/txtChallengeTitle"
+            <TextView android:id="@+id/txtChallengeViewTitle"
                       android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:text="Challenge title"/>
+                      android:text="Challenge title" android:textColor="#000000"/>
 
             <TextView
-                    android:id="@+id/txtChallengerName"
+                    android:id="@+id/txtChallengeViewName"
                     android:text="@string/challenger"
-                    android:layout_below="@id/txtChallengeTitle"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    android:layout_below="@id/txtChallengeViewTitle"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textColor="#000000"/>
 
-            <TextView android:id="@+id/txtDate"
+            <TextView android:id="@+id/txtChallengeViewDate"
                       android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:layout_below="@id/txtChallengerName"
-                      android:text="Date"/>
+                      android:layout_below="@id/txtChallengeViewName"
+                      android:text="Date" android:textColor="#000000"/>
 
             <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:id="@+id/btnViewChallenge"
                     android:text="@string/view"
-                    android:layout_toRightOf="@+id/txtChallengerName"
+                    android:layout_toRightOf="@+id/txtChallengeViewName"
                     android:layout_marginLeft="100dp"
                     />
         </RelativeLayout>

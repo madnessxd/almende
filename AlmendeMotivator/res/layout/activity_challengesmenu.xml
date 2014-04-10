@@ -57,18 +57,18 @@
         </GridView>
 
         <TextView
-                android:id="@+id/txtEndedChallenge"
+                android:id="@+id/txtIssuedChallenge"
                 android:layout_width="fill_parent" android:layout_height="wrap_content"
-                android:text="@string/ended_challenges"
+                android:text="@string/issued_challenges"
                 android:textColor="#000000"
                 android:layout_below="@id/grdProgressChallenges"
                 android:layout_marginLeft="10dp"/>
 
-        <GridView android:id="@+id/grdEndedChallenges"
+        <ListView android:id="@+id/lstIsseudChallenges"
                   android:layout_width="match_parent"
                   android:layout_height="140dp"
-                  android:layout_below="@id/txtEndedChallenge">
-        </GridView>
+                  android:layout_below="@id/txtIssuedChallenge">
+        </ListView>
     </RelativeLayout>
     <ListView android:id="@+id/left_drawer"
               android:layout_width="240dp"

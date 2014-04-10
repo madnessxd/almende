@@ -1,19 +1,20 @@
 package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.models.Challenge;
+import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * Created by Kevin on 02/04/2014.
@@ -30,6 +31,7 @@ public class ChallengeCreateActivity extends Activity {
 
     //Layout variables
     private Button btnCreateChallenge;
+    private Spinner spinnerFriends;
     private Spinner spinnerAmount;
     private Spinner spinnerType;
     private EditText textTitle;
@@ -51,6 +53,8 @@ public class ChallengeCreateActivity extends Activity {
     private GraphUser user;
     private Session userInfoSession;
 
+    private String[] facebookFriends = {"null"};
+    private String[] facebookFriendsName = {"null"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,9 +75,29 @@ public class ChallengeCreateActivity extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                //Do nothing
+                //Isn't possible so, do nothing
             }
         });
+
+        spinnerFriends = (Spinner) findViewById(R.id.spinner_getFriends);
+        //GET FRIENDS
+        spinnerFriends.setOnTouchListener(Spinner_OnTouch);
+
+        spinnerFriends.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                challengee = facebookFriends[spinnerFriends.getSelectedItemPosition()];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+        DatabaseThread2 dbT = new DatabaseThread2();
+        dbT.execute();
 
         spinnerType = (Spinner) findViewById(R.id.spinner_evidence_type);
         spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -84,7 +108,7 @@ public class ChallengeCreateActivity extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                //Do nothing
+                //Isn't possible so, do nothing
             }
         });
 
@@ -99,6 +123,20 @@ public class ChallengeCreateActivity extends Activity {
                 createChallenge();
             }
         });
+    }
+
+    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                updateFriends();
+            }
+            return false;
+        }
+    };
+
+    public void updateFriends(){
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, facebookFriendsName);
+        spinnerFriends.setAdapter(spinnerArrayAdapter);
     }
 
     public boolean checkFields() {
@@ -186,8 +224,51 @@ public class ChallengeCreateActivity extends Activity {
             userCollection.setObjectClass(Challenge.class);
 
             //TODO Add Challengee from appFriendslist
-            Challenge challenge = new Challenge(title, challenger, "Dennis Reep", content, evidence_amount, evidence_type, reward, status);
+            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status);
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+            return null;
+        }
+    }
+
+    class DatabaseThread2 extends AsyncTask<String, String, String> {
+        protected String doInBackground(String... args) {
+            MongoClient client = Database.getInstance();
+            DB db = client.getDB(Database.uri.getDatabase());
+            DBCollection userCollection = db.getCollection("user");
+            userCollection.setObjectClass(User.class);
+
+            Session session = Session.getActiveSession();
+
+            Request request = new Request(session, "me", null, HttpMethod.GET);
+            Response response = request.executeAndWait();
+
+            System.out.println(Cookie.getInstance().userEntryId);
+
+            User curUser = new User();
+            curUser.put("facebookID", Cookie.getInstance().userEntryId);
+            User newUser = (User) userCollection.find(curUser).toArray().get(0);
+            System.out.println(newUser.values());
+
+            ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("friends");
+            facebookFriends = new String[arrayMessages.toArray().length];
+            facebookFriendsName = new String[arrayMessages.toArray().length];
+
+
+
+            for(int i = 0 ; i < arrayMessages.toArray().length ; i++){
+                facebookFriends[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
+
+                request = new Request(session, facebookFriends[i], null, HttpMethod.GET);
+                response = request.executeAndWait();
+
+                if (response.getError() != null) {
+                    System.out.println("NOPE");
+                } else {
+                    GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                    facebookFriendsName[i] = graphUser.getName();
+                }
+            }
+
             return null;
         }
     }

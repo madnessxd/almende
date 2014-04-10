@@ -1,5 +1,6 @@
 package alm.motiv.AlmendeMotivator;
 
+import android.content.Intent;
 import android.widget.EditText;
 
 import java.util.regex.Pattern;
@@ -61,4 +62,5 @@ public class Validation {
 
         return true;
     }
+
 }

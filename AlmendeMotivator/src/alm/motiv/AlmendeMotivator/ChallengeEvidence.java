@@ -57,6 +57,8 @@ public class ChallengeEvidence extends Activity {
     ImageView temp;
 
 
+    private Intent home;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -237,6 +239,13 @@ public class ChallengeEvidence extends Activity {
             return null;
         }
 
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+        home = new Intent(ChallengeEvidence.this, MainMenuActivity.class);
+        startActivity(home);
+        return;
     }
 
 }
