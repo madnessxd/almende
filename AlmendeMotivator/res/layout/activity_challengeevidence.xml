@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content">
+    
+    <TextView android:layout_width="fill_parent" 
+              android:layout_height="wrap_content"
+            android:text="Evidence"/>
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/numberOfEvidenceLbl"
+              android:text="Upload your evidence"/>
+    <Button android:layout_width="wrap_content"
+            android:text="Add evidence"
+            android:onClick="addEvidence"
+            android:id="@+id/addEvidenceBtn"
+            android:layout_height="wrap_content"/>
+    <ImageView android:layout_width="wrap_content"
+               android:id="@+id/tempimg"
+               android:layout_height="wrap_content"/>
 
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="intro"
-            android:layout_margin="3dp"
-            android:textStyle="bold" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+               android:orientation="vertical"
+               android:id="@+id/evidenceRow"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content">
+</LinearLayout>
 
-    <Button
-            android:id="@+id/capture_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Make a photo" />
-
-    <Button
-            android:id="@+id/browsePicturseBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Browse my pictures" />
-
-    <ImageView
-            android:id="@+id/picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="picture"
-            android:layout_margin="5dp"
-            android:background="@drawable/pic_border" />
 
 </LinearLayout>

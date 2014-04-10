@@ -155,7 +155,6 @@ public class FriendActivity extends Activity {
 
                 userCollection.update(match, update);
             }
-
             return null;
         }
 
