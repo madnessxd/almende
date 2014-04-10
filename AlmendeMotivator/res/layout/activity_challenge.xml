@@ -140,6 +140,8 @@
                   android:textColor="#000000"
                   android:layout_marginLeft="5dp"
                   android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
         <Button android:id="@+id/btnAccept" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accept"
@@ -150,6 +152,12 @@
                 android:text="Decline" android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:onClick="onDeclinePressed"/>
+        <Button android:id="@+id/btnComplete" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complete" android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:onClick="onCompletePressed"
+                android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>
     <ListView android:id="@+id/left_drawer"

@@ -1,18 +1,12 @@
 package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.models.Challenge;
-import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +15,10 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -29,13 +26,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
-import com.squareup.picasso.Picasso;
-import org.apache.http.util.ByteArrayBuffer;
 import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by AsterLaptop on 4/7/14.
@@ -48,44 +42,48 @@ public class ChallengeEvidence extends Activity {
     final int SELECT_PICTURE = 2;
 
     private int numberOfEvidence;
+
     private int numberOfCreatedEvidence = 0;
 
     //captured picture uri
     private Uri picUri;
-    private String realpath;
 
     private AlertDialog helpDialog;
 
     private ProgressDialog simpleWaitDialog;
-    ImageView temp;
 
     private Intent home;
+
+    //the intent that can contain extras
+    private Intent intent;
 
     //the picture uri collection
     private ArrayList<String> pictureUriList;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challengeevidence);
 
-       temp = (ImageView)findViewById(R.id.tempimg);
-
-       TextView challengeLabel = (TextView)findViewById(R.id.numberOfEvidenceLbl);
+        //get extras from our intent
+        Intent intent = getIntent();
 
         //TODO fill with challenge data
         //number of evidence the challenger wants
-        numberOfEvidence=3;
+        numberOfEvidence = Integer.valueOf(intent.getExtras().getString("evidenceAmount"));
         //list in which we will store the uploaded pictures their URI
         pictureUriList = new ArrayList<String>();
-        challengeLabel.setText("Your challenger wants you to upload " +numberOfEvidence+" photo's");
-        }
 
-    public void addEvidence(View v){
+        TextView challengeLabel = (TextView) findViewById(R.id.numberOfEvidenceLbl);
+
+        challengeLabel.setText("Your challenger wants you to upload " + numberOfEvidence + " photo's");
+    }
+
+    public void addEvidence(View v) {
         showPopUp();
     }
 
-    public void addReference(final Uri uri){
+    public void addReference(final Uri uri) {
         //reference to the picture uploaded
         LinearLayout theLayout = (LinearLayout) findViewById(R.id.evidenceRow);
 
@@ -103,10 +101,10 @@ public class ChallengeEvidence extends Activity {
         theLayout.addView(referenceButton);
 
         //Check if our challengee has enough evidence
-        numberOfCreatedEvidence= numberOfCreatedEvidence+1;
-        if(numberOfCreatedEvidence==3){
+        numberOfCreatedEvidence = numberOfCreatedEvidence + 1;
+        if (numberOfCreatedEvidence == 3) {
             //if so disable the add evidence button
-            Button addEvidenceBtn = (Button)findViewById(R.id.addEvidenceBtn);
+            Button addEvidenceBtn = (Button) findViewById(R.id.addEvidenceBtn);
             addEvidenceBtn.setEnabled(false);
 
             System.out.println(pictureUriList);
@@ -117,7 +115,7 @@ public class ChallengeEvidence extends Activity {
             sendEvidence.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   new DatabaseThread().execute("insert");
+                    new DatabaseThread().execute("insert");
                 }
             });
             theLayout.addView(sendEvidence);
@@ -127,8 +125,8 @@ public class ChallengeEvidence extends Activity {
     public String getRealPathFromURI(Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = this.getContentResolver().query(contentUri,  proj, null, null, null);
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = this.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -141,12 +139,12 @@ public class ChallengeEvidence extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if(requestCode == CAMERA_CAPTURE){//user is returning from taking the image
+            if (requestCode == CAMERA_CAPTURE) {//user is returning from taking the image
                 //get the Uri for the captured image
                 picUri = data.getData();
                 addReference(picUri);
                 pictureUriList.add(getRealPathFromURI(picUri));
-            }else if(requestCode == SELECT_PICTURE){
+            } else if (requestCode == SELECT_PICTURE) {
                 picUri = data.getData();
                 addReference(picUri);
                 pictureUriList.add(getRealPathFromURI(picUri));
@@ -164,27 +162,27 @@ public class ChallengeEvidence extends Activity {
         helpDialog.show();
     }
 
-    public void browse(View v){
-        try{
+    public void browse(View v) {
+        try {
             Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
             browseIntent.setType("image/*");
             startActivityForResult(Intent.createChooser(browseIntent, "Select a picture"), CAMERA_CAPTURE);
             helpDialog.dismiss();
-        }catch(ActivityNotFoundException anfe){
+        } catch (ActivityNotFoundException anfe) {
             String errorMessage = "Whoops - can't open your images!";
             Toast toast = Toast.makeText(ChallengeEvidence.this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
         }
     }
 
-    public void takePicture(View v){
+    public void takePicture(View v) {
         try {
             //use standard intent to capture an image
             Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             //we will handle the returned data in onActivityResult
             startActivityForResult(captureIntent, CAMERA_CAPTURE);
             helpDialog.dismiss();
-        }catch(ActivityNotFoundException anfe){
+        } catch (ActivityNotFoundException anfe) {
             //display an error message
             String errorMessage = "Whoops - your device doesn't support capturing images!";
             Toast toast = Toast.makeText(ChallengeEvidence.this, errorMessage, Toast.LENGTH_SHORT);
@@ -208,6 +206,7 @@ public class ChallengeEvidence extends Activity {
             simpleWaitDialog.dismiss();
 
         }
+
         protected byte[] doInBackground(String... args) {
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
@@ -217,13 +216,13 @@ public class ChallengeEvidence extends Activity {
 
             //TODO make dynamic. Use challenge data.
             Challenge match = new Challenge();
-            match.put("_id", new ObjectId("53401c1620a08841cc4226cf"));
+            match.put("_id", new ObjectId(intent.getExtras().getString("challengeid")));
 
-            if(args[0]=="insert"){
+            if (args[0] == "insert") {
                 GridFS gfsPhoto = new GridFS(db, "challenge");
 
                 //loop through the picture uri list
-                for(String uri : pictureUriList){
+                for (String uri : pictureUriList) {
                     File imageFile = new File(uri);
                     GridFSInputFile gfsFile = null;
                     try {
@@ -231,19 +230,21 @@ public class ChallengeEvidence extends Activity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    gfsFile.setFilename("challenge");
+                    gfsFile.setFilename(intent.getExtras().getString("title"));
                     gfsFile.save();
 
                     BasicDBObject evidence = new BasicDBObject();
-                    evidence.put("evidenceID",gfsFile.getId().toString());
+                    evidence.put("evidenceID", gfsFile.getId().toString());
 
                     BasicDBObject update = new BasicDBObject();
                     update.put("$push", new BasicDBObject("evidence", evidence));
+                    //with the evidenceSubmitted field the challenger knows he can check the submitted evidence
+                    update.put("evidenceSubmitted", "true");
 
                     challengeCollection.update(match, update);
                 }
 
-            }else if(args[0]=="somethingelse"){
+            } else if (args[0] == "somethingelse") {
                 GridFS gfsPhoto = new GridFS(db, "challenge");
                 //TODO set this piece of code where the challengee will validate the evidence and use challenge data
                 GridFSDBFile image = gfsPhoto.findOne(new ObjectId("53458331726c7e2f54bd529f"));
@@ -256,7 +257,7 @@ public class ChallengeEvidence extends Activity {
 
                     // write the inputStream to a FileOutputStream
                     outputStream =
-                            new FileOutputStream(new File(android.os.Environment.getExternalStorageDirectory()+"/"+Environment.DIRECTORY_DOWNLOADS+"/temp.jpg"));
+                            new FileOutputStream(new File(android.os.Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/temp.jpg"));
 
                     int read = 0;
                     byte[] bytes = new byte[1024];
@@ -291,6 +292,7 @@ public class ChallengeEvidence extends Activity {
         }
 
     }
+
     @Override
     public void onBackPressed() {
         finish();

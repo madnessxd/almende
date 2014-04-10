@@ -9,10 +9,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
@@ -36,6 +33,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     TextView evidence;
     TextView reward;
     String id;
+    Intent intent = getIntent();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void updateUI() {
-        Intent intent = getIntent();
         title = (TextView) findViewById(R.id.txtStaticChallengeName);
         challenger = (TextView) findViewById(R.id.txtChallenger);
         challengee = (TextView) findViewById(R.id.txtChallengee);
@@ -101,11 +98,29 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     public void onAcceptPressed(View v) {
         DatabaseThread db = new DatabaseThread();
         db.execute("accept");
+        updateButtons();
+    }
+
+    public void onCompletePressed(View v) {
+        Intent newIntent = new Intent(this, ChallengeEvidence.class);
+        newIntent.putExtra("evidenceAmount", intent.getExtras().getString("evidenceAmount"));
+        newIntent.putExtra("title", intent.getExtras().getString("title"));
+        newIntent.putExtra("challengeid", id);
+        this.startActivity(newIntent);
     }
 
     public void onDeclinePressed(View v) {
         DatabaseThread db = new DatabaseThread();
         db.execute("decline");
+    }
+
+    public void updateButtons(){
+        Button accept = (Button)findViewById(R.id.btnAccept);
+        Button decline = (Button)findViewById(R.id.btnDecline);
+        Button complete = (Button)findViewById(R.id.btnComplete);
+        accept.setVisibility(View.GONE);
+        decline.setVisibility(View.GONE);
+        complete.setVisibility(View.VISIBLE);
     }
 
     @Override
