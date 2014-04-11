@@ -66,11 +66,11 @@ public class ChallengeEvidence extends Activity {
         setContentView(R.layout.activity_challengeevidence);
 
         //get extras from our intent
-        Intent intent = getIntent();
+        intent = getIntent();
 
         //TODO fill with challenge data
         //number of evidence the challenger wants
-        numberOfEvidence = Integer.valueOf(intent.getExtras().getString("evidenceAmount"));
+        numberOfEvidence = Integer.valueOf(intent.getExtras().getInt("evidenceAmount"));
         //list in which we will store the uploaded pictures their URI
         pictureUriList = new ArrayList<String>();
 

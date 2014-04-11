@@ -33,7 +33,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     TextView evidence;
     TextView reward;
     String id;
-    Intent intent = getIntent();
+    Intent intent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
+
+        intent = getIntent();
         updateUI();
     }
 
@@ -63,6 +65,10 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         content.setText(intent.getExtras().getString("content"));
         evidence.setText(intent.getExtras().getInt("evidenceAmount") + " " + intent.getExtras().getString("evidenceType"));
         reward.setText(intent.getExtras().getString("reward"));
+
+        if(intent.getExtras().getString("status").equals("accepted")){
+            updateButtons();
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -103,7 +109,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     public void onCompletePressed(View v) {
         Intent newIntent = new Intent(this, ChallengeEvidence.class);
-        newIntent.putExtra("evidenceAmount", intent.getExtras().getString("evidenceAmount"));
+        newIntent.putExtra("evidenceAmount", intent.getExtras().getInt("evidenceAmount"));
         newIntent.putExtra("title", intent.getExtras().getString("title"));
         newIntent.putExtra("challengeid", id);
         this.startActivity(newIntent);
