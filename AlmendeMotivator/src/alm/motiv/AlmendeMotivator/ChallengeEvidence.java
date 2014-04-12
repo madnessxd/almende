@@ -102,7 +102,7 @@ public class ChallengeEvidence extends Activity {
 
         //Check if our challengee has enough evidence
         numberOfCreatedEvidence = numberOfCreatedEvidence + 1;
-        if (numberOfCreatedEvidence == 3) {
+        if (numberOfCreatedEvidence == numberOfEvidence) {
             //if so disable the add evidence button
             Button addEvidenceBtn = (Button) findViewById(R.id.addEvidenceBtn);
             addEvidenceBtn.setEnabled(false);
@@ -204,7 +204,6 @@ public class ChallengeEvidence extends Activity {
             Log.i("Async-Example", "onPostExecute Called");
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
-
         }
 
         protected byte[] doInBackground(String... args) {
@@ -221,6 +220,7 @@ public class ChallengeEvidence extends Activity {
             if (args[0] == "insert") {
                 GridFS gfsPhoto = new GridFS(db, "challenge");
 
+                int counter = 1;
                 //loop through the picture uri list
                 for (String uri : pictureUriList) {
                     File imageFile = new File(uri);
@@ -230,63 +230,22 @@ public class ChallengeEvidence extends Activity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    gfsFile.setFilename(intent.getExtras().getString("title"));
+                    gfsFile.setFilename(intent.getExtras().getString("title")+counter);
                     gfsFile.save();
 
                     BasicDBObject evidence = new BasicDBObject();
                     evidence.put("evidenceID", gfsFile.getId().toString());
 
-                    BasicDBObject update = new BasicDBObject();
+                    Challenge update = new Challenge();
+                    //update the status of the challenge, so that the challenger knows he can check the evidence
+                    update.put("$set" , new BasicDBObject("status", "completed"));
+                    //put a reference to the evidence picture in the challenge
                     update.put("$push", new BasicDBObject("evidence", evidence));
-                    //with the evidenceSubmitted field the challenger knows he can check the submitted evidence
-                    update.put("evidenceSubmitted", "true");
 
                     challengeCollection.update(match, update);
+                    counter++;
                 }
 
-            } else if (args[0] == "somethingelse") {
-                GridFS gfsPhoto = new GridFS(db, "challenge");
-                //TODO set this piece of code where the challengee will validate the evidence and use challenge data
-                GridFSDBFile image = gfsPhoto.findOne(new ObjectId("53458331726c7e2f54bd529f"));
-
-                InputStream inputStream = image.getInputStream();
-
-                OutputStream outputStream = null;
-
-                try {
-
-                    // write the inputStream to a FileOutputStream
-                    outputStream =
-                            new FileOutputStream(new File(android.os.Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/temp.jpg"));
-
-                    int read = 0;
-                    byte[] bytes = new byte[1024];
-
-                    while ((read = inputStream.read(bytes)) != -1) {
-                        outputStream.write(bytes, 0, read);
-                    }
-
-                    System.out.println("Done!");
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (inputStream != null) {
-                        try {
-                            inputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (outputStream != null) {
-                        try {
-                            // outputStream.flush();
-                            outputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
             }
             return null;
         }

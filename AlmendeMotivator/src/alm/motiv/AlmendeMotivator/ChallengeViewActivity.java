@@ -5,17 +5,24 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
 import org.bson.types.ObjectId;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -34,6 +41,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     TextView reward;
     String id;
     Intent intent;
+    private DatabaseThread db = new DatabaseThread();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +52,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
 
         intent = getIntent();
         updateUI();
@@ -67,7 +74,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         reward.setText(intent.getExtras().getString("reward"));
 
         if(intent.getExtras().getString("status").equals("accepted")){
-            updateButtons();
+            updateButtons("complete");
+        }else if(intent.getExtras().getString("status").equals("completed")){
+            updateButtons("evidence");
         }
     }
 
@@ -102,9 +111,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onAcceptPressed(View v) {
-        DatabaseThread db = new DatabaseThread();
         db.execute("accept");
-        updateButtons();
+        updateButtons("complete");
     }
 
     public void onCompletePressed(View v) {
@@ -115,18 +123,28 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         this.startActivity(newIntent);
     }
 
+    public void onEvidencePressed(View v){
+        db.execute("select");
+    }
+
     public void onDeclinePressed(View v) {
-        DatabaseThread db = new DatabaseThread();
         db.execute("decline");
     }
 
-    public void updateButtons(){
+    public void updateButtons(String status){
         Button accept = (Button)findViewById(R.id.btnAccept);
         Button decline = (Button)findViewById(R.id.btnDecline);
-        Button complete = (Button)findViewById(R.id.btnComplete);
+
         accept.setVisibility(View.GONE);
         decline.setVisibility(View.GONE);
-        complete.setVisibility(View.VISIBLE);
+
+        if(status.equals("complete")){
+            Button complete = (Button)findViewById(R.id.btnComplete);
+            complete.setVisibility(View.VISIBLE);
+        }else{
+            Button evidence = (Button)findViewById(R.id.btnEvidence);
+            evidence.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -138,6 +156,22 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     class DatabaseThread extends AsyncTask<String, String, Challenge> {
+        private ProgressDialog simpleWaitDialog;
+
+        @Override
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(ChallengeViewActivity.this,
+                    "Please wait", "Processing");
+
+        }
+
+        protected void onPostExecute(Challenge result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
+            Toast.makeText(ChallengeViewActivity.this, "The evidence is placed in your downloads", Toast.LENGTH_LONG).show();
+
+        }
+
         protected Challenge doInBackground(String... args) {
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
@@ -149,12 +183,57 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             current.put("_id", new ObjectId(id));
             Challenge aChallenge = (Challenge) challengeCollection.findOne(current);
 
+            ArrayList<BasicDBObject> evidenceList = aChallenge.getEvidence();
 
-            if (args[0].matches("accept")) {
-                updateQuery(current, aChallenge, challengeCollection, "accepted");
-            } else if (args[0].matches("decline")) {
-                updateQuery(current, aChallenge, challengeCollection, "declined");
+            if(args[0]=="select"){
+                GridFS gfsPhoto = new GridFS(db, "challenge");
+
+                for(BasicDBObject evidence: evidenceList){
+                    String evidenceID = evidence.get("evidenceID").toString();
+
+                    GridFSDBFile image = gfsPhoto.findOne(new ObjectId(evidenceID));
+
+                    InputStream inputStream = image.getInputStream();
+
+                    OutputStream outputStream = null;
+
+                    try {
+                        // write the inputStream to a FileOutputStream
+                        outputStream = new FileOutputStream(new File(android.os.Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/" +image.getFilename()+".jpg"));
+
+                        int read = 0;
+                        byte[] bytes = new byte[1024];
+
+                        while ((read = inputStream.read(bytes)) != -1) {
+                            outputStream.write(bytes, 0, read);
+                        }
+
+                        System.out.println("Done!");
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (inputStream != null) {
+                            try {
+                                inputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (outputStream != null) {
+                            try {
+                                outputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }else{
+                //args[0] holds the status
+                updateQuery(current, aChallenge, challengeCollection, args[0]);
             }
+
             return null;
         }
 

@@ -158,6 +158,15 @@
                 android:layout_weight="1"
                 android:onClick="onCompletePressed"
                 android:visibility="gone"/>
+        <Button android:id="@+id/btnEvidence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show Evidence"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:onClick="onEvidencePressed"
+                android:visibility="gone"/>
+
     </LinearLayout>
 </LinearLayout>
     <ListView android:id="@+id/left_drawer"

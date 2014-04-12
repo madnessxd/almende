@@ -4,6 +4,7 @@ import android.os.Parcelable;
 import com.mongodb.BasicDBObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by AsterLaptop on 3/31/14.
@@ -64,5 +65,9 @@ public class Challenge extends BasicDBObject implements Serializable{
 
     public String getStatus() {
         return this.getString("status");
+    }
+
+    public ArrayList<BasicDBObject> getEvidence(){
+        return (ArrayList<BasicDBObject>) this.get("evidence");
     }
 }
