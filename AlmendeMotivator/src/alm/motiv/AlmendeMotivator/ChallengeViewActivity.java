@@ -150,7 +150,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(ChallengeViewActivity.this, ChallengesMenuActivity.class);
+        home = new Intent(ChallengeViewActivity.this, ChallengeOverviewActivity.class);
         startActivity(home);
         return;
     }

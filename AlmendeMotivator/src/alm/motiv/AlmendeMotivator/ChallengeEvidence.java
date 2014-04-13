@@ -194,14 +194,12 @@ public class ChallengeEvidence extends Activity {
 
         @Override
         protected void onPreExecute() {
-            Log.i("Async-Example", "onPreExecute Called");
             simpleWaitDialog = ProgressDialog.show(ChallengeEvidence.this,
                     "Please wait", "Processing");
 
         }
 
         protected void onPostExecute(byte[] result) {
-            Log.i("Async-Example", "onPostExecute Called");
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
         }

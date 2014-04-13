@@ -1,5 +1,6 @@
 package alm.motiv.AlmendeMotivator.models;
 
+import alm.motiv.AlmendeMotivator.adapters.Item;
 import android.os.Parcelable;
 import com.mongodb.BasicDBObject;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by AsterLaptop on 3/31/14.
  */
-public class Challenge extends BasicDBObject implements Serializable{
+public class Challenge extends BasicDBObject implements Item{
     private static final long serialVersionUID = 1L;
 
     public Challenge() {
@@ -69,5 +70,14 @@ public class Challenge extends BasicDBObject implements Serializable{
 
     public ArrayList<BasicDBObject> getEvidence(){
         return (ArrayList<BasicDBObject>) this.get("evidence");
+    }
+
+    public void addComment(BasicDBObject message){
+        this.put("comments", message);
+    }
+
+    @Override
+    public boolean isSection() {
+        return false;
     }
 }
