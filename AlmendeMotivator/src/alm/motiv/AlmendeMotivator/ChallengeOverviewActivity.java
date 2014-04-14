@@ -72,6 +72,10 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         return;
     }
 
+    public void onCreatePressed(View v) {
+        startActivity(new Intent(this, ChallengeCreateActivity.class));
+    }
+
 
     @Override
     public void onItemClick(AdapterView arg0, View arg1, int position, long arg3) {

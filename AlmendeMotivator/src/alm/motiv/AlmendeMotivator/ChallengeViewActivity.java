@@ -3,14 +3,18 @@ package alm.motiv.AlmendeMotivator;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
+import alm.motiv.AlmendeMotivator.models.Message;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.mongodb.BasicDBObject;
@@ -73,9 +77,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         evidence.setText(intent.getExtras().getInt("evidenceAmount") + " " + intent.getExtras().getString("evidenceType"));
         reward.setText(intent.getExtras().getString("reward"));
 
-        if(intent.getExtras().getString("status").equals("accepted")){
+        if (intent.getExtras().getString("status").equals("accepted")) {
             updateButtons("complete");
-        }else if(intent.getExtras().getString("status").equals("completed")){
+        } else if (intent.getExtras().getString("status").equals("completed")) {
             updateButtons("evidence");
         }
     }
@@ -123,7 +127,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         this.startActivity(newIntent);
     }
 
-    public void onEvidencePressed(View v){
+    public void onEvidencePressed(View v) {
         db.execute("select");
     }
 
@@ -131,18 +135,22 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         db.execute("decline");
     }
 
-    public void updateButtons(String status){
-        Button accept = (Button)findViewById(R.id.btnAccept);
-        Button decline = (Button)findViewById(R.id.btnDecline);
+    public void onCommentPressed(View v) {
+        showPopup("comment");
+    }
+
+    public void updateButtons(String status) {
+        Button accept = (Button) findViewById(R.id.btnAccept);
+        Button decline = (Button) findViewById(R.id.btnDecline);
 
         accept.setVisibility(View.GONE);
         decline.setVisibility(View.GONE);
 
-        if(status.equals("complete")){
-            Button complete = (Button)findViewById(R.id.btnComplete);
+        if (status.equals("complete")) {
+            Button complete = (Button) findViewById(R.id.btnComplete);
             complete.setVisibility(View.VISIBLE);
-        }else{
-            Button evidence = (Button)findViewById(R.id.btnEvidence);
+        } else {
+            Button evidence = (Button) findViewById(R.id.btnEvidence);
             evidence.setVisibility(View.VISIBLE);
         }
     }
@@ -153,6 +161,39 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         home = new Intent(ChallengeViewActivity.this, ChallengeOverviewActivity.class);
         startActivity(home);
         return;
+    }
+
+    public void showPopup(String kindOfPopup) {
+
+        String categories[] ={"Motivational","Engagement","Inspirational","Other"};
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.comment_popup, null);
+        alertDialog.setView(convertView);
+        alertDialog.setTitle("Add a comment");
+
+        EditText content = (EditText)convertView.findViewById(R.id.txtContent);
+
+        alertDialog.setPositiveButton("Add Comment", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //nothing..
+            }
+        });
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //nothing..
+            }
+        });
+
+        if(kindOfPopup.equals("comment")){
+            ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
+            lv.setVisibility(View.VISIBLE);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,categories);
+            lv.setAdapter(adapter);
+        }
+
+        alertDialog.show();
     }
 
     class DatabaseThread extends AsyncTask<String, String, Challenge> {
@@ -185,63 +226,77 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
             ArrayList<BasicDBObject> evidenceList = aChallenge.getEvidence();
 
-            if(args[0]=="select"){
-                GridFS gfsPhoto = new GridFS(db, "challenge");
-
-                for(BasicDBObject evidence: evidenceList){
-                    String evidenceID = evidence.get("evidenceID").toString();
-
-                    GridFSDBFile image = gfsPhoto.findOne(new ObjectId(evidenceID));
-
-                    InputStream inputStream = image.getInputStream();
-
-                    OutputStream outputStream = null;
-
-                    try {
-                        // write the inputStream to a FileOutputStream
-                        outputStream = new FileOutputStream(new File(android.os.Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/" +image.getFilename()+".jpg"));
-
-                        int read = 0;
-                        byte[] bytes = new byte[1024];
-
-                        while ((read = inputStream.read(bytes)) != -1) {
-                            outputStream.write(bytes, 0, read);
-                        }
-
-                        System.out.println("Done!");
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (inputStream != null) {
-                            try {
-                                inputStream.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        if (outputStream != null) {
-                            try {
-                                outputStream.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }else{
-                //args[0] holds the status
-                updateQuery(current, aChallenge, challengeCollection, args[0]);
+            if (args[0] == "select") {
+                downloadEvidence(db, evidenceList);
+                return null;
             }
+
+            if (args[1] != "") {
+                updateQuery(current, aChallenge, challengeCollection, args);
+            } else {
+                //args[0] holds the status
+                updateQuery(current, aChallenge, challengeCollection, args);
+            }
+
 
             return null;
         }
 
-        private void updateQuery(Challenge current, Challenge newChallenge, DBCollection challengeCollection, String status) {
-            newChallenge.setStatus(status);
+        private void updateQuery(Challenge current, Challenge newChallenge, DBCollection challengeCollection, String[] args) {
+            if(args[0].equals("unchanged")){
+               Message message = new Message();
+            }else{
+                newChallenge.setStatus(args[0]);
+            }
 
             //overwrite the old one with the new one
             challengeCollection.findAndModify(current, newChallenge);
+        }
+
+        private void downloadEvidence(DB db, ArrayList<BasicDBObject> evidenceList) {
+            GridFS gfsPhoto = new GridFS(db, "challenge");
+
+            for (BasicDBObject evidence : evidenceList) {
+                String evidenceID = evidence.get("evidenceID").toString();
+
+                GridFSDBFile image = gfsPhoto.findOne(new ObjectId(evidenceID));
+
+                InputStream inputStream = image.getInputStream();
+
+                OutputStream outputStream = null;
+
+                try {
+                    // write the inputStream to a FileOutputStream
+                    outputStream = new FileOutputStream(new File(android.os.Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/" + image.getFilename() + ".jpg"));
+
+                    int read = 0;
+                    byte[] bytes = new byte[1024];
+
+                    while ((read = inputStream.read(bytes)) != -1) {
+                        outputStream.write(bytes, 0, read);
+                    }
+
+                    System.out.println("Done!");
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (outputStream != null) {
+                        try {
+                            outputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
         }
     }
 }
