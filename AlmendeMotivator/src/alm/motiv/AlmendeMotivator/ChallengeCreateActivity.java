@@ -251,23 +251,27 @@ public class ChallengeCreateActivity extends Activity {
             System.out.println(newUser.values());
 
             ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("friends");
-            facebookFriends = new String[arrayMessages.toArray().length];
-            facebookFriendsName = new String[arrayMessages.toArray().length];
+
+            String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
+            String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
+
 
             for(int i = 0 ; i < arrayMessages.toArray().length ; i++){
-                facebookFriends[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
+                facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
 
-                request = new Request(session, facebookFriends[i], null, HttpMethod.GET);
+                request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
                 response = request.executeAndWait();
 
                 if (response.getError() != null) {
                     System.out.println("NOPE");
                 } else {
                     GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-                    facebookFriendsName[i] = graphUser.getName();
+                    facebookFriendsNameTemp[i] = graphUser.getName();
                 }
             }
 
+            facebookFriends = facebookFriendsTemp;
+            facebookFriendsName = facebookFriendsNameTemp;
             return null;
         }
     }
