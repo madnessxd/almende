@@ -16,14 +16,16 @@
             android:layout_height="100dp"
             android:src="@drawable/profilepic"
             android:layout_alignParentLeft="true" android:layout_below="@+id/button" android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"/>
     <TextView
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Name"
             android:textSize="20dp" android:textStyle="bold" android:textColor="#000"
-            android:layout_toRightOf="@+id/picture" android:layout_below="@+id/button"/>
+            android:layout_toRightOf="@+id/picture" android:layout_below="@+id/button"
+            android:layout_marginTop="50dp"/>
     <TextView
             android:id="@+id/age"
             android:layout_width="50dp"
@@ -34,42 +36,40 @@
             android:layout_toRightOf="@+id/picture"/>
     <TextView
             android:id="@+id/ageContent"
-            android:layout_width="50dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:layout_above="@+id/goalContent"
-            android:layout_toRightOf="@id/age"/>
+            android:layout_toRightOf="@id/age" android:layout_alignBottom="@+id/age"/>
     <TextView
             android:id="@+id/goal"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="Goal:"
             android:textColor="#000"
-            android:layout_below="@+id/age"
+            android:layout_below="@+id/city"
             android:layout_toRightOf="@+id/picture"/>
     <TextView
             android:id="@+id/goalContent"
-            android:layout_width="50dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:layout_above="@+id/cityContent"
-            android:layout_toRightOf="@id/goal"/>
+            android:layout_alignLeft="@+id/cityContent"
+            android:layout_below="@+id/city"/>
     <TextView
             android:id="@+id/city"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="City:"
             android:textColor="#000"
-            android:layout_below="@+id/goal"
+            android:layout_below="@+id/age"
             android:layout_toRightOf="@+id/picture"/>
     <TextView
             android:id="@+id/cityContent"
-            android:layout_width="50dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textColor="#000"
             android:text="aa"
-            android:layout_below="@+id/goal"
-            android:layout_toRightOf="@+id/city"/>
+            android:layout_toRightOf="@+id/city" android:layout_below="@+id/age"/>
     <TextView
             android:id="@+id/level"
             android:layout_width="fill_parent"
