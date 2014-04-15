@@ -10,9 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +22,6 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import org.bson.types.ObjectId;
 
@@ -69,7 +66,7 @@ public class ChallengeEvidence extends Activity {
         intent = getIntent();
 
         //TODO fill with challenge data
-        //number of evidence the challenger wants
+        //number of popup_evidence the challenger wants
         numberOfEvidence = Integer.valueOf(intent.getExtras().getInt("evidenceAmount"));
         //list in which we will store the uploaded pictures their URI
         pictureUriList = new ArrayList<String>();
@@ -97,20 +94,20 @@ public class ChallengeEvidence extends Activity {
                 startActivity(intent);
             }
         });
-        referenceButton.setText("Show evidence");
+        referenceButton.setText("Show popup_evidence");
         theLayout.addView(referenceButton);
 
-        //Check if our challengee has enough evidence
+        //Check if our challengee has enough popup_evidence
         numberOfCreatedEvidence = numberOfCreatedEvidence + 1;
         if (numberOfCreatedEvidence == numberOfEvidence) {
-            //if so disable the add evidence button
+            //if so disable the add popup_evidence button
             Button addEvidenceBtn = (Button) findViewById(R.id.addEvidenceBtn);
             addEvidenceBtn.setEnabled(false);
 
             System.out.println(pictureUriList);
             //Add our send button
             Button sendEvidence = new Button(this);
-            sendEvidence.setText("Send evidence");
+            sendEvidence.setText("Send popup_evidence");
             sendEvidence.setWidth(100);
             sendEvidence.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -156,7 +153,7 @@ public class ChallengeEvidence extends Activity {
         LayoutInflater inflater = getLayoutInflater();
 
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
-        helpBuilder.setView(inflater.inflate(R.layout.evidence, null));
+        helpBuilder.setView(inflater.inflate(R.layout.popup_evidence, null));
 
         helpDialog = helpBuilder.create();
         helpDialog.show();
@@ -235,10 +232,10 @@ public class ChallengeEvidence extends Activity {
                     evidence.put("evidenceID", gfsFile.getId().toString());
 
                     Challenge update = new Challenge();
-                    //update the status of the challenge, so that the challenger knows he can check the evidence
+                    //update the status of the challenge, so that the challenger knows he can check the popup_evidence
                     update.put("$set" , new BasicDBObject("status", "completed"));
-                    //put a reference to the evidence picture in the challenge
-                    update.put("$push", new BasicDBObject("evidence", evidence));
+                    //put a reference to the popup_evidence picture in the challenge
+                    update.put("$push", new BasicDBObject("popup_evidence", evidence));
 
                     challengeCollection.update(match, update);
                     counter++;

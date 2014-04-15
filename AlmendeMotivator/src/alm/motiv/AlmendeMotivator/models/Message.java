@@ -74,4 +74,12 @@ public class Message extends BasicDBObject {
     public String getCatgeory(){
         return this.get("Category").toString();
     }
+
+    public void setCorrespondingChallenge(String correspondingChallenge){
+        put("CorrespondingChallengeID",correspondingChallenge);
+    }
+
+    public String getCorrespondingChallenge(){
+        return this.get("CorrespondingChallengeID").toString();
+    }
 }

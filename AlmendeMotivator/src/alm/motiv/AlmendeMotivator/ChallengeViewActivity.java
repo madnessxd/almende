@@ -4,7 +4,6 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.Message;
-import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,7 +12,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -27,7 +25,7 @@ import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 
 /**
  * Created by Kevin on 26/03/2014.
@@ -80,7 +78,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         if (intent.getExtras().getString("status").equals("accepted")) {
             updateButtons("complete");
         } else if (intent.getExtras().getString("status").equals("completed")) {
-            updateButtons("evidence");
+            updateButtons("popup_evidence");
         }
     }
 
@@ -136,7 +134,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onCommentPressed(View v) {
-        showPopup("comment");
+        showPopup();
     }
 
     public void updateButtons(String status) {
@@ -163,37 +161,50 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         return;
     }
 
-    public void showPopup(String kindOfPopup) {
+    Message message = new Message();
+    public void showPopup() {
 
-        String categories[] ={"Motivational","Engagement","Inspirational","Other"};
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.comment_popup, null);
-        alertDialog.setView(convertView);
-        alertDialog.setTitle("Add a comment");
+        View convertView = (View) inflater.inflate(R.layout.popup_comment, null);
 
-        EditText content = (EditText)convertView.findViewById(R.id.txtContent);
+        //input for content for the comment
+        final EditText content = (EditText)convertView.findViewById(R.id.txtContent);
 
-        alertDialog.setPositiveButton("Add Comment", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //nothing..
+        //listview so that the categoryf of the comment can be selected
+        String categories[] ={"Motivational","Engagement","Inspirational","Other"};
+        final ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
+        lv.setVisibility(View.VISIBLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,categories);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                message.setCategory(lv.getItemAtPosition(i).toString());
             }
         });
 
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //nothing..
+
+        final AlertDialog d = new AlertDialog.Builder(this)
+                .setPositiveButton("Add Comment",null)
+                .setNegativeButton("Cancel",null)
+                .setView(convertView)
+                .setTitle("Add a comment")
+                .show();
+
+        d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Boolean success = true;
+                if(!(Validation.hasText(content))||(message.getCatgeory()==null)){success=false;}
+
+                if(!success){
+                    Toast.makeText(ChallengeViewActivity.this, "Please fill in everything", Toast.LENGTH_LONG).show();
+                }
+
+                d.dismiss();
             }
         });
-
-        if(kindOfPopup.equals("comment")){
-            ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
-            lv.setVisibility(View.VISIBLE);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,categories);
-            lv.setAdapter(adapter);
-        }
-
-        alertDialog.show();
     }
 
     class DatabaseThread extends AsyncTask<String, String, Challenge> {
@@ -209,8 +220,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         protected void onPostExecute(Challenge result) {
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
-            Toast.makeText(ChallengeViewActivity.this, "The evidence is placed in your downloads", Toast.LENGTH_LONG).show();
-
         }
 
         protected Challenge doInBackground(String... args) {
@@ -231,13 +240,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 return null;
             }
 
-            if (args[1] != "") {
-                updateQuery(current, aChallenge, challengeCollection, args);
-            } else {
-                //args[0] holds the status
-                updateQuery(current, aChallenge, challengeCollection, args);
-            }
-
+            updateQuery(current, aChallenge, challengeCollection, args);
 
             return null;
         }
@@ -291,6 +294,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                     if (outputStream != null) {
                         try {
                             outputStream.close();
+                            Toast.makeText(ChallengeViewActivity.this, "The evidence is placed in your downloads", Toast.LENGTH_LONG).show();
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
