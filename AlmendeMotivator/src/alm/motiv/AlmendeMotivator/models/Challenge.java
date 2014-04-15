@@ -10,14 +10,12 @@ import java.util.ArrayList;
 /**
  * Created by AsterLaptop on 3/31/14.
  */
-public class Challenge extends BasicDBObject implements Item{
+public class Challenge extends BasicDBObject implements Item {
     private static final long serialVersionUID = 1L;
 
-    public Challenge() {
+    public Challenge() {}
 
-    }
-
-    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status) {
+    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps) {
         put("title", title);
         put("challenger", challenger);
         put("challengee", challengee);
@@ -26,13 +24,14 @@ public class Challenge extends BasicDBObject implements Item{
         put("evidence_type", evidence_type);
         put("reward", reward);
         put("status", status);
+        put("gps", gps);
     }
 
-    public void setStatus(String status){
+    public void setStatus(String status) {
         put("status", status);
     }
 
-    public Object getID(){
+    public Object getID() {
         return this.get("_id");
     }
 
@@ -68,11 +67,11 @@ public class Challenge extends BasicDBObject implements Item{
         return this.getString("status");
     }
 
-    public ArrayList<BasicDBObject> getEvidence(){
+    public ArrayList<BasicDBObject> getEvidence() {
         return (ArrayList<BasicDBObject>) this.get("evidence");
     }
 
-    public void addComment(BasicDBObject message){
+    public void addComment(BasicDBObject message) {
         this.put("comments", message);
     }
 

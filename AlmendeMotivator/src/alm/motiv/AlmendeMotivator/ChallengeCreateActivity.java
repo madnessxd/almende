@@ -3,6 +3,11 @@ package alm.motiv.AlmendeMotivator;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -134,7 +139,7 @@ public class ChallengeCreateActivity extends Activity {
         }
     };
 
-    public void updateFriends(){
+    public void updateFriends() {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, facebookFriendsName);
         spinnerFriends.setAdapter(spinnerArrayAdapter);
     }
@@ -174,7 +179,7 @@ public class ChallengeCreateActivity extends Activity {
             txtChallenger.setText("Challenger:\n" + user.getName());
 
             String imgId = "https://graph.facebook.com/" + user.getId() + "/picture";
-            userPic = (ImageView)findViewById(R.id.imgChallenger);
+            userPic = (ImageView) findViewById(R.id.imgChallenger);
             Picasso.with(getApplicationContext()).load(imgId).into(userPic);
         }
     }
@@ -214,6 +219,16 @@ public class ChallengeCreateActivity extends Activity {
         }
     }
 
+    //TODO Add this code to challengeViewActivity onComplete listener.
+    /*public String getGPS(){
+        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        MyLocationListener locationListener = new MyLocationListener();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        locationListener.onLocationChanged(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+
+        return locationListener.getLocation();
+    }*/
+
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
             // To connect to mongodb server
@@ -224,8 +239,7 @@ public class ChallengeCreateActivity extends Activity {
             DBCollection userCollection = db.getCollection("challenge");
             userCollection.setObjectClass(Challenge.class);
 
-            //TODO Add Challengee from appFriendslist
-            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status);
+            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null");
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }
@@ -243,19 +257,17 @@ public class ChallengeCreateActivity extends Activity {
             Request request = new Request(session, "me", null, HttpMethod.GET);
             Response response = request.executeAndWait();
 
-            System.out.println(Cookie.getInstance().userEntryId);
-
             User curUser = new User();
             curUser.put("facebookID", Cookie.getInstance().userEntryId);
             User newUser = (User) userCollection.find(curUser).toArray().get(0);
-            System.out.println(newUser.values());
 
-            ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("friends");
+
+            ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
             facebookFriends = new String[arrayMessages.toArray().length];
             facebookFriendsName = new String[arrayMessages.toArray().length];
 
-            for(int i = 0 ; i < arrayMessages.toArray().length ; i++){
-                facebookFriends[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
+            for (int i = 0; i < arrayMessages.toArray().length; i++) {
+                facebookFriends[i] = arrayMessages.toArray()[i].toString().replace("{ " + '"' + "facebookID" + '"' + " : " + '"', "").replace('"' + "}", "");
 
                 request = new Request(session, facebookFriends[i], null, HttpMethod.GET);
                 response = request.executeAndWait();
@@ -267,7 +279,6 @@ public class ChallengeCreateActivity extends Activity {
                     facebookFriendsName[i] = graphUser.getName();
                 }
             }
-
             return null;
         }
     }
