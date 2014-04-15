@@ -103,10 +103,18 @@ public class ProfileActivity extends Activity{
         initLabels();
     }
 
-    public void saveUserBtn(View v){
+    public void saveUserBtn(View v) throws InterruptedException {
         if(validation()){
             new DatabaseThread().execute("insert");
+            Thread.sleep(1000);
+
+            setContentView(R.layout.activity_profileview);
+            initLabels();
         }
+    }
+
+    public static void goBack(){
+
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -179,6 +187,8 @@ public class ProfileActivity extends Activity{
             }else if(args[0]=="insert"){
                 insertQuery(current,aUser, userCollection);
             }
+
+            ProfileActivity.goBack();
 
             return null;
         }

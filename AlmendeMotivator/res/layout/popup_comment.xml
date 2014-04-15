@@ -11,7 +11,8 @@
     <EditText android:layout_width="fill_parent"
               android:layout_height="100dp"
             android:hint="The content of your message"
-            android:id="@+id/txtContent"/>
+            android:id="@+id/txtContent"
+            android:gravity="top"/>
     <TextView android:layout_width="match_parent"
               android:text="Pick a category for the message"
               android:layout_height="wrap_content"/>

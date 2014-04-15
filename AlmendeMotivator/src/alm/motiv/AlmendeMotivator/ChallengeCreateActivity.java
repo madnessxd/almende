@@ -1,5 +1,7 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
+import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
@@ -25,7 +27,9 @@ import java.util.ArrayList;
  * Created by Kevin on 02/04/2014.
  */
 public class ChallengeCreateActivity extends Activity {
-
+    Intent k;
+    private String[] mMenuOptions;
+    private ListView mDrawerList;
 
     private static final String NAME = "name";
     private static final String ID = "id";
@@ -58,8 +62,8 @@ public class ChallengeCreateActivity extends Activity {
     private GraphUser user;
     private Session userInfoSession;
 
-    private String[] facebookFriends = {"null"};
-    private String[] facebookFriendsName = {"null"};
+    private String[] facebookFriends = {"loading..."};
+    private String[] facebookFriendsName = {"loading..."};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,41 @@ public class ChallengeCreateActivity extends Activity {
                 createChallenge();
             }
         });
+
+        mMenuOptions = getResources().getStringArray(R.array.profile_array);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    public void selectItem(int pos){
+        switch (pos){
+            case 0:
+                k = new Intent(ChallengeCreateActivity.this, ProfileActivity.class);
+                break;
+            case 1:
+                k = new Intent(ChallengeCreateActivity.this, MessageActivity.class);
+                break;
+            case 2:
+                k = new Intent(ChallengeCreateActivity.this, ChallengesMenuActivity.class);
+                break;
+            case 3:
+                k = new Intent(ChallengeCreateActivity.this, FriendActivity.class);
+                break;
+            case 4:
+                FacebookManager.logout();
+                k = new Intent(ChallengeCreateActivity.this, FacebookMainActivity.class);
+                break;
+        }
+        finish();
+        startActivity(k);
     }
 
     private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
@@ -263,22 +302,27 @@ public class ChallengeCreateActivity extends Activity {
 
 
             ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
-            facebookFriends = new String[arrayMessages.toArray().length];
-            facebookFriendsName = new String[arrayMessages.toArray().length];
+
+            String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
+            String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
+
 
             for (int i = 0; i < arrayMessages.toArray().length; i++) {
-                facebookFriends[i] = arrayMessages.toArray()[i].toString().replace("{ " + '"' + "facebookID" + '"' + " : " + '"', "").replace('"' + "}", "");
+                facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
 
-                request = new Request(session, facebookFriends[i], null, HttpMethod.GET);
+                request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
                 response = request.executeAndWait();
 
                 if (response.getError() != null) {
                     System.out.println("NOPE");
                 } else {
                     GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-                    facebookFriendsName[i] = graphUser.getName();
+                    facebookFriendsNameTemp[i] = graphUser.getName();
                 }
             }
+
+            facebookFriends = facebookFriendsTemp;
+            facebookFriendsName = facebookFriendsNameTemp;
             return null;
         }
     }

@@ -68,7 +68,7 @@ public class Challenge extends BasicDBObject implements Item {
     }
 
     public ArrayList<BasicDBObject> getEvidence() {
-        return (ArrayList<BasicDBObject>) this.get("evidence");
+        return (ArrayList<BasicDBObject>) this.get("popup_evidence");
     }
 
     public void addComment(BasicDBObject message) {
