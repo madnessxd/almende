@@ -42,8 +42,6 @@ public class NewMessageActivity extends Activity{
 
         getFacebookID(Session.getActiveSession());
 
-        showMessages();
-
         UpdateMessages u = new UpdateMessages();
         u.execute();
 
@@ -69,7 +67,7 @@ public class NewMessageActivity extends Activity{
         listView.setAdapter(adapter);
     }
 
-    public void sendMessage(View v){
+    public void sendMessage(View v) throws InterruptedException {
         EditText mEdit = (EditText)findViewById(R.id.messageInput);
         message = mEdit.getText().toString();
 
@@ -81,7 +79,6 @@ public class NewMessageActivity extends Activity{
         db.execute();
         Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
         mEdit.setText("");
-        showMessages();
     }
 
     private void getFacebookID(final Session session) {
@@ -111,14 +108,13 @@ public class NewMessageActivity extends Activity{
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-            //Message current = new Message();
-
-            //DBObject query = QueryBuilder.start("Author").is(facebookId).get();
-            //DBCursor cursor = userCollection.find(query);
-
             getMessages(userCollection);
 
             return null;
+        }
+        @Override
+        protected void onPostExecute(String string) {
+            showMessages();
         }
     }
 
@@ -155,6 +151,10 @@ public class NewMessageActivity extends Activity{
 
             return null;
         }
+        @Override
+        protected void onPostExecute(String string) {
+            showMessages();
+        }
     }
 
     public void getMessages(DBCollection userCollection){
@@ -163,7 +163,6 @@ public class NewMessageActivity extends Activity{
 
         if(userCollection.find(current).toArray().size() > 0){
             Message newUser = (Message) userCollection.find(current).toArray().get(0);
-            System.out.println("NU: " + newUser);
 
             ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("Content");
             int noOfMessages = arrayMessages.size();
