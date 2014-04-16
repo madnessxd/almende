@@ -75,6 +75,14 @@ public class Challenge extends BasicDBObject implements Item {
         this.put("comments", message);
     }
 
+    public void setRated(String rated){
+        this.put("rated",rated);
+    }
+
+    public String getRated(){
+        return this.get("rated").toString();
+    }
+
     @Override
     public boolean isSection() {
         return false;

@@ -94,7 +94,7 @@ public class ChallengeEvidence extends Activity {
                 startActivity(intent);
             }
         });
-        referenceButton.setText("Show popup_evidence");
+        referenceButton.setText("Show evidence");
         theLayout.addView(referenceButton);
 
         //Check if our challengee has enough popup_evidence
@@ -107,7 +107,7 @@ public class ChallengeEvidence extends Activity {
             System.out.println(pictureUriList);
             //Add our send button
             Button sendEvidence = new Button(this);
-            sendEvidence.setText("Send popup_evidence");
+            sendEvidence.setText("Send evidence");
             sendEvidence.setWidth(100);
             sendEvidence.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -199,6 +199,8 @@ public class ChallengeEvidence extends Activity {
         protected void onPostExecute(byte[] result) {
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
+            Intent newIntent = new Intent(ChallengeEvidence.this, ChallengeOverviewActivity.class);
+            startActivity(newIntent);
         }
 
         protected byte[] doInBackground(String... args) {
