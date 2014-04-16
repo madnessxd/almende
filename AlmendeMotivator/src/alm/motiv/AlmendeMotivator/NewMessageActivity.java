@@ -158,9 +158,14 @@ public class NewMessageActivity extends Activity{
     }
 
     public void getMessages(DBCollection userCollection){
-        Message current = new Message();
 
+
+        Session session = Session.getActiveSession();
+
+        Message current = new Message();
+        current.put("Receiver", Cookie.getInstance().userEntryId);
         Message newUser = (Message) userCollection.find(current).toArray().get(0);
+
         ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("Content");
         int noOfMessages = arrayMessages.size();
         receivedMessages.clear();
