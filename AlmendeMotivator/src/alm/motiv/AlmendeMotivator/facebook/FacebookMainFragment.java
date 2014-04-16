@@ -149,6 +149,7 @@ public class FacebookMainFragment extends Fragment {
                             //need this so we can access the user's data in mongodb with database entry key
                             Cookie entry = Cookie.getInstance();
                             entry.userEntryId = user.getId();
+                            entry.userName = user.getName();
 
                             updateUI(session);
                             new DatabaseThread().execute();

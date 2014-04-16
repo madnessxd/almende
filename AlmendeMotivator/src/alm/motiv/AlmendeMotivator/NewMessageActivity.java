@@ -69,8 +69,7 @@ public class NewMessageActivity extends Activity{
 
     public void sendMessage(View v) throws InterruptedException {
         EditText mEdit = (EditText)findViewById(R.id.messageInput);
-        message = mEdit.getText().toString();
-
+        message = Cookie.getInstance().userFirstName + ": " + mEdit.getText().toString();
         Time now = new Time();
         now.setToNow();
         date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);
@@ -124,8 +123,6 @@ public class NewMessageActivity extends Activity{
             DB db = client.getDB(Database.uri.getDatabase());
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
-
-            //Message current = new Message();
 
             DBObject query = QueryBuilder.start("Author").is(facebookId).get();
             DBCursor cursor = userCollection.find(query);

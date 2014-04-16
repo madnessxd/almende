@@ -21,7 +21,7 @@
                 android:textColor="#000000"/>
 
         <LinearLayout android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
+                      android:layout_height="70dp"
                       android:id="@+id/layoutChallenger"
                       android:orientation="horizontal"
                       android:layout_marginTop="10dp">
