@@ -82,7 +82,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             updateButtons("complete");
         } else if (intent.getExtras().getString("status").equals("completed")) {
             updateButtons("evidence");
-        }else if (intent.getExtras().getString("status").equals("closed")){
+        } else if (intent.getExtras().getString("status").equals("closed")) {
             updateButtons("closed");
         }
     }
@@ -142,14 +142,14 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         showPopup();
     }
 
-    public void onApprovePressed(View v){
+    public void onApprovePressed(View v) {
 
         // Use an EditText view to get user input.
         final EditText content = new EditText(this);
 
         final AlertDialog d = new AlertDialog.Builder(this)
-                .setPositiveButton("Approve",null)
-                .setNegativeButton("Disapprove",null)
+                .setPositiveButton("Approve", null)
+                .setNegativeButton("Disapprove", null)
                 .setTitle("Decision time")
                 .setMessage("Decide if the evidence that is added meets your expectations. " +
                         "If not, be so kind to tell why." +
@@ -158,43 +158,45 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 .setView(content)
                 .show();
 
-        d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener(){
+        d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                if(popUpValidation(content)){
-                    new DatabaseThread().execute("closed", "approved");
+                if (popUpValidation(content)) {
+                    new DatabaseThread().execute("closed", "approved", content.getText().toString());
                     d.dismiss();
-                }else{
+                } else {
                     return;
                 }
             }
         });
 
-        d.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener(){
+        d.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                if(popUpValidation(content)){
-                    new DatabaseThread().execute("closed", "disapproved");
+                if (popUpValidation(content)) {
+                    new DatabaseThread().execute("closed", "disapproved", content.getText().toString());
                     d.dismiss();
-                }else{
+                } else {
                     return;
                 }
             }
         });
     }
 
-    private boolean popUpValidation(EditText content){
+    private boolean popUpValidation(EditText content) {
         Boolean success = true;
         String category = null;
 
-        if(!Validation.hasText(content)){success=false;}
+        if (!Validation.hasText(content)) {
+            success = false;
+        }
 
-        if(!success){
+        if (!success) {
             Toast.makeText(ChallengeViewActivity.this, "Please fill in everything", Toast.LENGTH_LONG).show();
             return false;
-        }else{
+        } else {
             message.setAuthor(Cookie.getInstance().userEntryId);
             message.setTitle("Evidence approvement");
             message.setReceiver(intent.getExtras().getString("challengee"));
@@ -214,14 +216,13 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         if (status.equals("complete")) {
             Button complete = (Button) findViewById(R.id.btnComplete);
             complete.setVisibility(View.VISIBLE);
-        } else if(status.equals("closed")){
-            LinearLayout buttonRow = (LinearLayout)findViewById(R.id.buttonRow);
+        } else if (status.equals("closed")) {
+            LinearLayout buttonRow = (LinearLayout) findViewById(R.id.buttonRow);
             buttonRow.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             Button evidence = (Button) findViewById(R.id.btnEvidence);
             evidence.setVisibility(View.VISIBLE);
-            Button approve = (Button)findViewById(R.id.btnApprove);
+            Button approve = (Button) findViewById(R.id.btnApprove);
             approve.setVisibility(View.VISIBLE);
         }
     }
@@ -239,48 +240,50 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         View convertView = (View) inflater.inflate(R.layout.popup_comment, null);
 
         //input for content for the comment
-        final EditText content = (EditText)convertView.findViewById(R.id.txtContent);
+        final EditText content = (EditText) convertView.findViewById(R.id.txtContent);
 
 
-            //listview so that the categoryf of the comment can be selected
-            String categories[] ={"Motivational","Meet Up","Inspirational","Other"};
-            final ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
-            lv.setVisibility(View.VISIBLE);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,categories);
-            lv.setAdapter(adapter);
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    message.setCategory(lv.getItemAtPosition(i).toString());
-                }
-            });
+        //listview so that the categoryf of the comment can be selected
+        String categories[] = {"Motivational", "Meet Up", "Inspirational", "Other"};
+        final ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
+        lv.setVisibility(View.VISIBLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                message.setCategory(lv.getItemAtPosition(i).toString());
+            }
+        });
 
         final AlertDialog d = new AlertDialog.Builder(this)
-                .setPositiveButton("Add Comment",null)
-                .setNegativeButton("Cancel",null)
+                .setPositiveButton("Add Comment", null)
+                .setNegativeButton("Cancel", null)
                 .setView(convertView)
                 .setTitle("Add a comment")
                 .show();
 
-        d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener(){
+        d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Boolean success = true;
                 String category = null;
-                try{
+                try {
                     //we put this in a try catch because .getCatgeory can crash when it isn't set
                     category = message.getCatgeory();
-                }catch(Exception e){
-                    success=false;
+                } catch (Exception e) {
+                    success = false;
                 }
 
-                if(!Validation.hasText(content)){success=false;}
+                if (!Validation.hasText(content)) {
+                    success = false;
+                }
 
-                if(!success){
+                if (!success) {
                     Toast.makeText(ChallengeViewActivity.this, "Please fill in everything", Toast.LENGTH_LONG).show();
                     return;
-                }else{
+                } else {
                     message.setAuthor(Cookie.getInstance().userEntryId);
                     message.setTitle("Comment");
                     message.setReceiver(intent.getExtras().getString("challengee"));
@@ -322,33 +325,32 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             Challenge aChallenge = (Challenge) challengeCollection.findOne(current);
             ArrayList<BasicDBObject> evidenceList = aChallenge.getEvidence();
 
-            if (args[0] == "select") {
+            if (args[0].equals("select")) {
                 downloadEvidence(db, evidenceList);
+                return null;
+            } else if (args[0].equals("unchanged")) {
+                //if the status is unchanged, we want to add a comment
+                addCommentToChallenge(aChallenge, challengeCollection);
                 return null;
             }
 
-            updateQuery(current, challengeCollection, args);
-
+            updateQuery(current, aChallenge, challengeCollection, args);
             return null;
         }
 
-        private void updateQuery(Challenge current,  DBCollection challengeCollection, String[] args) {
-            Challenge newChallenge = new Challenge();
+        private void addCommentToChallenge(Challenge current, DBCollection challengeCollection) {
+            challengeCollection.update(current, new BasicDBObject("$push", new BasicDBObject("comments", message)));
+        }
 
-            if(args[0].equals("unchanged")){
-                //when the status is unchanged, it means that there's a new comment
-                //newChallenge.put("$push", new BasicDBObject("comment", message));
-                //newChallenge.addComment(message);
-            }else{
-                if(args[0].equals("closed")){
-                    //newChallenge.setRated(args[1]);
-                    //newChallenge.addComment(message);
-                }
-                newChallenge.setStatus(args[0]);
+        private void updateQuery(Challenge current, Challenge newChallenge, DBCollection challengeCollection, String[] args) {
+            if (args[0].equals("closed")) {
+                newChallenge.setRated(args[1]);
+                newChallenge.put("ratedMessage", args[2]);
             }
+            newChallenge.setStatus(args[0]);
 
             //overwrite the old one with the new one
-            challengeCollection.update(current, newChallenge);
+            challengeCollection.findAndModify(current, newChallenge);
         }
 
         private void downloadEvidence(DB db, ArrayList<BasicDBObject> evidenceList) {
