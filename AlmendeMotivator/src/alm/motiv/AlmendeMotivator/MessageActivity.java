@@ -1,16 +1,17 @@
 package alm.motiv.AlmendeMotivator;
 
-import alm.motiv.AlmendeMotivator.adapters.MessagesAdapter;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
-import alm.motiv.AlmendeMotivator.models.User;
+import alm.motiv.AlmendeMotivator.models.Message;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
+import com.mongodb.*;
+
+import java.util.ArrayList;
 
 public class MessageActivity extends Activity{
     Intent home;
@@ -18,10 +19,18 @@ public class MessageActivity extends Activity{
     private String[] mMenuOptions;
     private ListView mDrawerList;
 
+    private ListView listView;
+    private ArrayList<String> runningMessages = new ArrayList<String>();
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messagesmenu);
+
+        UpdateMessages u = new UpdateMessages();
+        u.execute();
+
+        showMessages();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -41,6 +50,61 @@ public class MessageActivity extends Activity{
         finish();
         startActivity(k);
     }
+
+    class UpdateMessages extends AsyncTask<String, String, String> {
+        protected String doInBackground(String... args) {
+            MongoClient client = Database.getInstance();
+            DB db = client.getDB(Database.uri.getDatabase());
+            DBCollection userCollection = db.getCollection("messages");
+            userCollection.setObjectClass(Message.class);
+
+            getMessages(userCollection);
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String string) {
+            showMessages();
+        }
+    }
+
+    public void getMessages(DBCollection userCollection){
+
+        DBObject query = QueryBuilder.start("Author").is(Cookie.getInstance().userEntryId).get();
+        DBCursor myCursor = userCollection.find(query);
+
+        while(myCursor.hasNext()){
+            DBObject testObj = myCursor.next();
+            runningMessages.add("Send: " + testObj.get("Receiver").toString());
+        }
+
+        query = QueryBuilder.start("Receiver").is(Cookie.getInstance().userEntryId).get();
+        myCursor = userCollection.find(query);
+
+        while(myCursor.hasNext()){
+            DBObject testObj = myCursor.next();
+            runningMessages.add("Received: " + testObj.get("Author").toString());
+        }
+
+    }
+
+    public void showMessages(){
+        listView = (ListView) findViewById(R.id.messageList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, runningMessages);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new MessageClickListener());
+    }
+
+
+    private class MessageClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            //GA NAAR DE JUISTE MESSAGE
+            System.out.println(runningMessages.get(position));
+        }
+    }
+
     public void selectItem(int pos){
         switch (pos){
             case 0:

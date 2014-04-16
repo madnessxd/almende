@@ -69,7 +69,7 @@ public class NewMessageActivity extends Activity{
 
     public void sendMessage(View v) throws InterruptedException {
         EditText mEdit = (EditText)findViewById(R.id.messageInput);
-        message = Cookie.getInstance().userFirstName + ": " + mEdit.getText().toString();
+        message = Cookie.getInstance().userName + ": " + mEdit.getText().toString();
         Time now = new Time();
         now.setToNow();
         date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);

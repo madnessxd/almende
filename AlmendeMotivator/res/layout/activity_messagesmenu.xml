@@ -24,10 +24,10 @@
             android:text="New Message"
             android:onClick="createMessage"
             android:id="@+id/button" android:layout_alignTop="@+id/textView" android:layout_alignParentRight="true"/>
-    <GridView
+    <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gridView" android:layout_below="@+id/button" android:layout_alignParentRight="true"
+            android:id="@+id/messageList" android:layout_below="@+id/button" android:layout_alignParentRight="true"
             />
 </RelativeLayout>
     <ListView android:id="@+id/left_drawer"
