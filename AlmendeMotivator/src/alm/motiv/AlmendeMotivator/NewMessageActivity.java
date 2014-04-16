@@ -158,19 +158,19 @@ public class NewMessageActivity extends Activity{
     }
 
     public void getMessages(DBCollection userCollection){
-
-
-        Session session = Session.getActiveSession();
-
         Message current = new Message();
         current.put("Receiver", Cookie.getInstance().userEntryId);
-        Message newUser = (Message) userCollection.find(current).toArray().get(0);
 
-        ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("Content");
-        int noOfMessages = arrayMessages.size();
-        receivedMessages.clear();
-        for(int i = 0; i < noOfMessages; i++){
-            receivedMessages.add(arrayMessages.get(i));
+        if(userCollection.find(current).toArray().size() > 0){
+            Message newUser = (Message) userCollection.find(current).toArray().get(0);
+            System.out.println("NU: " + newUser);
+
+            ArrayList<String> arrayMessages = (ArrayList<String>)newUser.get("Content");
+            int noOfMessages = arrayMessages.size();
+            receivedMessages.clear();
+            for(int i = 0; i < noOfMessages; i++){
+                receivedMessages.add(arrayMessages.get(i));
+            }
         }
     }
 
