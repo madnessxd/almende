@@ -124,6 +124,10 @@
                 android:onClick="onCommentPressed"
                 android:layout_marginRight="5dp"/>
     </LinearLayout>
+    <ListView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+            android:id="@+id/lstMessages">
+    </ListView>
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:text="Amount comments"
@@ -149,12 +153,14 @@
         <Button android:id="@+id/btnAccept" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accept"
+                android:visibility="gone"
                 android:onClick="onAcceptPressed"
                 android:layout_weight="1"/>
         <Button android:id="@+id/btnDecline" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Decline" android:layout_marginRight="5dp"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:onClick="onDeclinePressed"/>
         <Button android:id="@+id/btnComplete" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

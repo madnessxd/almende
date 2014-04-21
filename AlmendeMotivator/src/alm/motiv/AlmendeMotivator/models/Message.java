@@ -51,6 +51,13 @@ public class Message extends BasicDBObject {
         return this.get("Title").toString();
     }
 
+    public void setContent(String content){
+        this.put("Content", content);
+    }
+
+    public String getContent(){
+        return this.get("content").toString();
+    }
     public void setAuthor(String author){
         put("Author", author);
     }

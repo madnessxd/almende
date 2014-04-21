@@ -1,5 +1,6 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.adapters.MessageAdapter;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.BaseColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -37,16 +39,16 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     private String[] mMenuOptions;
     private ListView mDrawerList;
-    private TextView title;
-    private TextView challenger;
-    private TextView challengee;
-    private TextView content;
-    private TextView evidence;
-    private TextView reward;
     private String id;
 
     //when a user adds a comment, this object will be used
     private Message message = new Message();
+
+    private ListView messagesListview;
+
+    private Challenge currentChallenge = null;
+
+    private ArrayList<BasicDBObject> messages = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,32 +61,39 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         intent = getIntent();
-        updateUI();
+        messagesListview = (ListView)findViewById(R.id.lstMessages);
+
+        id = intent.getExtras().getString("id");
+
+        //first database call because we need information about the challenge
+        new DatabaseThread().execute("get challenge");
     }
 
     public void updateUI() {
-        title = (TextView) findViewById(R.id.txtStaticChallengeName);
-        challenger = (TextView) findViewById(R.id.txtChallenger);
-        challengee = (TextView) findViewById(R.id.txtChallengee);
-        content = (TextView) findViewById(R.id.viewChallengeContent);
-        evidence = (TextView) findViewById(R.id.viewChallengeEvidence);
-        reward = (TextView) findViewById(R.id.viewChallengeReward);
-        id = intent.getExtras().getString("id");
+        TextView title = (TextView) findViewById(R.id.txtStaticChallengeName);
+        TextView challenger = (TextView) findViewById(R.id.txtChallenger);
+        TextView challengee = (TextView) findViewById(R.id.txtChallengee);
+        TextView content = (TextView) findViewById(R.id.viewChallengeContent);
+        TextView evidence = (TextView) findViewById(R.id.viewChallengeEvidence);
+        TextView reward = (TextView) findViewById(R.id.viewChallengeReward);
 
-        title.setText(intent.getExtras().getString("title"));
-        challenger.setText(intent.getExtras().getString("challenger"));
-        challengee.setText(intent.getExtras().getString("challengee"));
-        content.setText(intent.getExtras().getString("content"));
-        evidence.setText(intent.getExtras().getInt("evidenceAmount") + " " + intent.getExtras().getString("evidenceType"));
-        reward.setText(intent.getExtras().getString("reward"));
 
-        if (intent.getExtras().getString("status").equals("accepted")) {
-            updateButtons("complete");
-        } else if (intent.getExtras().getString("status").equals("completed")) {
-            updateButtons("evidence");
-        } else if (intent.getExtras().getString("status").equals("closed")) {
-            updateButtons("closed");
+        title.setText(currentChallenge.getTitle());
+        challenger.setText(currentChallenge.getChallenger());
+        challengee.setText(currentChallenge.getChallengee());
+        content.setText(currentChallenge.getContent());
+        evidence.setText(currentChallenge.getEvidenceAmount()+ " " + currentChallenge.getEvidenceType());
+        reward.setText(currentChallenge.getReward());
+
+        updateButtons("");
+
+        //get comments from challenge
+        messages = currentChallenge.getComments();
+        if(messages!=null){
+            MessageAdapter adapter = new MessageAdapter(this, messages);
+            messagesListview.setAdapter(adapter);
         }
+
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -118,14 +127,15 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onAcceptPressed(View v) {
-        new DatabaseThread().execute("accept");
-        updateButtons("complete");
+        currentChallenge.setStatus("accepted");
+        new DatabaseThread().execute("");
+        updateButtons("");
     }
 
     public void onCompletePressed(View v) {
         Intent newIntent = new Intent(this, ChallengeEvidence.class);
-        newIntent.putExtra("evidenceAmount", intent.getExtras().getInt("evidenceAmount"));
-        newIntent.putExtra("title", intent.getExtras().getString("title"));
+        newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
+        newIntent.putExtra("title", currentChallenge.getTitle());
         newIntent.putExtra("challengeid", id);
         this.startActivity(newIntent);
     }
@@ -135,7 +145,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onDeclinePressed(View v) {
-        new DatabaseThread().execute("decline");
+        currentChallenge.setRated("declined");
+        new DatabaseThread().execute("");
     }
 
     public void onCommentPressed(View v) {
@@ -163,7 +174,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             @Override
             public void onClick(View view) {
                 if (popUpValidation(content)) {
-                    new DatabaseThread().execute("closed", "approved", content.getText().toString());
+                    currentChallenge.setRated("Approved");
+                    currentChallenge.setStatus("closed");
+                    new DatabaseThread().execute("");
                     d.dismiss();
                 } else {
                     return;
@@ -176,7 +189,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             @Override
             public void onClick(View view) {
                 if (popUpValidation(content)) {
-                    new DatabaseThread().execute("closed", "disapproved", content.getText().toString());
+                    currentChallenge.setStatus("closed");
+                    currentChallenge.setRated("Disapproved");
+                    new DatabaseThread().execute("");
                     d.dismiss();
                 } else {
                     return;
@@ -199,31 +214,53 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         } else {
             message.setAuthor(Cookie.getInstance().userEntryId);
             message.setTitle("Evidence approvement");
-            message.setReceiver(intent.getExtras().getString("challengee"));
+            message.setReceiver(currentChallenge.getChallengee());
             message.setLiked("false");
+            message.setContent(content.getText().toString());
             message.setDate(new Date());
             return true;
         }
     }
 
     public void updateButtons(String status) {
+        String temp = currentChallenge.getStatus();
+        Boolean userMadeChallenge = false;
+
+        if(currentChallenge.getChallenger().equals(Cookie.getInstance().userEntryId)){
+            userMadeChallenge=true;
+            System.out.println("LALA");
+        }
+
         Button accept = (Button) findViewById(R.id.btnAccept);
         Button decline = (Button) findViewById(R.id.btnDecline);
+        Button complete = (Button) findViewById(R.id.btnComplete);
 
-        accept.setVisibility(View.GONE);
-        decline.setVisibility(View.GONE);
+        if(temp.equals("new_challenge")&&(!userMadeChallenge)){
+            accept.setVisibility(View.VISIBLE);
+            decline.setVisibility(View.VISIBLE);
+        }
 
-        if (status.equals("complete")) {
-            Button complete = (Button) findViewById(R.id.btnComplete);
+        if (temp.equals("accepted")&&!(userMadeChallenge)) {
             complete.setVisibility(View.VISIBLE);
-        } else if (status.equals("closed")) {
+
+            //hide previous buttons
+            accept.setVisibility(View.GONE);
+            decline.setVisibility(View.GONE);
+        }
+
+        if (temp.equals("closed")) {
             LinearLayout buttonRow = (LinearLayout) findViewById(R.id.buttonRow);
             buttonRow.setVisibility(View.GONE);
-        } else {
+        }
+
+        if(temp.equals("completed")){
             Button evidence = (Button) findViewById(R.id.btnEvidence);
             evidence.setVisibility(View.VISIBLE);
             Button approve = (Button) findViewById(R.id.btnApprove);
             approve.setVisibility(View.VISIBLE);
+
+            //hide our complete button
+            complete.setVisibility(View.GONE);
         }
     }
 
@@ -286,10 +323,12 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 } else {
                     message.setAuthor(Cookie.getInstance().userEntryId);
                     message.setTitle("Comment");
-                    message.setReceiver(intent.getExtras().getString("challengee"));
+                    message.setReceiver(currentChallenge.getChallengee());
                     message.setLiked("false");
                     message.setDate(new Date());
+                    message.setContent(content.getText().toString());
                     new DatabaseThread().execute("unchanged");
+                    updateMessagesInListview();
                 }
 
                 d.dismiss();
@@ -297,63 +336,74 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         });
     }
 
+    public void updateMessagesInListview(){
+        messages.add(message);
+        ((BaseAdapter)messagesListview.getAdapter()).notifyDataSetChanged();
+    }
+
     class DatabaseThread extends AsyncTask<String, String, Challenge> {
         private ProgressDialog simpleWaitDialog;
+        private Boolean updateUI = false;
+        private DB db = null;
+        private DBCollection challengeCollection;
 
         @Override
         protected void onPreExecute() {
-            simpleWaitDialog = ProgressDialog.show(ChallengeViewActivity.this,
-                    "Please wait", "Processing");
+          simpleWaitDialog = ProgressDialog.show(ChallengeViewActivity.this,
+                   "Please wait", "Processing");
 
         }
 
         protected void onPostExecute(Challenge result) {
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
+            if(updateUI){
+                updateUI();
+            }
         }
 
         protected Challenge doInBackground(String... args) {
+
             MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection challengeCollection = db.getCollection("challenge");
+            db = client.getDB(Database.uri.getDatabase());
+            challengeCollection = db.getCollection("challenge");
             challengeCollection.setObjectClass(Challenge.class);
 
             // get the current challenge from database
             Challenge current = new Challenge();
             current.put("_id", new ObjectId(id));
 
-            Challenge aChallenge = (Challenge) challengeCollection.findOne(current);
-            ArrayList<BasicDBObject> evidenceList = aChallenge.getEvidence();
+            if(currentChallenge==null){
+                //this variable tells us that the view needs to be constructed for use
+                updateUI= true;
+                currentChallenge = (Challenge) challengeCollection.findOne(current);
+                return null;
+            }
 
             if (args[0].equals("select")) {
-                downloadEvidence(db, evidenceList);
+                ArrayList<BasicDBObject> evidenceList = currentChallenge.getEvidence();
+                downloadEvidence(evidenceList);
                 return null;
             } else if (args[0].equals("unchanged")) {
                 //if the status is unchanged, we want to add a comment
-                addCommentToChallenge(aChallenge, challengeCollection);
+                addCommentToChallenge();
                 return null;
+            }else if(args[0]==""){
+                updateQuery(current);
             }
-
-            updateQuery(current, aChallenge, challengeCollection, args);
             return null;
         }
 
-        private void addCommentToChallenge(Challenge current, DBCollection challengeCollection) {
-            challengeCollection.update(current, new BasicDBObject("$push", new BasicDBObject("comments", message)));
+        private void addCommentToChallenge() {
+            challengeCollection.update(currentChallenge, new BasicDBObject("$push", new BasicDBObject("comments", message)));
+            message.clear(); //clear message for the next use
         }
 
-        private void updateQuery(Challenge current, Challenge newChallenge, DBCollection challengeCollection, String[] args) {
-            if (args[0].equals("closed")) {
-                newChallenge.setRated(args[1]);
-                newChallenge.put("ratedMessage", args[2]);
-            }
-            newChallenge.setStatus(args[0]);
-
-            //overwrite the old one with the new one
-            challengeCollection.findAndModify(current, newChallenge);
+        private void updateQuery(Challenge current) {
+            challengeCollection.findAndModify(current, currentChallenge);
         }
 
-        private void downloadEvidence(DB db, ArrayList<BasicDBObject> evidenceList) {
+        private void downloadEvidence(ArrayList<BasicDBObject> evidenceList) {
             GridFS gfsPhoto = new GridFS(db, "challenge");
 
             for (BasicDBObject evidence : evidenceList) {

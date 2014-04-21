@@ -210,7 +210,6 @@ public class ChallengeEvidence extends Activity {
             DBCollection challengeCollection = db.getCollection("challenge");
             challengeCollection.setObjectClass(Challenge.class);
 
-            //TODO make dynamic. Use challenge data.
             Challenge match = new Challenge();
             match.put("_id", new ObjectId(intent.getExtras().getString("challengeid")));
 

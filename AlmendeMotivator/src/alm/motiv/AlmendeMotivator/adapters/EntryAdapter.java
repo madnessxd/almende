@@ -1,10 +1,11 @@
-package alm.motiv.AlmendeMotivator;
+package alm.motiv.AlmendeMotivator.adapters;
 
 /**
  * Created by AsterLaptop on 4/13/14.
  */
 import java.util.ArrayList;
 
+import alm.motiv.AlmendeMotivator.R;
 import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
 import alm.motiv.AlmendeMotivator.models.Challenge;

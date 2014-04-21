@@ -7,6 +7,7 @@ package alm.motiv.AlmendeMotivator;
 import java.util.ArrayList;
 import java.util.List;
 
+import alm.motiv.AlmendeMotivator.adapters.EntryAdapter;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
 import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.Challenge;
@@ -86,15 +87,16 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         //Open the challengeViewActivity and give the current selected Challenge to the activity
         Intent intent = new Intent(this, ChallengeViewActivity.class);
         //TODO This works as a cheap workaround because I can't send a Serializable object. Fix
-        intent.putExtra("title", item.getTitle());
+        /*intent.putExtra("title", item.getTitle());
         intent.putExtra("challenger", item.getChallenger());
         intent.putExtra("challengee", item.getChallengee());
         intent.putExtra("content", item.getContent());
         intent.putExtra("evidenceAmount", item.getEvidenceAmount());
         intent.putExtra("evidenceType", item.getEvidenceType());
         intent.putExtra("reward", item.getReward());
-        intent.putExtra("status", item.getStatus());
+        intent.putExtra("status", item.getStatus());*/
         intent.putExtra("id", item.getID().toString());
+        /*intent.putExtra("comments", item.getComments());*/
         this.startActivity(intent);
     }
 
