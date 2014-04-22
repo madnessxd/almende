@@ -65,7 +65,6 @@ public class ChallengeEvidence extends Activity {
         //get extras from our intent
         intent = getIntent();
 
-        //TODO fill with challenge data
         //number of popup_evidence the challenger wants
         numberOfEvidence = Integer.valueOf(intent.getExtras().getInt("evidenceAmount"));
         //list in which we will store the uploaded pictures their URI

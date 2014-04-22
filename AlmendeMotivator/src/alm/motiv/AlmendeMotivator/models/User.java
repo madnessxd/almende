@@ -68,6 +68,14 @@ public class User extends BasicDBObject {
         return this.getString("goal");
     }
 
+    public int getXP(){
+        return this.getInt("XP");
+    }
+
+    public void setXP(int XP){
+        this.put("XP", XP);
+    }
+
     public ArrayList<BasicDBObject> getFriends(){
         return (ArrayList<BasicDBObject>) this.get("friends");
     }
