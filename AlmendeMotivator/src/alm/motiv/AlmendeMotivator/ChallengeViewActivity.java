@@ -114,7 +114,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 k = new Intent(ChallengeViewActivity.this, MessageActivity.class);
                 break;
             case 2:
-                k = new Intent(ChallengeViewActivity.this, ChallengesMenuActivity.class);
+                k = new Intent(ChallengeViewActivity.this, ChallengeOverviewActivity.class);
                 break;
             case 3:
                 k = new Intent(ChallengeViewActivity.this, FriendActivity.class);

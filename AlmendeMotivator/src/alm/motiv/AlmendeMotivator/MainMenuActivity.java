@@ -48,7 +48,7 @@ public class MainMenuActivity extends Activity {
                 k = new Intent(MainMenuActivity.this, MessageActivity.class);
                 break;
             case 2:
-                k = new Intent(MainMenuActivity.this, ChallengesMenuActivity.class);
+                k = new Intent(MainMenuActivity.this, ChallengeOverviewActivity.class);
                 break;
             case 3:
                 k = new Intent(MainMenuActivity.this, FriendActivity.class);
@@ -71,13 +71,10 @@ public class MainMenuActivity extends Activity {
                 k = new Intent(MainMenuActivity.this, MessageActivity.class);
                 break;
             case R.id.challengesBut:
-                k = new Intent(MainMenuActivity.this, ChallengesMenuActivity.class);
+                k = new Intent(MainMenuActivity.this, ChallengeOverviewActivity.class);
                 break;
             case R.id.friendsBut:
                 k = new Intent(MainMenuActivity.this, FriendActivity.class);
-                break;
-            case R.id.evidenceBut:
-                k = new Intent(MainMenuActivity.this, ChallengeOverviewActivity.class);
                 break;
         }
         finish();
