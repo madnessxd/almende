@@ -209,7 +209,7 @@ public class FriendActivity extends Activity {
     @Override
     public void onBackPressed() {
         finish();
-        startActivity(new Intent(FriendActivity.this, MainMenuActivity.class));
+        startActivity(new Intent(FriendActivity.this, ChallengeOverviewActivity.class));
         return;
     }
 

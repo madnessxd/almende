@@ -1,9 +1,6 @@
 package alm.motiv.AlmendeMotivator.facebook;
 
-import alm.motiv.AlmendeMotivator.Cookie;
-import alm.motiv.AlmendeMotivator.Database;
-import alm.motiv.AlmendeMotivator.MainMenuActivity;
-import alm.motiv.AlmendeMotivator.R;
+import alm.motiv.AlmendeMotivator.*;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.content.Intent;
 import android.graphics.Color;
@@ -234,7 +231,7 @@ public class FacebookMainFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            Intent intent = new Intent(getActivity(), MainMenuActivity.class);
+            Intent intent = new Intent(getActivity(), ChallengeOverviewActivity.class);
             getActivity().startActivity(intent);
             getActivity().finish();
         }

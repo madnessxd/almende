@@ -253,7 +253,7 @@ public class ChallengeEvidence extends Activity {
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(ChallengeEvidence.this, MainMenuActivity.class);
+        home = new Intent(ChallengeEvidence.this, ChallengeOverviewActivity.class);
         startActivity(home);
         return;
     }
