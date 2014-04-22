@@ -238,7 +238,7 @@ public class ChallengeEvidence extends Activity {
 
                     //TODO Add gps to the updated challenge ASTER!
                     //update.put("$gps", new BasicDBObject("gps" , intent.getExtras().getString("gps")));
-                    
+
                     //put a reference to the popup_evidence picture in the challenge
                     update.put("$push", new BasicDBObject("evidence", evidence));
 
