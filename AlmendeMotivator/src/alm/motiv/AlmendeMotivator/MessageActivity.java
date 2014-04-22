@@ -102,6 +102,24 @@ public class MessageActivity extends Activity{
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             //GA NAAR DE JUISTE MESSAGE
             System.out.println(runningMessages.get(position));
+            String butName = runningMessages.get(position);
+
+            k = new Intent(MessageActivity.this, NewMessageActivity.class);
+
+            if(butName.contains("Send: ")){
+                butName = butName.replace("Send: ","");
+                k.putExtra("challenger", Cookie.getInstance().userEntryId);
+                k.putExtra("challengee", butName);
+            }
+
+            if(butName.contains("Received: ")){
+                butName = butName.replace("Received: ","");
+                k.putExtra("challenger", butName);
+                k.putExtra("challengee", Cookie.getInstance().userEntryId);
+            }
+
+            finish();
+            startActivity(k);
         }
     }
 

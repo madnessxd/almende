@@ -197,9 +197,7 @@ public class FacebookMainFragment extends Fragment {
             if (session != null && session.isOpened()) {
                 Toast.makeText(getActivity(), "User is logged in.", Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent(getActivity(), MainMenuActivity.class);
-                getActivity().startActivity(intent);
-                getActivity().finish();
+
             }
         }
     };
@@ -207,6 +205,11 @@ public class FacebookMainFragment extends Fragment {
     /**
      * Background Async Task to add the user to our own database, if it doesn't already exist*/
     class DatabaseThread extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
         protected String doInBackground(String... args) {
             // To connect to mongodb server
             MongoClient client = Database.getInstance();
@@ -227,6 +230,13 @@ public class FacebookMainFragment extends Fragment {
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Intent intent = new Intent(getActivity(), MainMenuActivity.class);
+            getActivity().startActivity(intent);
+            getActivity().finish();
         }
     }
 
