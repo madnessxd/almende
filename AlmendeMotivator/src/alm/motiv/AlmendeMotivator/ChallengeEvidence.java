@@ -232,12 +232,13 @@ public class ChallengeEvidence extends Activity {
                     BasicDBObject evidence = new BasicDBObject();
                     evidence.put("evidenceID", gfsFile.getId().toString());
 
+                    BasicDBObject setCarrier = new BasicDBObject();
+                    setCarrier.put("gps", intent.getExtras().getString("gps"));
+                    setCarrier.put("status", "completed");
+
                     Challenge update = new Challenge();
                     //update the status of the challenge, so that the challenger knows he can check the popup_evidence
-                    update.put("$set" , new BasicDBObject("status", "completed"));
-
-                    //TODO Add gps to the updated challenge ASTER!
-                    //update.put("$gps", new BasicDBObject("gps" , intent.getExtras().getString("gps")));
+                    update.put("$set" , setCarrier);
 
                     //put a reference to the popup_evidence picture in the challenge
                     update.put("$push", new BasicDBObject("evidence", evidence));

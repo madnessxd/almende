@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
 
@@ -47,7 +48,6 @@ public class FriendActivity extends Activity {
             public Object callback(Object object) {
                 if (object != null && object instanceof List) {
                     List<GraphUser> users = (List<GraphUser>) object;
-
                     ArrayList<GraphUser> usersArray = new ArrayList<GraphUser>();
                     usersArray.addAll(users);
 
@@ -77,6 +77,18 @@ public class FriendActivity extends Activity {
             }
         });
     }
+
+     //we want to sort the usersArray alphabetically
+     public static Comparator<GraphUser> sortUsers = new Comparator<GraphUser>() {
+        @Override
+        public int compare(GraphUser first, GraphUser second) {
+            String user1 = first.getName().toLowerCase();
+            String user2 = second.getName().toLowerCase();
+
+            //ascending order
+            return user1.compareTo(user2);
+        }
+    };
 
     private void showPopUpUnfollow(final int position){
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
@@ -142,15 +154,16 @@ public class FriendActivity extends Activity {
                 set.add((String) aFriend.get("facebookID"));
             }
 
-            if(manageFriends){
-                //we want only to show the facebookfriends that the user follows so that he can manage it
-                for(GraphUser facebookFriend: facebookFriends){
-                    if(set.contains(facebookFriend.getId())){
-                        result.add(facebookFriend);
+                    if(manageFriends){
+                        //we want only to show the facebookfriends that the user follows so that he can manage it
+                        for(GraphUser facebookFriend: facebookFriends){
+                            if(set.contains(facebookFriend.getId())){
+                                result.add(facebookFriend);
+                            }
+                        }
+                        Collections.sort(result, sortUsers);
+                        return result;
                     }
-                }
-                return result;
-            }
 
             //compare strings and put the facebook user that's not yet followed by the user in result
             for(GraphUser facebookFriend: facebookFriends){
@@ -158,6 +171,7 @@ public class FriendActivity extends Activity {
                     result.add(facebookFriend);
                 }
             }
+            Collections.sort(result, sortUsers);
             return result;
         }
         return facebookFriends;

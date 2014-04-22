@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class Validation {
     // Regular Expression
     private static final String NUMERIC_REGEX = "^[1-8][0-9]$";
-    private static final String CHAR_REGEX = "^[A-Za-z]+$";
+    private static final String CHAR_REGEX = "^[A-Za-z ]+$";
 
     // Error Messages
     private static final String REQUIRED_MSG = "This field cannot be empty";
