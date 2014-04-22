@@ -35,7 +35,6 @@ public class ChallengeCreateActivity extends Activity {
     private static final String ID = "id";
     private static final String PICTURE = "picture";
     private static final String FIELDS = "fields";
-
     private static final String REQUEST_FIELDS = TextUtils.join(",", new String[]{ID, NAME, PICTURE});
 
     //Layout variables
@@ -231,7 +230,6 @@ public class ChallengeCreateActivity extends Activity {
         status = "new_challenge";
     }
 
-
     private void fetchUserInfo(final Session session) {
         final Session currentSession = session;
         if (currentSession != null && currentSession.isOpened()) {
@@ -257,16 +255,6 @@ public class ChallengeCreateActivity extends Activity {
             user = null;
         }
     }
-
-    //TODO Add this code to challengeViewActivity onComplete listener.
-    /*public String getGPS(){
-        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        MyLocationListener locationListener = new MyLocationListener();
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-        locationListener.onLocationChanged(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
-
-        return locationListener.getLocation();
-    }*/
 
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {

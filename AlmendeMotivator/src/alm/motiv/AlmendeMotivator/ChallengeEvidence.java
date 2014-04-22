@@ -235,17 +235,19 @@ public class ChallengeEvidence extends Activity {
                     Challenge update = new Challenge();
                     //update the status of the challenge, so that the challenger knows he can check the popup_evidence
                     update.put("$set" , new BasicDBObject("status", "completed"));
+
+                    //TODO Add gps to the updated challenge ASTER!
+                    //update.put("$gps", new BasicDBObject("gps" , intent.getExtras().getString("gps")));
+                    
                     //put a reference to the popup_evidence picture in the challenge
                     update.put("$push", new BasicDBObject("evidence", evidence));
 
                     challengeCollection.update(match, update);
                     counter++;
                 }
-
             }
             return null;
         }
-
     }
 
     @Override
