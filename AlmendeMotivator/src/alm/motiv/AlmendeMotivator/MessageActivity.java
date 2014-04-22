@@ -46,7 +46,7 @@ public class MessageActivity extends Activity{
     }
 
     public void createMessage(View v){
-        k = new Intent(MessageActivity.this, NewMessageActivity.class);
+        k = new Intent(MessageActivity.this, MessageViewActivity.class);
         finish();
         startActivity(k);
     }
@@ -104,7 +104,7 @@ public class MessageActivity extends Activity{
             System.out.println(runningMessages.get(position));
             String butName = runningMessages.get(position);
 
-            k = new Intent(MessageActivity.this, NewMessageActivity.class);
+            k = new Intent(MessageActivity.this, MessageViewActivity.class);
 
             if(butName.contains("Send: ")){
                 butName = butName.replace("Send: ","");
@@ -132,7 +132,7 @@ public class MessageActivity extends Activity{
                 k = new Intent(MessageActivity.this, MessageActivity.class);
                 break;
             case 2:
-                k = new Intent(MessageActivity.this, ChallengesMenuActivity.class);
+                k = new Intent(MessageActivity.this, ChallengeOverviewActivity.class);
                 break;
             case 3:
                 k = new Intent(MessageActivity.this, FriendActivity.class);

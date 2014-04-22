@@ -133,7 +133,7 @@ public class ProfileActivity extends Activity{
                 k = new Intent(ProfileActivity.this, MessageActivity.class);
                 break;
             case 2:
-                k = new Intent(ProfileActivity.this, ChallengesMenuActivity.class);
+                k = new Intent(ProfileActivity.this, ChallengeOverviewActivity.class);
                 break;
             case 3:
                 k = new Intent(ProfileActivity.this, FriendActivity.class);

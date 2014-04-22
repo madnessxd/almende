@@ -1,26 +1,20 @@
 package alm.motiv.AlmendeMotivator;
 
-import alm.motiv.AlmendeMotivator.adapters.FriendsAdapter;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Message;
-import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.*;
-import com.facebook.*;
-import com.facebook.model.GraphUser;
 import com.mongodb.*;
 
 import java.util.ArrayList;
 
-public class NewMessageActivity extends Activity{
+public class MessageViewActivity extends Activity{
     Intent home;
     Intent k;
     private String[] mMenuOptions;
@@ -159,20 +153,20 @@ public class NewMessageActivity extends Activity{
     public void selectItem(int pos){
         switch (pos){
             case 0:
-                k = new Intent(NewMessageActivity.this, ProfileActivity.class);
+                k = new Intent(MessageViewActivity.this, ProfileActivity.class);
                 break;
             case 1:
-                k = new Intent(NewMessageActivity.this, MessageActivity.class);
+                k = new Intent(MessageViewActivity.this, MessageActivity.class);
                 break;
             case 2:
-                k = new Intent(NewMessageActivity.this, ChallengesMenuActivity.class);
+                k = new Intent(MessageViewActivity.this, ChallengeOverviewActivity.class);
                 break;
             case 3:
-                k = new Intent(NewMessageActivity.this, FriendActivity.class);
+                k = new Intent(MessageViewActivity.this, FriendActivity.class);
                 break;
             case 4:
                 FacebookManager.logout();
-                k = new Intent(NewMessageActivity.this, FacebookMainActivity.class);
+                k = new Intent(MessageViewActivity.this, FacebookMainActivity.class);
                 break;
         }
         finish();
@@ -181,7 +175,7 @@ public class NewMessageActivity extends Activity{
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(NewMessageActivity.this, MainMenuActivity.class);
+        home = new Intent(MessageViewActivity.this, MainMenuActivity.class);
         startActivity(home);
         return;
     }
