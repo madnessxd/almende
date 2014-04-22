@@ -5,6 +5,7 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.Message;
+import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -135,14 +136,16 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onCompletePressed(View v) {
-        String gps = getGPS();
+        String gps = "no GPS";
+        try{
+            gps = getGPS();
+        }catch(Exception e){
+            System.out.println("no gps" + e);
+        }
         Intent newIntent = new Intent(this, ChallengeEvidence.class);
         newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
         newIntent.putExtra("title", currentChallenge.getTitle());
         newIntent.putExtra("challengeid", id);
-        if (gps.equals("null")) {
-            gps = "no GPS found";
-        }
         newIntent.putExtra("gps", gps);
         this.startActivity(newIntent);
     }
@@ -416,7 +419,23 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         private void updateQuery(Challenge current) {
+            if(currentChallenge.getStatus().equals("closed")&&currentChallenge.getRated().equals("Approved")){
+                updateXP();
+            }
             challengeCollection.findAndModify(current, currentChallenge);
+        }
+
+        private void updateXP(){
+            DBCollection userCollection = db.getCollection("user");
+
+            User match = new User();
+            match.put("facebookID", currentChallenge.getChallengee().toString());
+
+            User update = (User)userCollection.findOne(match);
+
+            //update.setXP(update.getXP()+1000);
+
+            userCollection.update(match, update);
         }
 
         private void downloadEvidence(ArrayList<BasicDBObject> evidenceList) {

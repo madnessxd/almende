@@ -148,7 +148,7 @@ public class MessageActivity extends Activity{
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(MessageActivity.this, MainMenuActivity.class);
+        home = new Intent(MessageActivity.this, ChallengeOverviewActivity.class);
         startActivity(home);
         return;
     }
