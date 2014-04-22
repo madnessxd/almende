@@ -46,7 +46,7 @@ public class MessageActivity extends Activity{
     }
 
     public void createMessage(View v){
-        k = new Intent(MessageActivity.this, MessageViewActivity.class);
+        k = new Intent(MessageActivity.this, MessageCreateActivity.class);
         finish();
         startActivity(k);
     }
