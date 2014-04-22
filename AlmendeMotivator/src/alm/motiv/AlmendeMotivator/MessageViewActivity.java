@@ -159,7 +159,7 @@ public class MessageViewActivity extends Activity{
                 k = new Intent(MessageViewActivity.this, MessageActivity.class);
                 break;
             case 2:
-                k = new Intent(MessageViewActivity.this, ChallengesMenuActivity.class);
+                k = new Intent(MessageViewActivity.this, ChallengeOverviewActivity.class);
                 break;
             case 3:
                 k = new Intent(MessageViewActivity.this, FriendActivity.class);
