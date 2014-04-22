@@ -8,22 +8,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alm.motiv.AlmendeMotivator.adapters.EntryAdapter;
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
+import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
 import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.mongodb.*;
 
 public class ChallengeOverviewActivity extends Activity implements OnItemClickListener {
-
+    Intent k;
+    private String[] mMenuOptions;
+    private ListView mDrawerList;
     ArrayList<Item> items = new ArrayList<Item>();
     ListView listview = null;
     DatabaseThread DT = new DatabaseThread();
@@ -36,6 +43,11 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
         listview = (ListView) findViewById(R.id.listView_main);
         DT.execute();
+
+        mMenuOptions = getResources().getStringArray(R.array.profile_array);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
 
     public void initListview() {
@@ -67,11 +79,32 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
     @Override
     public void onBackPressed() {
-        finish();
-        Intent home = new Intent(ChallengeOverviewActivity.this, MainMenuActivity.class);
-        startActivity(home);
-        return;
+        showPopUp();
     }
+
+    private void showPopUp() {
+        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
+        helpBuilder.setTitle("Exit");
+        helpBuilder.setMessage("Are you sure you want to exit Sportopia?");
+        helpBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    }
+                }
+        );
+
+        helpBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing
+            }
+        });
+
+        AlertDialog helpDialog = helpBuilder.create();
+        helpDialog.show();
+    }
+
 
     public void onCreatePressed(View v) {
         startActivity(new Intent(this, ChallengeCreateActivity.class));
@@ -98,6 +131,36 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         intent.putExtra("id", item.getID().toString());
         /*intent.putExtra("comments", item.getComments());*/
         this.startActivity(intent);
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    public void selectItem(int pos) {
+        switch (pos) {
+            case 0:
+                k = new Intent(ChallengeOverviewActivity.this, ProfileActivity.class);
+                break;
+            case 1:
+                k = new Intent(ChallengeOverviewActivity.this, MessageActivity.class);
+                break;
+            case 2:
+                k = new Intent(ChallengeOverviewActivity.this, ChallengeOverviewActivity.class);
+                break;
+            case 3:
+                k = new Intent(ChallengeOverviewActivity.this, FriendActivity.class);
+                break;
+            case 4:
+                FacebookManager.logout();
+                k = new Intent(ChallengeOverviewActivity.this, FacebookMainActivity.class);
+                break;
+        }
+        finish();
+        startActivity(k);
     }
 
     private class DatabaseThread extends AsyncTask<String, String, String> {

@@ -314,4 +314,11 @@ public class ChallengeCreateActivity extends Activity {
             return null;
         }
     }
+
+    public void onBackPressed() {
+        finish();
+        Intent home = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
+        startActivity(home);
+        return;
+    }
 }

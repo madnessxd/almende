@@ -149,7 +149,7 @@ public class ProfileActivity extends Activity{
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(ProfileActivity.this, MainMenuActivity.class);
+        home = new Intent(ProfileActivity.this, ChallengeOverviewActivity.class);
         startActivity(home);
         return;
     }

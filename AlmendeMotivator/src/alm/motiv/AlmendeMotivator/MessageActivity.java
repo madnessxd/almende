@@ -46,7 +46,7 @@ public class MessageActivity extends Activity{
     }
 
     public void createMessage(View v){
-        k = new Intent(MessageActivity.this, MessageViewActivity.class);
+        k = new Intent(MessageActivity.this, MessageCreateActivity.class);
         finish();
         startActivity(k);
     }
@@ -148,7 +148,7 @@ public class MessageActivity extends Activity{
     @Override
     public void onBackPressed() {
         finish();
-        home = new Intent(MessageActivity.this, MainMenuActivity.class);
+        home = new Intent(MessageActivity.this, ChallengeOverviewActivity.class);
         startActivity(home);
         return;
     }
