@@ -39,7 +39,7 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
-        <activity android:name=".NewMessageActivity"
+        <activity android:name=".MessageViewActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"
                 >
