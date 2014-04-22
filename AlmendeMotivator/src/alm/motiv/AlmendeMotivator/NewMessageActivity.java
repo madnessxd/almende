@@ -25,22 +25,26 @@ public class NewMessageActivity extends Activity{
     Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
-
     private ListView listView;
-
     private String message;
     private String date;
-
-    private String facebookId;
-
+    private String facebookId = Cookie.getInstance().userEntryId;
     private ArrayList<String> receivedMessages = new ArrayList<String>();
+
+    Intent intent;
+
+    private String challenger;
+    private String challengee;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-        getFacebookID(Session.getActiveSession());
+        intent = getIntent();
+
+        challenger = intent.getExtras().getString("challenger");
+        challengee = intent.getExtras().getString("challengee");
 
         UpdateMessages u = new UpdateMessages();
         u.execute();
@@ -80,26 +84,6 @@ public class NewMessageActivity extends Activity{
         mEdit.setText("");
     }
 
-    private void getFacebookID(final Session session) {
-        Request request = Request.newMeRequest(session,
-                new Request.GraphUserCallback() {
-
-                    @Override
-                    public void onCompleted(GraphUser user, Response response) {
-                        // If the response is successful
-                        if (session == Session.getActiveSession()) {
-                            if (user != null) {
-                                facebookId = user.getId();
-                            }
-                        }
-                        if (response.getError() != null) {
-                            // Handle error
-                        }
-                    }
-                });
-        request.executeAsync();
-    }
-
     class UpdateMessages extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
             MongoClient client = Database.getInstance();
@@ -124,14 +108,15 @@ public class NewMessageActivity extends Activity{
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-            DBObject query = QueryBuilder.start("Author").is(facebookId).get();
-            DBCursor cursor = userCollection.find(query);
+            DBObject query = QueryBuilder.start("Author").is(challenger).get();
+            DBObject query2 = QueryBuilder.start("Receiver").is(challengee).get();
+            DBCursor cursor = userCollection.find(query, query2);
 
             if(cursor.count()==0){
                 ArrayList<String> messages = new ArrayList<String>();
                 messages.add(message);
 
-                Message challenge = new Message(facebookId, facebookId, "Test Message", messages, date, "Normal message", "0");
+                Message challenge = new Message(challenger, challengee, "Test Message", messages, date, "Normal message", "0");
                 userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
 
             } else{
@@ -139,7 +124,7 @@ public class NewMessageActivity extends Activity{
                 update.put("$push", new BasicDBObject("Content", message));
 
                 Message newFriend = new Message();
-                newFriend.put("Receiver", facebookId);
+                newFriend.put("Receiver", challengee);
 
                 userCollection.update(newFriend, update);
             }
@@ -156,7 +141,8 @@ public class NewMessageActivity extends Activity{
 
     public void getMessages(DBCollection userCollection){
         Message current = new Message();
-        current.put("Receiver", Cookie.getInstance().userEntryId);
+        current.put("Receiver", challengee);
+        current.put("Author", challenger);
 
         if(userCollection.find(current).toArray().size() > 0){
             Message newUser = (Message) userCollection.find(current).toArray().get(0);
