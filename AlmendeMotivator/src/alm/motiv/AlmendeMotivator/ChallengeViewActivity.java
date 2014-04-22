@@ -8,8 +8,10 @@ import alm.motiv.AlmendeMotivator.models.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -61,7 +63,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         intent = getIntent();
-        messagesListview = (ListView)findViewById(R.id.lstMessages);
+        messagesListview = (ListView) findViewById(R.id.lstMessages);
 
         id = intent.getExtras().getString("id");
 
@@ -82,14 +84,14 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         challenger.setText(currentChallenge.getChallenger());
         challengee.setText(currentChallenge.getChallengee());
         content.setText(currentChallenge.getContent());
-        evidence.setText(currentChallenge.getEvidenceAmount()+ " " + currentChallenge.getEvidenceType());
+        evidence.setText(currentChallenge.getEvidenceAmount() + " " + currentChallenge.getEvidenceType());
         reward.setText(currentChallenge.getReward());
 
         updateButtons("");
 
         //get comments from challenge
         messages = currentChallenge.getComments();
-        if(messages!=null){
+        if (messages != null) {
             MessageAdapter adapter = new MessageAdapter(this, messages);
             messagesListview.setAdapter(adapter);
         }
@@ -133,11 +135,25 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onCompletePressed(View v) {
+        String gps = getGPS();
         Intent newIntent = new Intent(this, ChallengeEvidence.class);
         newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
         newIntent.putExtra("title", currentChallenge.getTitle());
         newIntent.putExtra("challengeid", id);
+        if (gps.equals("null")) {
+            gps = "no GPS found";
+        }
+        newIntent.putExtra("gps", gps);
         this.startActivity(newIntent);
+    }
+
+    public String getGPS() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        MyLocationListener locationListener = new MyLocationListener();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        locationListener.onLocationChanged(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+
+        return locationListener.getLocation();
     }
 
     public void onEvidencePressed(View v) {
@@ -226,8 +242,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         String temp = currentChallenge.getStatus();
         Boolean userMadeChallenge = false;
 
-        if(currentChallenge.getChallenger().equals(Cookie.getInstance().userEntryId)){
-            userMadeChallenge=true;
+        if (currentChallenge.getChallenger().equals(Cookie.getInstance().userEntryId)) {
+            userMadeChallenge = true;
             System.out.println("LALA");
         }
 
@@ -235,12 +251,12 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         Button decline = (Button) findViewById(R.id.btnDecline);
         Button complete = (Button) findViewById(R.id.btnComplete);
 
-        if(temp.equals("new_challenge")&&(!userMadeChallenge)){
+        if (temp.equals("new_challenge") && (!userMadeChallenge)) {
             accept.setVisibility(View.VISIBLE);
             decline.setVisibility(View.VISIBLE);
         }
 
-        if (temp.equals("accepted")&&!(userMadeChallenge)) {
+        if (temp.equals("accepted") && !(userMadeChallenge)) {
             complete.setVisibility(View.VISIBLE);
 
             //hide previous buttons
@@ -253,7 +269,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             buttonRow.setVisibility(View.GONE);
         }
 
-        if(temp.equals("completed")){
+        if (temp.equals("completed")) {
             Button evidence = (Button) findViewById(R.id.btnEvidence);
             evidence.setVisibility(View.VISIBLE);
             Button approve = (Button) findViewById(R.id.btnApprove);
@@ -336,9 +352,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         });
     }
 
-    public void updateMessagesInListview(){
+    public void updateMessagesInListview() {
         messages.add(message);
-        ((BaseAdapter)messagesListview.getAdapter()).notifyDataSetChanged();
+        ((BaseAdapter) messagesListview.getAdapter()).notifyDataSetChanged();
     }
 
     class DatabaseThread extends AsyncTask<String, String, Challenge> {
@@ -349,15 +365,15 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         @Override
         protected void onPreExecute() {
-          simpleWaitDialog = ProgressDialog.show(ChallengeViewActivity.this,
-                   "Please wait", "Processing");
+            simpleWaitDialog = ProgressDialog.show(ChallengeViewActivity.this,
+                    "Please wait", "Processing");
 
         }
 
         protected void onPostExecute(Challenge result) {
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
-            if(updateUI){
+            if (updateUI) {
                 updateUI();
             }
         }
@@ -373,9 +389,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             Challenge current = new Challenge();
             current.put("_id", new ObjectId(id));
 
-            if(currentChallenge==null){
+            if (currentChallenge == null) {
                 //this variable tells us that the view needs to be constructed for use
-                updateUI= true;
+                updateUI = true;
                 currentChallenge = (Challenge) challengeCollection.findOne(current);
                 return null;
             }
@@ -388,7 +404,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 //if the status is unchanged, we want to add a comment
                 addCommentToChallenge();
                 return null;
-            }else if(args[0]==""){
+            } else if (args[0] == "") {
                 updateQuery(current);
             }
             return null;
