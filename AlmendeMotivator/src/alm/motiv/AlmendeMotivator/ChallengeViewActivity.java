@@ -432,8 +432,11 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             match.put("facebookID", currentChallenge.getChallengee().toString());
 
             User update = (User)userCollection.findOne(match);
-
-            //update.setXP(update.getXP()+1000);
+            try{
+                update.setXP(update.getXP()+100);
+            }catch (Exception e){
+                update.setXP(1000);
+            }
 
             userCollection.update(match, update);
         }
