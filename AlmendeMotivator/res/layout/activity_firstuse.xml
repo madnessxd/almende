@@ -19,6 +19,7 @@
                   android:layout_height="wrap_content">
         <EditText android:layout_width="wrap_content"
                   android:hint="Number of hours"
+                  android:id="@+id/hoursInput"
                   android:layout_height="wrap_content"/>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="hours per"/>
@@ -62,7 +63,8 @@
              android:layout_height="wrap_content"></Spinner>
     <Button android:layout_width="wrap_content"
             android:id="@+id/btnSubmitFirstUse"
-            android:text="Submit" android:layout_height="wrap_content"/>
+            android:text="Submit"
+            android:onClick="onSubmitFirstUsePressed" android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
