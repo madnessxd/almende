@@ -103,9 +103,10 @@ public class MessageViewActivity extends Activity{
             userCollection.setObjectClass(Message.class);
 
             DBObject query = QueryBuilder.start("Author").is(challenger).get();
-            DBObject query2 = QueryBuilder.start("Receiver").is(challengee).get();
-            DBCursor cursor = userCollection.find(query, query2);
+            query = QueryBuilder.start("Receiver").is(challengee).get();
+            DBCursor cursor = userCollection.find(query);
 
+            System.out.println("ff tellen: " + cursor.count());
             if(cursor.count()==0){
                 ArrayList<String> messages = new ArrayList<String>();
                 messages.add(message);
