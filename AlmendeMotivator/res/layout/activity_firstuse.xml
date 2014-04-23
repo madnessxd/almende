@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView android:layout_width="wrap_content"
+              android:text="First use"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              android:text="What would you say your current exercise behaviour is?"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              android:text="What is the average time you spend on exercise?"
+              android:layout_height="wrap_content"/>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_height="wrap_content">
+        <EditText android:layout_width="wrap_content"
+                  android:hint="Number of hours"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="hours per"/>
+        <Spinner
+                android:id="@+id/spPeriod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="true"
+                android:entries="@array/periods"
+                />
+    </LinearLayout>
+
+    <TextView android:layout_width="wrap_content"
+              android:text="What is your motivation for exercising?"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+            android:text="Is it for fun, or for example health? Fill in at least two"/>
+    <EditText android:layout_width="fill_parent"
+              android:hint="Motivation"
+              android:id="@+id/motivationReason1"
+              android:layout_height="wrap_content"/>
+    <EditText android:layout_width="fill_parent"
+              android:hint="Motivation"
+              android:id="@+id/motivationReason2"
+              android:layout_height="wrap_content"/>
+    <EditText android:layout_width="fill_parent"
+              android:hint="Motivation"
+              android:id="@+id/motivationReason3"
+              android:layout_height="wrap_content"/>
+    <EditText android:layout_width="fill_parent"
+              android:hint="Motivation"
+              android:id="@+id/motivationReason4"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="What part of the day do you exercise the most?"/>
+    <Spinner android:layout_width="wrap_content"
+             android:id="@+id/spPartOfTheDay"
+             android:entries="@array/partOfTheDay"
+             android:drawSelectorOnTop="true"
+             android:layout_height="wrap_content"></Spinner>
+    <Button android:layout_width="wrap_content"
+            android:id="@+id/btnSubmitFirstUse"
+            android:text="Submit" android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

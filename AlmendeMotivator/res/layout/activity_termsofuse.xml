@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView android:layout_width="fill_parent"
+              android:text="Terms of use"
+              android:layout_height="wrap_content"/>
+
+    <TextView android:layout_width="fill_parent"
+              android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In consequat volutpat augue, vel imperdiet dui adipiscing in. Suspendisse potenti. Vivamus sit amet eros at dolor laoreet imperdiet. Nunc vulputate condimentum sem, ut pulvinar nibh varius id. Aenean sit amet tempus nibh, nec faucibus neque. Cras mollis tincidunt ultrices. Proin convallis, metus vitae dictum mattis, sapien est imperdiet tortor, non laoreet urna massa id lorem. Vestibulum in orci id enim consectetur volutpat nec vitae ante. Praesent sed lorem nisl. Nulla dictum auctor eros a ultrices. Nullam eu venenatis purus. Duis vel varius arcu.
+
+Praesent ac sem odio. Etiam pretium nisi id rhoncus consequat. Nulla non tortor pulvinar, commodo nisl non, lacinia odio. Curabitur varius augue at metus sollicitudin, at ultricies nisl tristique. In feugiat nunc eget diam semper, at pretium eros eleifend. Duis lobortis nunc magna, a venenatis elit consequat quis. Morbi egestas nibh vel velit ultrices euismod."
+              android:layout_height="wrap_content"/>
+
+    <Button android:layout_width="wrap_content"
+            android:text="I don't agree"
+            android:id="@+id/btnDisagree"
+            android:onClick="onDisagreePressed"
+            android:layout_height="wrap_content"/>
+
+    <Button android:layout_width="wrap_content"
+            android:text="I agree"
+            android:id="@+id/btnAgree"
+            android:onClick="onAgreePressed"
+            android:layout_height="wrap_content"/>
+
+
+</LinearLayout>
