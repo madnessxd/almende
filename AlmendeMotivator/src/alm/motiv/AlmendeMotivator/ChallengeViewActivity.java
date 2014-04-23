@@ -480,7 +480,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                     if (outputStream != null) {
                         try {
                             outputStream.close();
-                            Toast.makeText(ChallengeViewActivity.this, "The evidence is placed in your downloads", Toast.LENGTH_LONG).show();
 
                         } catch (IOException e) {
                             e.printStackTrace();
