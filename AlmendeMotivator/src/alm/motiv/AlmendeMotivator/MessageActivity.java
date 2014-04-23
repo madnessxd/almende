@@ -3,13 +3,17 @@ package alm.motiv.AlmendeMotivator;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Message;
+import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import com.facebook.*;
+import com.facebook.model.GraphUser;
 import com.mongodb.*;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -22,6 +26,8 @@ public class MessageActivity extends Activity{
     private ListView listView;
     private ArrayList<String> runningMessages = new ArrayList<String>();
 
+    private ArrayList<String> nameArray = new ArrayList<String>();
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -30,7 +36,7 @@ public class MessageActivity extends Activity{
         UpdateMessages u = new UpdateMessages();
         u.execute();
 
-        showMessages();
+        //showMessages();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -43,6 +49,35 @@ public class MessageActivity extends Activity{
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             selectItem(position);
         }
+    }
+
+    class GetNameThread extends AsyncTask<String, String, String> {
+        protected String doInBackground(String... args) {
+            Session session = Session.getActiveSession();
+
+            Request request = new Request(session, "me", null, HttpMethod.GET);
+            Response response = request.executeAndWait();
+
+
+            for (int i = 0; i < runningMessages.size(); i++){
+                request = new Request(session, runningMessages.get(i), null, HttpMethod.GET);
+                response = request.executeAndWait();
+
+                if (response.getError() != null) {
+                    System.out.println("NOPE");
+                } else {
+                    GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                    nameArray.add(graphUser.getName());
+                    System.out.println(graphUser.getName());
+                }
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String string) {
+            showMessages();
+        }
+
     }
 
     public void createMessage(View v){
@@ -75,7 +110,7 @@ public class MessageActivity extends Activity{
 
         while(myCursor.hasNext()){
             DBObject testObj = myCursor.next();
-            runningMessages.add("Send: " + testObj.get("Receiver").toString());
+            runningMessages.add(testObj.get("Receiver").toString());
         }
 
         query = QueryBuilder.start("Receiver").is(Cookie.getInstance().userEntryId).get();
@@ -83,15 +118,17 @@ public class MessageActivity extends Activity{
 
         while(myCursor.hasNext()){
             DBObject testObj = myCursor.next();
-            runningMessages.add("Received: " + testObj.get("Author").toString());
+            runningMessages.add(testObj.get("Author").toString());
         }
-
+        GetNameThread dbT = new GetNameThread();
+        dbT.execute();
     }
 
     public void showMessages(){
         listView = (ListView) findViewById(R.id.messageList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, runningMessages);
+                //android.R.layout.simple_list_item_1, runningMessages);
+                android.R.layout.simple_list_item_1, nameArray);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new MessageClickListener());
     }
@@ -106,17 +143,8 @@ public class MessageActivity extends Activity{
 
             k = new Intent(MessageActivity.this, MessageViewActivity.class);
 
-            if(butName.contains("Send: ")){
-                butName = butName.replace("Send: ","");
                 k.putExtra("challenger", Cookie.getInstance().userEntryId);
                 k.putExtra("challengee", butName);
-            }
-
-            if(butName.contains("Received: ")){
-                butName = butName.replace("Received: ","");
-                k.putExtra("challenger", butName);
-                k.putExtra("challengee", Cookie.getInstance().userEntryId);
-            }
 
             finish();
             startActivity(k);
