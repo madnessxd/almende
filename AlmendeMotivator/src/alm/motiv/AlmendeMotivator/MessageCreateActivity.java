@@ -1,23 +1,21 @@
 package alm.motiv.AlmendeMotivator;
 
+import alm.motiv.AlmendeMotivator.models.Message;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.*;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 
 import java.util.ArrayList;
 
@@ -28,7 +26,7 @@ public class MessageCreateActivity extends Activity {
     private Spinner spinnerFriends;
 
     private String challengee;
-
+    private String challenger = Cookie.getInstance().userEntryId;
     private String[] facebookFriends = {"loading..."};
     private String[] facebookFriendsName = {"loading..."};
 
@@ -68,6 +66,7 @@ public class MessageCreateActivity extends Activity {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 updateFriends();
+
             }
             return false;
         }
@@ -116,11 +115,62 @@ public class MessageCreateActivity extends Activity {
         }
     }
 
-    public void sendMessage() {
-        finish();
-        Intent home = new Intent(MessageCreateActivity.this, MessageActivity.class);
-        startActivity(home);
-        //return;
+    class DatabaseThread extends AsyncTask<String, String, String> {
+        protected String doInBackground(String... args) {
+            MongoClient client = Database.getInstance();
+            DB db = client.getDB(Database.uri.getDatabase());
+            DBCollection userCollection = db.getCollection("messages");
+            userCollection.setObjectClass(Message.class);
+
+            DBObject query = QueryBuilder.start("Author").is(challenger).get();
+            query = QueryBuilder.start("Receiver").is(challengee).get();
+            DBCursor cursor = userCollection.find(query);
+
+            System.out.println("ff tellen: " + cursor.count());
+
+
+            EditText textContent = (EditText) findViewById(R.id.txtChallengeContent);
+            String message = textContent.getText().toString();
+            Time now = new Time();
+            now.setToNow();
+            String date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);
+
+            if(cursor.count()==0){
+                ArrayList<String> messages = new ArrayList<String>();
+                messages.add(message);
+
+                Message challenge = new Message(challengee, challenger, "Test Message", messages, date, "Normal message", "0");
+                userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+
+            } else{
+                BasicDBObject update = new BasicDBObject();
+                update.put("$push", new BasicDBObject("Content", message));
+
+                Message newFriend = new Message();
+                newFriend.put("Receiver", challengee);
+
+                userCollection.update(newFriend, update);
+            }
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String string) {
+            finish();
+            Intent home = new Intent(MessageCreateActivity.this, MessageActivity.class);
+            startActivity(home);
+            //return;
+        }
+    }
+
+
+    public void sendMessage(View v) {
+        System.out.println("dit:" + challengee);
+        if(challengee != null && challengee != "loading..."){
+            DatabaseThread db = new DatabaseThread();
+            db.execute();
+            Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onBackPressed() {
