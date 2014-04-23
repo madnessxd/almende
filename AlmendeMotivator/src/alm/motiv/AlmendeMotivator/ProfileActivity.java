@@ -2,6 +2,7 @@ package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
+import alm.motiv.AlmendeMotivator.models.Level;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.content.Intent;
@@ -96,6 +97,10 @@ public class ProfileActivity extends Activity{
         ageInput.setText(user.getAge());
         cityInput.setText(user.getCity());
         sportsInput.setText(user.getSports());
+
+        //manage XP
+        user.getXP();
+        System.out.println(Level.BEGINNER.getMaxXP());
     }
 
     public void cancelEditBtn(View v){
