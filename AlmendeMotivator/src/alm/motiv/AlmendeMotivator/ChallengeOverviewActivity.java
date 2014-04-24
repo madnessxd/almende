@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -28,16 +29,32 @@ import android.widget.ListView;
 import com.mongodb.*;
 
 public class ChallengeOverviewActivity extends Activity implements OnItemClickListener {
-    Intent k;
+    private Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
-    ArrayList<Item> items = new ArrayList<Item>();
-    ListView listview = null;
-    DatabaseThread DT = new DatabaseThread();
+    private ArrayList<Item> items = new ArrayList<Item>();
+    private ListView listview = null;
+    private DatabaseThread DT = new DatabaseThread();
+    private static String PREFS_NAME = "sportopiaprefs";
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean redirect = settings.getBoolean("termsAgreement", false);
+        boolean firstUse = settings.getBoolean("firstUse", false);
+
+        //if we don't have an agreement yet on the terms of use, we redirect the user
+        if(!redirect){
+            Intent intent = new Intent(this, TermsActivity.class);
+            startActivity(intent);
+        }else if(!firstUse){
+            Intent intent = new Intent(this, FirstUseActivity.class);
+            startActivity(intent);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challengeoverview);
 

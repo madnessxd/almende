@@ -365,6 +365,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         private Boolean updateUI = false;
         private DB db = null;
         private DBCollection challengeCollection;
+        private Challenge current;
 
         @Override
         protected void onPreExecute() {
@@ -389,7 +390,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             challengeCollection.setObjectClass(Challenge.class);
 
             // get the current challenge from database
-            Challenge current = new Challenge();
+            current = new Challenge();
             current.put("_id", new ObjectId(id));
 
             if (currentChallenge == null) {
@@ -408,17 +409,19 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 addCommentToChallenge();
                 return null;
             } else if (args[0] == "") {
-                updateQuery(current);
+                updateQuery();
             }
             return null;
         }
 
         private void addCommentToChallenge() {
-            challengeCollection.update(currentChallenge, new BasicDBObject("$push", new BasicDBObject("comments", message)));
-            message.clear(); //clear message for the next use
+            Challenge challenge = (Challenge) challengeCollection.findOne(current);
+            //for some reason we need to get the currentchallenge again from mongodb otherwise it won't update the document
+
+            challengeCollection.update(challenge, new BasicDBObject("$push", new BasicDBObject("comments", message)));
         }
 
-        private void updateQuery(Challenge current) {
+        private void updateQuery() {
             if(currentChallenge.getStatus().equals("closed")&&currentChallenge.getRated().equals("Approved")){
                 updateXP();
             }

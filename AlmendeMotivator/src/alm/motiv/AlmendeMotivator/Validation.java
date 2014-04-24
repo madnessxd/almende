@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public class Validation {
     // Regular Expression
     private static final String NUMERIC_REGEX = "^[1-8][0-9]$";
+    private static final String NUMERIC_MSG_NO_LIMITATIONS = "^[0-9][0-9]$";
     private static final String CHAR_REGEX = "^[A-Za-z ]+$";
 
     // Error Messages
@@ -21,6 +22,10 @@ public class Validation {
     // call this method when you need to check email validation
     public static boolean isNumeric(EditText editText, boolean required) {
         return isValid(editText, NUMERIC_REGEX, NUMERIC_MSG, required);
+    }
+
+    public static boolean isNumericWihtoutLimitations(EditText editText, boolean required) {
+        return isValid(editText, NUMERIC_REGEX, NUMERIC_MSG_NO_LIMITATIONS, required);
     }
 
     public static boolean isLetters(EditText editText, boolean required){

@@ -29,7 +29,6 @@ public class MessageAdapter extends ArrayAdapter<BasicDBObject> {
         vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
