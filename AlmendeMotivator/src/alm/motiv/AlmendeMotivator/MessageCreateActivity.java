@@ -139,7 +139,7 @@ public class MessageCreateActivity extends Activity {
                 ArrayList<String> messages = new ArrayList<String>();
                 messages.add(message);
 
-                Message challenge = new Message(challengee, challenger, "Test Message", messages, date, "Normal message", "0");
+                Message challenge = new Message(challenger, challengee, "Test Message", messages, date, "Normal message", "0");
                 userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
 
             } else{
