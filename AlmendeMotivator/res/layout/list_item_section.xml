@@ -5,7 +5,14 @@
                   android:orientation="vertical"
                   xmlns:android="http://schemas.android.com/apk/res/android">
 
-     <include android:id="@+id/list_item_section_text"
-              layout="@android:layout/preference_category">
+    <TextView android:layout_width="fill_parent"
+              android:id="@+id/list_item_section_text"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
+
+     <!--<include
+              style="@style/header"
+              layout="@android:layout/preference_category"
          
-    </include></LinearLayout>
+    </include>-->
+        </LinearLayout>

@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <application android:label="@string/app_name" android:icon="@drawable/sportoptia">
+    <application android:label="Sportopia"
+                 android:icon="@drawable/sportoptia"
+            android:theme="@style/Sportopia">
         <activity android:name=".MainMenuActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"

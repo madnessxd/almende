@@ -31,6 +31,7 @@ import org.bson.types.ObjectId;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.Inflater;
 
 /**
  * Created by Kevin on 26/03/2014.
@@ -65,6 +66,10 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         intent = getIntent();
         messagesListview = (ListView) findViewById(R.id.lstMessages);
+        View headerView = View.inflate(this, R.layout.activity_challenge_header, null);
+        View footerView = View.inflate(this, R.layout.activity_challenge_footer, null);
+        messagesListview.addHeaderView(headerView);
+        messagesListview.addFooterView(footerView);
 
         id = intent.getExtras().getString("id");
 
@@ -356,8 +361,10 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void updateMessagesInListview() {
-        messages.add(message);
-        ((BaseAdapter) messagesListview.getAdapter()).notifyDataSetChanged();
+        if(messages!=null){
+            messages.add(message);
+        }
+        ((BaseAdapter)((HeaderViewListAdapter)messagesListview.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
     }
 
     class DatabaseThread extends AsyncTask<String, String, Challenge> {

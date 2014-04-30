@@ -182,33 +182,30 @@ public class ChallengeCreateActivity extends Activity {
         spinnerFriends.setAdapter(spinnerArrayAdapter);
     }
 
-    public boolean checkFields() {
-        boolean allFieldsEntered = true;
-        StringBuilder error = new StringBuilder();
-        if (textTitle.getText().toString().matches("")) {
-            allFieldsEntered = false;
-            error.append("You forgot to enter a challenge title!\n");
-        }
-        if (textContent.getText().toString().matches("")) {
-            allFieldsEntered = false;
-            error.append("You forgot to enter a challenge description!");
-        }
-
-        //If errors are added to the StringBuilder
-        if (error.length() != 0) {
-            Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
-        }
-        return allFieldsEntered;
-    }
-
     public void createChallenge() {
-        if (checkFields()) {
+        if (validation()) {
             setChallengeInfo();
             DatabaseThread db = new DatabaseThread();
             db.execute();
             Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    public boolean validation(){
+        boolean succes = true;
+        if(!Validation.isLetters(textTitle, true))succes=false;
+        if(!Validation.isLetters(textContent, true))succes=false;
+        if(!Validation.isLetters(textReward, true))succes=false;
+        if(spinnerFriends.getSelectedItem()==null){
+            succes=false;
+            Toast.makeText(this, "You haven't chosen an item", Toast.LENGTH_LONG);
+        }else if(spinnerFriends.getSelectedItem().toString()=="Follow some friends"){
+            succes=false;
+            Toast.makeText(this, "You have to challenge a friend", Toast.LENGTH_LONG);
+        }
+
+        return succes;
     }
 
     public void updateUI() {
@@ -289,28 +286,31 @@ public class ChallengeCreateActivity extends Activity {
             User newUser = (User) userCollection.find(curUser).toArray().get(0);
 
 
-            ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
+            if(newUser.get("friends")!=null){
 
-            String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
-            String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
+                ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
+
+                String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
+                String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
 
 
-            for (int i = 0; i < arrayMessages.toArray().length; i++) {
-                facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
+                for (int i = 0; i < arrayMessages.toArray().length; i++) {
+                    facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
 
-                request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
-                response = request.executeAndWait();
+                    request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
+                    response = request.executeAndWait();
 
-                if (response.getError() != null) {
-                    System.out.println("NOPE");
-                } else {
-                    GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-                    facebookFriendsNameTemp[i] = graphUser.getName();
+                    if (response.getError() != null) {
+                        System.out.println("NOPE");
+                    } else {
+                        GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                        facebookFriendsNameTemp[i] = graphUser.getName();
+                    }
                 }
+                facebookFriends = facebookFriendsTemp;
+                facebookFriendsName = facebookFriendsNameTemp;
             }
 
-            facebookFriends = facebookFriendsTemp;
-            facebookFriendsName = facebookFriendsNameTemp;
             return null;
         }
     }
