@@ -42,6 +42,14 @@
         <item>Evening</item>
     </string-array>
 
+    <!-- pop up array -->
+
+    <string-array name="categories">
+        <item>Inspirational</item>
+        <item>Meet up</item>
+        <item>Motivational</item>
+        <item>Other</item>
+    </string-array>
 
     <!--
         Copyright 2010-present Facebook.

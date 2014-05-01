@@ -8,112 +8,102 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="5dp"
-                    android:background="#D8D8D8" >
+                    android:background="@color/darkerWhite" >
+        <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                style="@style/button"
+                android:id="@+id/btnCancel"
+                android:onClick="cancelEditBtn"/>
         <TextView
                 android:id="@+id/name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Name:"
-                android:textColor="#000"
-                android:layout_below="@+id/name"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:text="Name"
+                style="@style/header"
+                android:layout_below="@+id/btnCancel"/>
         <EditText
                 android:id="@+id/nameInput"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
+                style="@style/normalText"
                 android:layout_below="@id/name"/>
         <TextView
                 android:id="@+id/age"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Age:"
-                android:textColor="#000"
-                android:layout_below="@+id/nameInput"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:text="Age"
+                style="@style/header"
+                android:layout_below="@+id/nameInput"/>
         <EditText
                 android:id="@+id/ageInput"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                style="@style/normalText"
+                android:layout_height="50dp"
                 android:layout_below="@id/age"/>
         <TextView
                 android:id="@+id/goal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Goal:"
-                android:textColor="#000"
-                android:layout_below="@+id/ageInput"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:text="Goal"
+                style="@style/header"
+                android:layout_below="@+id/ageInput"/>
        <EditText
                 android:id="@+id/goalInput"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
+                style="@style/normalText"
                 android:layout_below="@id/goal"/>
         <TextView
                 android:id="@+id/city"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="City:"
-                android:textColor="#000"
+                android:text="City"
                 android:layout_below="@+id/goalInput"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                style="@style/header"/>
         <EditText
                 android:id="@+id/cityInput"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                style="@style/normalText"
+                android:layout_height="50dp"
                 android:layout_below="@id/city"/>
        <TextView
                 android:id="@+id/sports"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="My Sports:"
-                android:textColor="#000"
-                android:layout_below="@+id/cityInput"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:text="My Sports"
+                style="@style/header"
+                android:layout_below="@+id/cityInput"/>
         <EditText
                 android:id="@+id/sportsInput"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
+                style="@style/normalText"
                 android:layout_below="@id/sports"/>
         <TextView
                 android:id="@+id/about"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="About:"
-                android:textColor="#000"
-                android:layout_below="@+id/sportsInput"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:text="About"
+                style="@style/header"
+                android:layout_below="@+id/sportsInput"/>
         <EditText
                 android:id="@+id/aboutInput"
                 android:layout_width="fill_parent"
                 android:layout_height="150dp"
+                style="@style/normalText"
                 android:layout_below="@id/about"
                 android:gravity="top"/>
         <Button
-                android:layout_width="70dp"
-                android:layout_height="35dp"
-                android:text="Save"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Save +"
                 android:id="@+id/btnSave"
                 android:onClick="saveUserBtn"
-                android:layout_below="@id/aboutInput"
-                android:layout_toRightOf="@+id/btnCancel"/>
-        <Button
-                android:layout_width="70dp"
-                android:layout_height="35dp"
-                android:text="Cancel"
-                android:id="@+id/btnCancel"
-                android:onClick="cancelEditBtn"
+                style="@style/button"
                 android:layout_below="@id/aboutInput"/>
+
 
     </RelativeLayout>
     </ScrollView>
