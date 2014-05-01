@@ -1,6 +1,5 @@
 package alm.motiv.AlmendeMotivator;
 
-import android.content.Intent;
 import android.widget.EditText;
 
 import java.util.regex.Pattern;
@@ -16,16 +15,17 @@ public class Validation {
 
     // Error Messages
     private static final String REQUIRED_MSG = "This field cannot be empty";
-    private static final String NUMERIC_MSG = "Only numbers are allowed, age between 10 and 89";
+    private static final String NUMERIC_MSG_AGE = "Only numbers are allowed, age between 10 and 89";
     private static final String CHAR_MSG = "Only letters are allowed";
+    private static final String NUMERIC_MSG = "Please enter 2 numbers. Example: 08 hours per week";
 
     // call this method when you need to check email validation
     public static boolean isNumeric(EditText editText, boolean required) {
-        return isValid(editText, NUMERIC_REGEX, NUMERIC_MSG, required);
+        return isValid(editText, NUMERIC_REGEX, NUMERIC_MSG_AGE, required);
     }
 
     public static boolean isNumericWihtoutLimitations(EditText editText, boolean required) {
-        return isValid(editText, NUMERIC_REGEX, NUMERIC_MSG_NO_LIMITATIONS, required);
+        return isValid(editText, NUMERIC_MSG_NO_LIMITATIONS, NUMERIC_MSG, required);
     }
 
     public static boolean isLetters(EditText editText, boolean required){

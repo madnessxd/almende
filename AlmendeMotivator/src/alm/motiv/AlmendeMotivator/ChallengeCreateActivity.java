@@ -263,7 +263,7 @@ public class ChallengeCreateActivity extends Activity {
             DBCollection userCollection = db.getCollection("challenge");
             userCollection.setObjectClass(Challenge.class);
 
-            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null");
+            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", 0);
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }

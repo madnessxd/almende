@@ -74,6 +74,11 @@ public class FirstUseActivity extends Activity {
         return succes;
     }
 
+    @Override
+    public void onBackPressed() {
+        //Override so people can't cancel this process
+    }
+
     class DatabaseThread extends AsyncTask<String, String, String> {
         private ProgressDialog simpleWaitDialog;
         @Override
