@@ -32,8 +32,6 @@
     <!-- first use arrays-->
     <string-array name="periods">
         <item>Week</item>
-        <item>Month</item>
-        <item>Year</item>
     </string-array>
 
     <string-array name="partOfTheDay">
