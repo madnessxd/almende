@@ -15,7 +15,7 @@ public class Challenge extends BasicDBObject implements Item {
 
     public Challenge() {}
 
-    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps, int likeAmount) {
+    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps) {
         put("title", title);
         put("challenger", challenger);
         put("challengee", challengee);
@@ -25,7 +25,7 @@ public class Challenge extends BasicDBObject implements Item {
         put("reward", reward);
         put("status", status);
         put("gps", gps);
-        put("likeAmount", likeAmount);
+        //put("likeAmount", likeAmount);
     }
 
     public void setStatus(String status) {
