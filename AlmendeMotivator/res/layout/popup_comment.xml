@@ -3,10 +3,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="wrap_content"
+              android:background="@color/darkerWhite"
               android:layout_height="wrap_content">
 
     <TextView android:layout_width="fill_parent"
               android:text="Upload a message"
+              style="@style/header"
               android:layout_height="wrap_content"/>
     <EditText android:layout_width="fill_parent"
               android:layout_height="100dp"
@@ -14,13 +16,14 @@
             android:id="@+id/txtContent"
             android:gravity="top"/>
     <TextView android:layout_width="match_parent"
+              style="@style/normalText"
               android:text="Pick a category for the message"
               android:layout_height="wrap_content"/>
-    <ListView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:listSelector="#483c90"
-            android:id="@+id/lstCategories"
-            android:visibility="gone">
 
-            </ListView>
+    <Spinner android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:drawSelectorOnTop="true"
+             android:id="@+id/spCategories"
+             android:entries="@array/categories"
+            ></Spinner>
 </LinearLayout>

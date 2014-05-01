@@ -97,10 +97,16 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         //get comments from challenge
         messages = currentChallenge.getComments();
-        if (messages != null) {
-            MessageAdapter adapter = new MessageAdapter(this, messages);
-            messagesListview.setAdapter(adapter);
+        if (messages == null) {
+            Message emptyMessage = new Message();
+            emptyMessage.setContent("This challenge doesn't have comments.");
+            emptyMessage.setAuthor(" ");
+            emptyMessage.setDate(new Date());
+            messages = new ArrayList<BasicDBObject>();
+            messages.add(emptyMessage);
         }
+        MessageAdapter adapter = new MessageAdapter(this, messages);
+        messagesListview.setAdapter(adapter);
 
     }
 
@@ -252,7 +258,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         if (currentChallenge.getChallenger().equals(Cookie.getInstance().userEntryId)) {
             userMadeChallenge = true;
-            System.out.println("LALA");
         }
 
         Button accept = (Button) findViewById(R.id.btnAccept);
@@ -302,10 +307,11 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         //input for content for the comment
         final EditText content = (EditText) convertView.findViewById(R.id.txtContent);
+        final Spinner spCategories = (Spinner) convertView.findViewById(R.id.spCategories);
 
 
         //listview so that the categoryf of the comment can be selected
-        String categories[] = {"Motivational", "Meet Up", "Inspirational", "Other"};
+       /* String categories[] = {"Motivational", "Meet Up", "Inspirational", "Other"};
         final ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
         lv.setVisibility(View.VISIBLE);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
@@ -315,7 +321,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 message.setCategory(lv.getItemAtPosition(i).toString());
             }
-        });
+        });*/
 
         final AlertDialog d = new AlertDialog.Builder(this)
                 .setPositiveButton("Add Comment", null)
@@ -329,13 +335,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             @Override
             public void onClick(View view) {
                 Boolean success = true;
-                String category = null;
-                try {
-                    //we put this in a try catch because .getCatgeory can crash when it isn't set
-                    category = message.getCatgeory();
-                } catch (Exception e) {
-                    success = false;
-                }
 
                 if (!Validation.hasText(content)) {
                     success = false;
@@ -351,6 +350,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                     message.setLiked("false");
                     message.setDate(new Date());
                     message.setContent(content.getText().toString());
+                    message.setCategory(spCategories.getSelectedItem().toString());
                     new DatabaseThread().execute("unchanged");
                     updateMessagesInListview();
                 }

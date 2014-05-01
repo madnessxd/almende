@@ -20,6 +20,7 @@ public class ProfileActivity extends Activity{
     Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
+    private Level level = Level.BEGINNER;
 
     //our user
     User user=null;
@@ -57,6 +58,8 @@ public class ProfileActivity extends Activity{
         TextView cityContent = (TextView)findViewById(R.id.cityContent);
         TextView ageContent = (TextView)findViewById(R.id.ageContent);
         TextView goalContent = (TextView)findViewById(R.id.goalContent);
+        TextView xpText = (TextView)findViewById(R.id.progressText);
+        ProgressBar xpBar = (ProgressBar)findViewById(R.id.progressXP);
 
         nameContent.setText(user.getName());
         aboutContent.setText(user.getAbout());
@@ -64,6 +67,29 @@ public class ProfileActivity extends Activity{
         cityContent.setText(user.getCity());
         ageContent.setText(user.getAge());
         goalContent.setText(user.getGoal());
+
+        //manage XP
+        int XP=0;
+        try{XP = user.getXP();}catch (Exception e){
+            //do nothing
+        }
+        setLevelOfUser(XP);
+
+        xpBar.setMax(level.getMaxXP());
+        xpBar.setProgress(XP);
+        xpText.setText(level.toString().toLowerCase() + ": "+ user.getXP() +"xp /"+level.getMaxXP()+"xp");
+
+    }
+
+
+    public void setLevelOfUser(int XP){
+        if(XP<Level.BEGINNER.getMaxXP())level = level.BEGINNER;
+
+        else if(XP<Level.NOVICE.getMaxXP())level = level.NOVICE;
+
+        else if(XP<Level.ATHLETE.getMaxXP())level = level.ATHLETE;
+
+        else if(XP>Level.CHAMPION.getMaxXP()) level = level.CHAMPION;
     }
 
     private void getUser(){
@@ -97,10 +123,6 @@ public class ProfileActivity extends Activity{
         ageInput.setText(user.getAge());
         cityInput.setText(user.getCity());
         sportsInput.setText(user.getSports());
-
-        //manage XP
-        user.getXP();
-        System.out.println(Level.BEGINNER.getMaxXP());
     }
 
     public void cancelEditBtn(View v){

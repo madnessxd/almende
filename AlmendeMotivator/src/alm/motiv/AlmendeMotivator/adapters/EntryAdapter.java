@@ -51,13 +51,16 @@ public class EntryAdapter extends ArrayAdapter<Item> {
                 Challenge ei = (Challenge)i;
                 v = vi.inflate(R.layout.list_item_entry, null);
                 final TextView title = (TextView)v.findViewById(R.id.list_item_entry_title);
-                final TextView subtitle = (TextView)v.findViewById(R.id.list_item_entry_summary);
+                final TextView challengee = (TextView)v.findViewById(R.id.list_item_entry_summary);
+                final TextView status = (TextView)v.findViewById(R.id.list_item_entry_status);
 
 
                 if (title != null)
                     title.setText(ei.getTitle());
-                if(subtitle != null)
-                    subtitle.setText(ei.getStatus());
+                if(challengee != null)
+                    challengee.setText(ei.getChallengee());
+                if(status != null)
+                    status.setText(ei.getStatus());
             }
         }
         return v;
