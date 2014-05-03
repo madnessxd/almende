@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:background="@color/darkerWhite"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <FrameLayout android:layout_width="80dp" android:layout_height="80dp"
+    <TextView
+            android:id="@+id/friendName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            style="@style/normalText"/>
+    <FrameLayout android:layout_width="80dp"  android:layout_height="80dp"
                  android:background="#ccc">
         <ProgressBar android:layout_width="40dp" android:layout_height="40dp"
                      android:layout_gravity="center"/>
@@ -14,9 +21,5 @@
                 android:layout_height="80dp"
                 />
     </FrameLayout>
-    <TextView
-            android:id="@+id/friendName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"/>
+
 </LinearLayout>

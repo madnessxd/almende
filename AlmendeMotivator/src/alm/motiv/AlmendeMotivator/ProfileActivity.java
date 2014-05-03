@@ -77,10 +77,9 @@ public class ProfileActivity extends Activity{
 
         xpBar.setMax(level.getMaxXP());
         xpBar.setProgress(XP);
-        xpText.setText(level.toString().toLowerCase() + ": "+ user.getXP() +"xp /"+level.getMaxXP()+"xp");
+        xpText.setText(level.toString().toLowerCase() + ": "+ XP +"xp /"+level.getMaxXP()+"xp");
 
     }
-
 
     public void setLevelOfUser(int XP){
         if(XP<Level.BEGINNER.getMaxXP())level = level.BEGINNER;
