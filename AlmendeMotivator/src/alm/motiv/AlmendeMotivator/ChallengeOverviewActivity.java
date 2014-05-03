@@ -47,10 +47,10 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         boolean firstUse = settings.getBoolean("firstUse", false);
 
         //if we don't have an agreement yet on the terms of use, we redirect the user
-        if(!redirect){
+        if (!redirect) {
             Intent intent = new Intent(this, TermsActivity.class);
             startActivity(intent);
-        }else if(!firstUse){
+        } else if (!firstUse) {
             Intent intent = new Intent(this, FirstUseActivity.class);
             startActivity(intent);
         }
@@ -130,23 +130,12 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView arg0, View arg1, int position, long arg3) {
-
         Challenge item = (Challenge) items.get(position);
-        //Toast.makeText(this, "You clicked " + item.getTitle() , Toast.LENGTH_SHORT).show();
 
         //Open the challengeViewActivity and give the current selected Challenge to the activity
         Intent intent = new Intent(this, ChallengeViewActivity.class);
-        //TODO This works as a cheap workaround because I can't send a Serializable object. Fix
-        /*intent.putExtra("title", item.getTitle());
-        intent.putExtra("challenger", item.getChallenger());
-        intent.putExtra("challengee", item.getChallengee());
-        intent.putExtra("content", item.getContent());
-        intent.putExtra("evidenceAmount", item.getEvidenceAmount());
-        intent.putExtra("evidenceType", item.getEvidenceType());
-        intent.putExtra("reward", item.getReward());
-        intent.putExtra("status", item.getStatus());*/
         intent.putExtra("id", item.getID().toString());
-        /*intent.putExtra("comments", item.getComments());*/
+
         this.startActivity(intent);
     }
 
