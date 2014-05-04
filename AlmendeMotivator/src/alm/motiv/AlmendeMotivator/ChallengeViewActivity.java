@@ -50,6 +50,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     private Challenge currentChallenge = null;
 
+    private Spinner spCategories;
+
     private ArrayList<BasicDBObject> messages = null;
 
     @Override
@@ -86,17 +88,20 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         ImageView imgChallengee = (ImageView) findViewById(R.id.imgChallengee);
 
         title.setText(currentChallenge.getTitle());
-        challenger.setText("Challenger:\n " + challengerName);
-        challengee.setText("Challengee:\n " + challengeeName);
+        challenger.setText(challengerName);
+        challengee.setText(challengeeName);
         content.setText(currentChallenge.getContent());
         evidence.setText(currentChallenge.getEvidenceAmount() + " " + currentChallenge.getEvidenceType());
         reward.setText(currentChallenge.getReward());
 
-        String imgSource1 = "https://graph.facebook.com/" + currentChallenge.getChallenger() + "/picture";
-        String imgSource2 = "https://graph.facebook.com/" + currentChallenge.getChallengee() + "/picture";
+        String imgSource1 = "https://graph.facebook.com/" + currentChallenge.getChallenger() + "/picture?type=normal&height=200&width=200";
+        String imgSource2 = "https://graph.facebook.com/" + currentChallenge.getChallengee() + "/picture?type=normal&height=200&width=200";
 
         Picasso.with(getApplicationContext()).load(imgSource1).into(imgChallenger);
         Picasso.with(getApplicationContext()).load(imgSource2).into(imgChallengee);
+
+        imgChallengee.setMinimumHeight(300);
+        imgChallenger.setMinimumHeight(300);
 
         updateButtons("");
 
@@ -327,6 +332,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             }
         });*/
 
+        spCategories = (Spinner)convertView.findViewById(R.id.spCategories);
+
         final AlertDialog d = new AlertDialog.Builder(this)
                 .setPositiveButton("Add Comment", null)
                 .setNegativeButton("Cancel", null)
@@ -339,13 +346,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             @Override
             public void onClick(View view) {
                 Boolean success = true;
-                String category = null;
-                try {
-                    //we put this in a try catch because .getCatgeory can crash when it isn't set
-                    category = message.getCatgeory();
-                } catch (Exception e) {
-                    success = false;
-                }
 
                 if (!Validation.hasText(content)) {
                     success = false;
@@ -360,6 +360,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                     message.setReceiver(currentChallenge.getChallengee());
                     message.setLiked("false");
                     message.setDate(new Date());
+                    message.setCategory(spCategories.getSelectedItem().toString());
                     message.setContent(content.getText().toString());
                     new DatabaseThread().execute("unchanged");
                     updateMessagesInListview();
@@ -372,6 +373,11 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     public void updateMessagesInListview() {
         if (messages != null) {
+            BasicDBObject aMessage = messages.get(0);
+            System.out.println(aMessage);
+            if(aMessage.get("Content")=="This challenge doesn't have comments."){
+                messages.remove(0);
+            }
             messages.add(message);
         }
         ((BaseAdapter) ((HeaderViewListAdapter) messagesListview.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
@@ -471,7 +477,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             match.put("facebookID", currentChallenge.getChallengee().toString());
 
             User update = (User) userCollection.findOne(match);
-            int reward = currentChallenge.getEvidenceAmount() * 100;
+            int reward = currentChallenge.getEvidenceAmount() * 300;
             try {
                 update.setXP(update.getXP() + reward);
             } catch (Exception e) {

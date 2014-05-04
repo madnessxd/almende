@@ -53,4 +53,20 @@
         <item name="android:background">@color/darkerWhite</item>
         <item name="android:padding">10dp</item>
     </style>
+
+    <style name="menu">
+        <item name="android:choiceMode">singleChoice</item>
+        <item name="android:divider">@color/mediumPurple</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:cacheColorHint">@color/darkPurple</item>
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:background">@color/darkPurple</item>
+    </style>
+
+    <style name="editText">
+        <item name="android:textColor">@color/darkPurple</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">top</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
 </resources>

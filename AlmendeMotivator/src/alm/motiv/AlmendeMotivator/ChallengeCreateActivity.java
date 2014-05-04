@@ -5,6 +5,8 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
@@ -87,7 +89,7 @@ public class ChallengeCreateActivity extends Activity {
             }
         });
 
-        spinnerFriends = (Spinner) findViewById(R.id.spinner_getFriends);
+        /*spinnerFriends = (Spinner) findViewById(R.id.spinner_getFriends);
         //GET FRIENDS
         spinnerFriends.setOnTouchListener(Spinner_OnTouch);
 
@@ -102,7 +104,7 @@ public class ChallengeCreateActivity extends Activity {
                 // your code here
             }
 
-        });
+        });*/
 
         DatabaseThread2 dbT = new DatabaseThread2();
         dbT.execute();
@@ -168,7 +170,7 @@ public class ChallengeCreateActivity extends Activity {
         startActivity(k);
     }
 
-    private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
+    /*private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 updateFriends();
@@ -177,10 +179,10 @@ public class ChallengeCreateActivity extends Activity {
         }
     };
 
-    public void updateFriends() {
+   /* public void updateFriends() {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, facebookFriendsName);
         spinnerFriends.setAdapter(spinnerArrayAdapter);
-    }
+    }*/
 
     public void createChallenge() {
         if (validation()) {
@@ -197,13 +199,13 @@ public class ChallengeCreateActivity extends Activity {
         if(!Validation.isLetters(textTitle, true))succes=false;
         if(!Validation.isLetters(textContent, true))succes=false;
         if(!Validation.isLetters(textReward, true))succes=false;
-        if(spinnerFriends.getSelectedItem()==null){
+        /*if(spinnerFriends.getSelectedItem()==null){
             succes=false;
             Toast.makeText(this, "You haven't chosen an item", Toast.LENGTH_LONG);
         }else if(spinnerFriends.getSelectedItem().toString()=="Follow some friends"){
             succes=false;
             Toast.makeText(this, "You have to challenge a friend", Toast.LENGTH_LONG);
-        }
+        }*/
 
         return succes;
     }
@@ -211,12 +213,23 @@ public class ChallengeCreateActivity extends Activity {
     public void updateUI() {
         if (user.getName() != null) {
             TextView txtChallenger = (TextView) findViewById(R.id.txtChallenger);
-            txtChallenger.setText("Challenger:\n" + user.getName());
+            txtChallenger.setText(user.getName());
 
-            String imgId = "https://graph.facebook.com/" + user.getId() + "/picture";
+            String imgId = "https://graph.facebook.com/" + user.getId() + "/picture?type=normal&height=200&width=200";
             userPic = (ImageView) findViewById(R.id.imgChallenger);
             Picasso.with(getApplicationContext()).load(imgId).into(userPic);
+            userPic.setMinimumHeight(300);
         }
+    }
+
+    public void updatePicture(String id, String name){
+        TextView txtChallengee = (TextView) findViewById(R.id.txtChallengee);
+        txtChallengee.setText(name);
+
+        String imgId = "https://graph.facebook.com/" + id + "/picture?type=normal&height=200&width=200";
+        userPic = (ImageView) findViewById(R.id.imgChallengee);
+        Picasso.with(getApplicationContext()).load(imgId).into(userPic);
+        userPic.setMinimumHeight(300);
     }
 
     public void setChallengeInfo() {
@@ -224,7 +237,7 @@ public class ChallengeCreateActivity extends Activity {
         content = textContent.getText().toString();
         reward = textReward.getText().toString();
         challenger = user.getId();
-        status = "new_challenge";
+        status = "New";
     }
 
     private void fetchUserInfo(final Session session) {
@@ -251,6 +264,20 @@ public class ChallengeCreateActivity extends Activity {
         } else {
             user = null;
         }
+    }
+
+    public void onSelectFriendsPressed(View v){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose the challengee")
+
+                .setItems(facebookFriendsName, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        challengee= facebookFriends[which];
+                        updatePicture(challengee, facebookFriendsName[which]);
+                    }
+                });
+        builder.create();
+        builder.show();
     }
 
     class DatabaseThread extends AsyncTask<String, String, String> {

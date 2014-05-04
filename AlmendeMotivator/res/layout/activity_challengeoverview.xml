@@ -34,11 +34,6 @@
               android:layout_width="240dp"
               android:layout_height="match_parent"
               android:layout_gravity="start"
-              android:choiceMode="singleChoice"
-              android:divider="@color/mediumPurple"
-              android:dividerHeight="1dp"
-              android:cacheColorHint="@color/darkPurple"
-              android:listSelector="@drawable/list_selector"
-              android:background="@color/darkPurple"/>
+              style="@style/menu"/>
 
 </android.support.v4.widget.DrawerLayout>
