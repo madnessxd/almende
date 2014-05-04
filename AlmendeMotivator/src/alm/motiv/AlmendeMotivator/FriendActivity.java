@@ -1,6 +1,7 @@
 package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.adapters.FriendsAdapter;
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.misc.CustomCallback;
 import alm.motiv.AlmendeMotivator.models.User;
@@ -13,10 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
@@ -25,19 +23,37 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class FriendActivity extends Activity {
-    FriendsAdapter adapter;
-    GraphUser friend;
-    User user = null;
-    GridView friendListView;
-    List<DBObject> allUsers = null;
-    boolean manageFriends = true;
+    private FriendsAdapter adapter;
+    private GraphUser friend;
+    private User user = null;
+    private GridView friendListView;
+    private List<DBObject> allUsers = null;
+    private boolean manageFriends = true;
+    private Intent k;
+    private boolean initializedFriends = false;
 
-    boolean initializedFriends = false;
+    //buttons
+    private Button btnFollowMoreFriends;
+
+    //textviews
+    private TextView lblFriendsYouFollow;
+
+    //menu
+    private String[] mMenuOptions;
+    private ListView mDrawerList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmenu);
+        btnFollowMoreFriends=(Button)findViewById(R.id.followFriends);
+        lblFriendsYouFollow=(TextView)findViewById(R.id.lblFriendsYouFollow);
+
+        //for the menu
+        mMenuOptions = getResources().getStringArray(R.array.profile_array);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         new DatabaseThread().execute("select");
     }
@@ -76,6 +92,8 @@ public class FriendActivity extends Activity {
                 }
             }
         });
+
+
     }
 
      //we want to sort the usersArray alphabetically
@@ -203,17 +221,44 @@ public class FriendActivity extends Activity {
 
     public void onFollowFriendsPressed(View v){
         manageFriends = false;
+        btnFollowMoreFriends.setVisibility(View.GONE);
+        lblFriendsYouFollow.setText("Choose friends to follow");
         addFriendsToList(compareFriends());
     }
 
-    @Override
-    public void onBackPressed() {
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    public void selectItem(int pos) {
+        switch (pos) {
+            case 0:
+                k = new Intent(FriendActivity.this, ProfileActivity.class);
+                break;
+            case 1:
+                k = new Intent(FriendActivity.this, MessageActivity.class);
+                break;
+            case 2:
+                k = new Intent(FriendActivity.this, ChallengeOverviewActivity.class);
+                break;
+            case 3:
+                k = new Intent(FriendActivity.this, FriendActivity.class);
+                break;
+            case 4:
+                FacebookManager.logout();
+                k = new Intent(FriendActivity.this, FacebookMainActivity.class);
+                break;
+        }
         finish();
-        startActivity(new Intent(FriendActivity.this, ChallengeOverviewActivity.class));
-        return;
+        startActivity(k);
     }
 
     class DatabaseThread extends AsyncTask<String, String, String> {
+        private ProgressDialog simpleWaitDialog;
+
         protected String doInBackground(String... args) {
             MongoClient client = Database.getInstance();
             DB db = client.getDB(Database.uri.getDatabase());
@@ -242,7 +287,15 @@ public class FriendActivity extends Activity {
             return null;
         }
 
+        @Override
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(FriendActivity.this,
+                    "Please wait", "Loading");
+
+        }
+
        protected void onPostExecute(String result) {
+          simpleWaitDialog.dismiss();
           if(!initializedFriends){
               initFriends();
               initializedFriends=true;

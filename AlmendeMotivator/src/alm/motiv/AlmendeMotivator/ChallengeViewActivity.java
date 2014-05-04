@@ -307,7 +307,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         //input for content for the comment
         final EditText content = (EditText) convertView.findViewById(R.id.txtContent);
-        final Spinner spCategories = (Spinner) convertView.findViewById(R.id.spCategories);
 
 
         //listview so that the categoryf of the comment can be selected
@@ -335,6 +334,13 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             @Override
             public void onClick(View view) {
                 Boolean success = true;
+                String category = null;
+                try {
+                    //we put this in a try catch because .getCatgeory can crash when it isn't set
+                    category = message.getCatgeory();
+                } catch (Exception e) {
+                    success = false;
+                }
 
                 if (!Validation.hasText(content)) {
                     success = false;
@@ -350,7 +356,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                     message.setLiked("false");
                     message.setDate(new Date());
                     message.setContent(content.getText().toString());
-                    message.setCategory(spCategories.getSelectedItem().toString());
                     new DatabaseThread().execute("unchanged");
                     updateMessagesInListview();
                 }
