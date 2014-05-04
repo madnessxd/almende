@@ -7,4 +7,9 @@
     <color name="white">#ffffff</color>
     <color name="darkerWhite">#ecebeb</color>
     <color name="grey">#d3d1d1</color>
+
+    <color name="acceptedChallenge">#17ac3a</color>
+    <color name="waitingChallenge">#7797cc</color>
+    <color name="closedChallenge">#191435</color>
+    <color name="completedChallenge">#f1941c</color>
 </resources>

@@ -15,6 +15,11 @@
                 android:text="CHALLENGE NAME"
                 android:layout_marginBottom="1dp"
                 style="@style/header"/>
+    <TextView android:layout_width="fill_parent"
+              style="@style/status"
+              android:id="@+id/txtStatus"
+              android:text="This challenge is closed."
+              android:layout_height="wrap_content"/>
 
     <LinearLayout android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -83,50 +88,6 @@
                    android:layout_weight="1">
         </ImageView>
     </LinearLayout>
-
-        <!--<LinearLayout android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/layoutChallenger"
-                      android:orientation="horizontal"
-                      android:layout_marginTop="10dp">
-
-            <ImageView android:id="@+id/imgChallenger"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/profilepic"
-                       android:layout_marginLeft="10dp"
-                       android:layout_weight="1">
-            </ImageView>
-
-            <TextView
-                    android:id="@+id/txtChallenger"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/challenger"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="3"
-                    android:textColor="#000000"/>
-
-            <TextView
-                    android:id="@+id/txtChallengee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/challengee"
-                    android:layout_marginTop="15dp"
-                    android:layout_weight="1"
-                    android:textColor="#000000"/>
-
-
-            <ImageView android:id="@+id/imgChallengee"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/profilepic"
-                       android:layout_marginLeft="10dp"
-                       android:layout_marginRight="10dp"
-                       android:layout_weight="1">
-            </ImageView>
-        </LinearLayout>-->
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:text="@string/the_challenge"

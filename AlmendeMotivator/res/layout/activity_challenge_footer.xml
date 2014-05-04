@@ -31,6 +31,12 @@
                 style="@style/button"
                 android:onClick="onEvidencePressed"
                 android:visibility="gone"/>
+    <TextView android:layout_width="wrap_content"
+              android:visibility="gone"
+              android:id="@+id/txtEvidence"
+              style="@style/normalText"
+              android:text="The evidence will be downloaded to the download directory of your SD cart"
+              android:layout_height="wrap_content"/>
         <Button android:id="@+id/btnApprove"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

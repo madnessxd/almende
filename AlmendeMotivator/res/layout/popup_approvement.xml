@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/darkerWhite"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <TextView android:layout_width="fill_parent"
+              android:text="Decision Time"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              style="@style/normalText"
+              android:text="Decide if the evidence that is added meets your expectations. If not, be so kind to tell why. Remember that the person cannot redo the challenge. It will be closed after your decision"
+              android:layout_height="wrap_content"/>
+
+    <EditText android:layout_width="fill_parent"
+              style="@style/editText"
+              android:id="@+id/txtApprovementExplained"
+              android:layout_height="150dp"/>
+    <Button
+            android:text="I approve"
+            android:layout_width="fill_parent"
+            style="@style/button"
+            android:layout_marginBottom="1dp"
+            android:onClick="onApproveEvidencePressed"
+            android:layout_height="wrap_content"/>
+
+    <Button android:layout_width="fill_parent"
+            android:text="I disapprove"
+            style="@style/button"
+            android:onClick="onDisapproveEvidencePressed"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

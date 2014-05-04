@@ -123,7 +123,7 @@
             <EditText android:layout_width="fill_parent" android:layout_height="150dp"
                       android:id="@+id/txtChallengeContent"
                       style="@style/editText"
-                      android:hint="Enter a description of the challenge"
+                      android:hint="Enter a description for the challenge"
                     />
 
             <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
                     style="@style/header"/>
             <TextView android:layout_width="wrap_content"
                       style="@style/normalText"
-                      android:text="When the challenge is completed, the challengee will upload this so that it can be proved in some way that your challenge really was carried out."
+                      android:text="When the challenge is completed, the challengee will upload evidence."
                       android:layout_height="wrap_content"/>
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"

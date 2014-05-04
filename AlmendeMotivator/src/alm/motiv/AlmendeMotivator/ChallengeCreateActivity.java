@@ -237,7 +237,7 @@ public class ChallengeCreateActivity extends Activity {
         content = textContent.getText().toString();
         reward = textReward.getText().toString();
         challenger = user.getId();
-        status = "New";
+        status = "new";
     }
 
     private void fetchUserInfo(final Session session) {

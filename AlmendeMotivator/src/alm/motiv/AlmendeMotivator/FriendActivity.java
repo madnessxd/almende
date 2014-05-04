@@ -111,6 +111,7 @@ public class FriendActivity extends Activity {
         }
     };
 
+    private AlertDialog helpDialog;
     private void showPopUpUnfollow(){
         LayoutInflater inflater = getLayoutInflater();
 
@@ -130,7 +131,7 @@ public class FriendActivity extends Activity {
             }
         });*/
 
-        AlertDialog helpDialog = helpBuilder.create();
+        helpDialog = helpBuilder.create();
         helpDialog.show();
     }
 
@@ -144,6 +145,7 @@ public class FriendActivity extends Activity {
     public void onUnfollowFriendPressed(View v){
         adapter.removeModel(positionSelectedFriend);
         new DatabaseThread().execute("remove");
+        helpDialog.dismiss();
     }
 
     private void showPopUp(final int position) {

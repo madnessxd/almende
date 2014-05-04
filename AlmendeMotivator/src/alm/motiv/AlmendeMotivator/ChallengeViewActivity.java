@@ -51,6 +51,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     private Challenge currentChallenge = null;
 
     private Spinner spCategories;
+    private TextView txtStatus;
 
     private ArrayList<BasicDBObject> messages = null;
 
@@ -86,6 +87,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         TextView reward = (TextView) findViewById(R.id.viewChallengeReward);
         ImageView imgChallenger = (ImageView) findViewById(R.id.imgChallenger);
         ImageView imgChallengee = (ImageView) findViewById(R.id.imgChallengee);
+        txtStatus = (TextView)findViewById(R.id.txtStatus);
 
         title.setText(currentChallenge.getTitle());
         challenger.setText(challengerName);
@@ -118,7 +120,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
 
 
-        updateButtons("");
+        updateStatusElements("");
 
         //get comments from challenge
         messages = currentChallenge.getComments();
@@ -175,7 +177,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     public void onAcceptPressed(View v) {
         currentChallenge.setStatus("accepted");
         new DatabaseThread().execute("");
-        updateButtons("");
+        updateStatusElements("");
     }
 
     public void onCompletePressed(View v) {
@@ -215,51 +217,36 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         showPopup();
     }
 
+    private AlertDialog d;
+    private EditText content;
     public void onApprovePressed(View v) {
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = inflater.inflate(R.layout.popup_approvement,null);
+        content = (EditText)convertView.findViewById(R.id.txtApprovementExplained);
 
-        // Use an EditText view to get user input.
-        final EditText content = new EditText(this);
-
-        final AlertDialog d = new AlertDialog.Builder(this)
-                .setPositiveButton("Approve", null)
-                .setNegativeButton("Disapprove", null)
-                .setTitle("Decision time")
-                .setMessage("Decide if the evidence that is added meets your expectations. " +
-                        "If not, be so kind to tell why." +
-                        "Remember that the person cannot redo the challenge. It will be closed after " +
-                        "your decision.")
-                .setView(content)
+       d = new AlertDialog.Builder(this)
+               .setView(convertView)
                 .show();
+    }
 
-        d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+    public void onApproveEvidencePressed(View v){
+        if (popUpValidation(content)) {
+            currentChallenge.setRated("Approved");
+            currentChallenge.setStatus("closed");
+            currentChallenge.setRatedMessage(content.getText().toString());
+            new DatabaseThread().execute("");
+            d.dismiss();
+        }
+    }
 
-            @Override
-            public void onClick(View view) {
-                if (popUpValidation(content)) {
-                    currentChallenge.setRated("Approved");
-                    currentChallenge.setStatus("closed");
-                    new DatabaseThread().execute("");
-                    d.dismiss();
-                } else {
-                    return;
-                }
-            }
-        });
-
-        d.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (popUpValidation(content)) {
-                    currentChallenge.setStatus("closed");
-                    currentChallenge.setRated("Disapproved");
-                    new DatabaseThread().execute("");
-                    d.dismiss();
-                } else {
-                    return;
-                }
-            }
-        });
+    public void onDisapproveEvidencePressed(View v){
+        if (popUpValidation(content)) {
+            currentChallenge.setStatus("closed");
+            currentChallenge.setRated("Disapproved");
+            currentChallenge.setRatedMessage(content.getText().toString());
+            new DatabaseThread().execute("");
+            d.dismiss();
+        }
     }
 
     private boolean popUpValidation(EditText content) {
@@ -283,7 +270,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
     }
 
-    public void updateButtons(String status) {
+    public void updateStatusElements(String status) {
         String temp = currentChallenge.getStatus();
         Boolean userMadeChallenge = false;
 
@@ -295,32 +282,68 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         Button decline = (Button) findViewById(R.id.btnDecline);
         Button complete = (Button) findViewById(R.id.btnComplete);
 
-        if (temp.equals("new_challenge") && (!userMadeChallenge)) {
-            accept.setVisibility(View.VISIBLE);
-            decline.setVisibility(View.VISIBLE);
+        if (temp.equals("new")) {
+            if(userMadeChallenge){
+                txtStatus.setText("Challenge is waiting for reply");
+            }else{
+                accept.setVisibility(View.VISIBLE);
+                decline.setVisibility(View.VISIBLE);
+                txtStatus.setText("The challenger is waiting for your reply");
+            }
+            txtStatus.setBackgroundColor(getResources().getColor(R.color.waitingChallenge));
+            return;
         }
 
-        if (temp.equals("accepted") && !(userMadeChallenge)) {
-            complete.setVisibility(View.VISIBLE);
+        if (temp.equals("accepted")) {
+            if(userMadeChallenge){
+                txtStatus.setText("Challenge has been accepted");
+            }else{
+                complete.setVisibility(View.VISIBLE);
+                txtStatus.setText("You have accepted the challenge");
 
-            //hide previous buttons
-            accept.setVisibility(View.GONE);
-            decline.setVisibility(View.GONE);
+                //hide previous buttons
+                accept.setVisibility(View.GONE);
+                decline.setVisibility(View.GONE);
+            }
+            txtStatus.setBackgroundColor(getResources().getColor(R.color.acceptedChallenge));
+            return;
         }
 
         if (temp.equals("closed")) {
+            String text = txtStatus.getText().toString();
+            text += " It has been "+currentChallenge.getRated().toLowerCase();
+            txtStatus.setText(text);
+            txtStatus.setVisibility(View.VISIBLE);
             LinearLayout buttonRow = (LinearLayout) findViewById(R.id.buttonRow);
             buttonRow.setVisibility(View.GONE);
+            return;
         }
 
         if (temp.equals("completed")) {
+            if(userMadeChallenge){
+                //we only want the challenger to see this button
+                Button approve = (Button) findViewById(R.id.btnApprove);
+                approve.setVisibility(View.VISIBLE);
+
+                //text for the status bar
+                txtStatus.setText("You have turned in evidence");
+
+            }else{
+                txtStatus.setText("Evidence has been turned in");
+            }
+
             Button evidence = (Button) findViewById(R.id.btnEvidence);
             evidence.setVisibility(View.VISIBLE);
-            Button approve = (Button) findViewById(R.id.btnApprove);
-            approve.setVisibility(View.VISIBLE);
+
+            TextView evidenceText = (TextView)findViewById(R.id.txtEvidence);
+            evidenceText.setVisibility(View.VISIBLE);
+
+            txtStatus.setBackgroundColor(getResources().getColor(R.color.completedChallenge));
 
             //hide our complete button
             complete.setVisibility(View.GONE);
+
+            return;
         }
     }
 
