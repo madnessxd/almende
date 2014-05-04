@@ -10,13 +10,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.BaseColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -26,12 +24,12 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.squareup.picasso.Picasso;
 import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.zip.Inflater;
 
 /**
  * Created by Kevin on 26/03/2014.
@@ -77,21 +75,28 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         new DatabaseThread().execute("get challenge");
     }
 
-    public void updateUI() {
+    public void updateUI(String challengerName, String challengeeName) {
         TextView title = (TextView) findViewById(R.id.txtStaticChallengeName);
         TextView challenger = (TextView) findViewById(R.id.txtChallenger);
         TextView challengee = (TextView) findViewById(R.id.txtChallengee);
         TextView content = (TextView) findViewById(R.id.viewChallengeContent);
         TextView evidence = (TextView) findViewById(R.id.viewChallengeEvidence);
         TextView reward = (TextView) findViewById(R.id.viewChallengeReward);
-
+        ImageView imgChallenger = (ImageView) findViewById(R.id.imgChallenger);
+        ImageView imgChallengee = (ImageView) findViewById(R.id.imgChallengee);
 
         title.setText(currentChallenge.getTitle());
-        challenger.setText(currentChallenge.getChallenger());
-        challengee.setText(currentChallenge.getChallengee());
+        challenger.setText("Challenger:\n " + challengerName);
+        challengee.setText("Challengee:\n " + challengeeName);
         content.setText(currentChallenge.getContent());
         evidence.setText(currentChallenge.getEvidenceAmount() + " " + currentChallenge.getEvidenceType());
         reward.setText(currentChallenge.getReward());
+
+        String imgSource1 = "https://graph.facebook.com/" + currentChallenge.getChallenger() + "/picture";
+        String imgSource2 = "https://graph.facebook.com/" + currentChallenge.getChallengee() + "/picture";
+
+        Picasso.with(getApplicationContext()).load(imgSource1).into(imgChallenger);
+        Picasso.with(getApplicationContext()).load(imgSource2).into(imgChallengee);
 
         updateButtons("");
 
@@ -148,9 +153,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     public void onCompletePressed(View v) {
         String gps = "no GPS";
-        try{
+        try {
             gps = getGPS();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("no gps" + e);
         }
         Intent newIntent = new Intent(this, ChallengeEvidence.class);
@@ -366,10 +371,10 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void updateMessagesInListview() {
-        if(messages!=null){
+        if (messages != null) {
             messages.add(message);
         }
-        ((BaseAdapter)((HeaderViewListAdapter)messagesListview.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
+        ((BaseAdapter) ((HeaderViewListAdapter) messagesListview.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
     }
 
     class DatabaseThread extends AsyncTask<String, String, Challenge> {
@@ -377,7 +382,11 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         private Boolean updateUI = false;
         private DB db = null;
         private DBCollection challengeCollection;
+        private DBCollection userCollection;
         private Challenge current;
+
+        private String challengeeName = "";
+        private String challengerName = "";
 
         @Override
         protected void onPreExecute() {
@@ -390,7 +399,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
             if (updateUI) {
-                updateUI();
+                updateUI(challengerName, challengeeName);
             }
         }
 
@@ -401,6 +410,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             challengeCollection = db.getCollection("challenge");
             challengeCollection.setObjectClass(Challenge.class);
 
+            userCollection = db.getCollection("user");
+            userCollection.setObjectClass(User.class);
+
             // get the current challenge from database
             current = new Challenge();
             current.put("_id", new ObjectId(id));
@@ -409,6 +421,17 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 //this variable tells us that the view needs to be constructed for use
                 updateUI = true;
                 currentChallenge = (Challenge) challengeCollection.findOne(current);
+
+
+                User challengeeUser = new User();
+                challengeeUser.put("facebookID", currentChallenge.getChallengee());
+                User newUser1 = (User) userCollection.find(challengeeUser).toArray().get(0);
+                challengeeName = newUser1.getName();
+
+                User challengerUser = new User();
+                challengerUser.put("facebookID", currentChallenge.getChallenger());
+                User newUser2 = (User) userCollection.find(challengerUser).toArray().get(0);
+                challengerName = newUser2.getName();
                 return null;
             }
 
@@ -423,6 +446,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             } else if (args[0] == "") {
                 updateQuery();
             }
+
             return null;
         }
 
@@ -434,23 +458,23 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         private void updateQuery() {
-            if(currentChallenge.getStatus().equals("closed")&&currentChallenge.getRated().equals("Approved")){
+            if (currentChallenge.getStatus().equals("closed") && currentChallenge.getRated().equals("Approved")) {
                 updateXP();
             }
             challengeCollection.findAndModify(current, currentChallenge);
         }
 
-        private void updateXP(){
+        private void updateXP() {
             DBCollection userCollection = db.getCollection("user");
 
             User match = new User();
             match.put("facebookID", currentChallenge.getChallengee().toString());
 
-            User update = (User)userCollection.findOne(match);
-            int reward = currentChallenge.getEvidenceAmount()*100;
-            try{
-                update.setXP(update.getXP()+reward);
-            }catch (Exception e){
+            User update = (User) userCollection.findOne(match);
+            int reward = currentChallenge.getEvidenceAmount() * 100;
+            try {
+                update.setXP(update.getXP() + reward);
+            } catch (Exception e) {
                 update.setXP(reward);
             }
 
