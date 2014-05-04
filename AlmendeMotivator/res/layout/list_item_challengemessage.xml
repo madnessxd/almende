@@ -28,6 +28,7 @@
                   android:layout_width="wrap_content"
                   android:paddingLeft="15dp"
                 />
+
         <TextView
                 android:id="@+id/messageContent"
                 android:text="Content of message"
@@ -39,4 +40,6 @@
                 />
 
     </RelativeLayout>
+
+
 </LinearLayout>

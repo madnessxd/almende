@@ -2,35 +2,32 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              android:layout_width="wrap_content"
+              android:background="@color/darkerWhite"
+              android:layout_width="fill_parent"
               android:layout_height="wrap_content">
 
     <TextView android:layout_width="fill_parent"
               android:text="Upload picture"
+              style="@style/header"
               android:layout_height="wrap_content"/>
     <TextView android:layout_width="fill_parent"
+              style="@style/normalText"
               android:text="Choose how you want to upload your picture"
               android:layout_height="wrap_content"/>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
-                  android:id="@+id/evidenceContainer"
-                  android:weightSum="100"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content">
-        <Button android:layout_width="0px"
-                android:layout_weight="50"
+
+        <Button android:layout_width="fill_parent"
                 android:text="Browse"
+                style="@style/button"
                 android:id="@+id/browsePicturseBtn"
                 android:onClick="browse"
+                android:layout_marginBottom="1dp"
                 android:layout_height="wrap_content"/>
         <Button
                 android:text="Take a picture"
-                android:layout_width="0px"
-                android:layout_weight="50"
+                android:layout_width="fill_parent"
                 android:id="@+id/captureBtn"
+                style="@style/button"
                 android:onClick="takePicture"
                 android:layout_height="wrap_content"/>
-    </LinearLayout>
-
 
 </LinearLayout>

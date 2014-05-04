@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.facebook.model.GraphObject;
@@ -31,6 +32,7 @@ public class FriendActivity extends Activity {
     private boolean manageFriends = true;
     private Intent k;
     private boolean initializedFriends = false;
+    private int positionSelectedFriend = 0;
 
     //buttons
     private Button btnFollowMoreFriends;
@@ -86,7 +88,8 @@ public class FriendActivity extends Activity {
                 friend = adapter.getItem(position);
 
                 if(manageFriends){
-                    showPopUpUnfollow(position);
+                    positionSelectedFriend=position;
+                    showPopUpUnfollow();
                 }else{
                     showPopUp(position);
                 }
@@ -108,15 +111,15 @@ public class FriendActivity extends Activity {
         }
     };
 
-    private void showPopUpUnfollow(final int position){
+    private void showPopUpUnfollow(){
+        LayoutInflater inflater = getLayoutInflater();
+
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
-        helpBuilder.setTitle(friend.getName());
-        helpBuilder.setMessage("Do you want to unfollow " + friend.getName());
-        helpBuilder.setPositiveButton("Yes",
+        helpBuilder.setView(inflater.inflate(R.layout.popup_friend, null));
+        /*helpBuilder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        adapter.removeModel(position);
-                        new DatabaseThread().execute("remove");
+
                     }
                 });
 
@@ -125,10 +128,22 @@ public class FriendActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 // Do nothing
             }
-        });
+        });*/
 
         AlertDialog helpDialog = helpBuilder.create();
         helpDialog.show();
+    }
+
+    public void onVisitProfilePressed(View v){
+        Intent displayFriend = new Intent(this, ProfileActivity.class);
+        displayFriend.putExtra("viewFriendProfile", true);
+        displayFriend.putExtra("facebookIdFriend", friend.getId());
+        startActivity(displayFriend);
+    }
+
+    public void onUnfollowFriendPressed(View v){
+        adapter.removeModel(positionSelectedFriend);
+        new DatabaseThread().execute("remove");
     }
 
     private void showPopUp(final int position) {

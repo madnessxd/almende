@@ -16,8 +16,8 @@ import org.w3c.dom.Text;
 import java.util.concurrent.ExecutionException;
 
 public class ProfileActivity extends Activity{
-    Intent home;
-    Intent k;
+    private Intent home;
+    private Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
     private Level level = Level.BEGINNER;
@@ -33,6 +33,10 @@ public class ProfileActivity extends Activity{
     private EditText cityInput;
     private EditText aboutInput;
 
+    //the intent that called this activity this is used to display either the user or a friend's profile
+    private Intent requestFrom;
+    private String facebookIdFriend = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -41,6 +45,14 @@ public class ProfileActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        //we want to know whose profile we need to display
+        requestFrom = getIntent();
+        try{
+            facebookIdFriend = requestFrom.getExtras().getString("facebookIdFriend");
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
         initLabels();
 
@@ -204,7 +216,11 @@ public class ProfileActivity extends Activity{
 
             // get the current user from database
             User current = new User();
-            current.put("facebookID", Cookie.getInstance().userEntryId);
+            if(facebookIdFriend!=null){
+                current.put("facebookID", facebookIdFriend);
+            }else{
+                current.put("facebookID", Cookie.getInstance().userEntryId);
+            }
             User aUser = (User) userCollection.find(current).toArray().get(0);
 
 

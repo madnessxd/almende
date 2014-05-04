@@ -115,6 +115,7 @@ public class ChallengeEvidence extends Activity {
         if (numberOfCreatedEvidence == numberOfEvidence) {
             //if so disable the add popup_evidence button
             Button addEvidenceBtn = (Button) findViewById(R.id.addEvidenceBtn);
+            addEvidenceBtn.setVisibility(View.GONE);
             addEvidenceBtn.setEnabled(false);
 
             //Add our send button

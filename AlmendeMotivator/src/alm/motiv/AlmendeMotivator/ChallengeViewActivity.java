@@ -101,7 +101,22 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         Picasso.with(getApplicationContext()).load(imgSource2).into(imgChallengee);
 
         imgChallengee.setMinimumHeight(300);
+        imgChallengee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                visitProfile(currentChallenge.getChallengee());
+            }
+        });
+
         imgChallenger.setMinimumHeight(300);
+        imgChallenger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                visitProfile(currentChallenge.getChallenger());
+            }
+        });
+
+
 
         updateButtons("");
 
@@ -118,6 +133,13 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         MessageAdapter adapter = new MessageAdapter(this, messages);
         messagesListview.setAdapter(adapter);
 
+    }
+
+    public void visitProfile(String viewProfileOf){
+        Intent displayFriend = new Intent(ChallengeViewActivity.this, ProfileActivity.class);
+        displayFriend.putExtra("viewFriendProfile", true);
+        displayFriend.putExtra("facebookIdFriend", viewProfileOf);
+        startActivity(displayFriend);
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -242,7 +264,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     private boolean popUpValidation(EditText content) {
         Boolean success = true;
-        String category = null;
 
         if (!Validation.hasText(content)) {
             success = false;
@@ -252,7 +273,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             Toast.makeText(ChallengeViewActivity.this, "Please fill in everything", Toast.LENGTH_LONG).show();
             return false;
         } else {
-            message.setAuthor(Cookie.getInstance().userEntryId);
+            message.setAuthor(Cookie.getInstance().userName);
             message.setTitle("Evidence approvement");
             message.setReceiver(currentChallenge.getChallengee());
             message.setLiked("false");
@@ -318,7 +339,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         //input for content for the comment
         final EditText content = (EditText) convertView.findViewById(R.id.txtContent);
 
-
         //listview so that the categoryf of the comment can be selected
        /* String categories[] = {"Motivational", "Meet Up", "Inspirational", "Other"};
         final ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
@@ -355,7 +375,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                     Toast.makeText(ChallengeViewActivity.this, "Please fill in everything", Toast.LENGTH_LONG).show();
                     return;
                 } else {
-                    message.setAuthor(Cookie.getInstance().userEntryId);
+                    message.setAuthor(Cookie.getInstance().userName);
                     message.setTitle("Comment");
                     message.setReceiver(currentChallenge.getChallengee());
                     message.setLiked("false");

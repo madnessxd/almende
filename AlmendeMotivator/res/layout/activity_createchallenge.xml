@@ -131,8 +131,7 @@
                     style="@style/header"/>
             <TextView android:layout_width="wrap_content"
                       style="@style/normalText"
-                      android:text="When the challenge is completed, the challengee will upload
-                      this so that it can be proved in some way that your challenge really was carried out."
+                      android:text="When the challenge is completed, the challengee will upload this so that it can be proved in some way that your challenge really was carried out."
                       android:layout_height="wrap_content"/>
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"

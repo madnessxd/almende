@@ -57,7 +57,7 @@ public class MessageAdapter extends ArrayAdapter<BasicDBObject> {
                 }
                 //we use this parsed date that now is a date object
                 String dateString = new SimpleDateFormat("MMM d yyyy").format(theDate);
-                date.setText(dateString);
+                date.setText("on " +dateString);
 
             }
 

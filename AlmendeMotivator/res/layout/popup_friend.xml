@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/darkerWhite"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <TextView android:layout_width="fill_parent"
+              android:text="What do you want to do?"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
+    <Button
+            android:text="Visit profile"
+            android:layout_width="fill_parent"
+            style="@style/button"
+            android:layout_marginBottom="1dp"
+            android:onClick="onVisitProfilePressed"
+            android:layout_height="wrap_content"/>
+
+    <Button android:layout_width="fill_parent"
+            android:text="Unfollow this friend"
+            style="@style/button"
+            android:onClick="onUnfollowFriendPressed"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>
