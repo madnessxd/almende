@@ -14,10 +14,7 @@ import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -33,6 +30,10 @@ import java.util.ArrayList;
  * Created by AsterLaptop on 4/7/14.
  */
 public class ChallengeEvidence extends Activity {
+    //menu
+    private String[] mMenuOptions;
+    private ListView mDrawerList;
+
     //keep track of camera capture intent
     final int CAMERA_CAPTURE = 1;
 
@@ -65,6 +66,12 @@ public class ChallengeEvidence extends Activity {
 
         //get extras from our intent
         intent = getIntent();
+
+        //menu
+        mMenuOptions = getResources().getStringArray(R.array.profile_array);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         //number of popup_evidence the challenger wants
         numberOfEvidence = Integer.valueOf(intent.getExtras().getInt("evidenceAmount"));
@@ -277,6 +284,13 @@ public class ChallengeEvidence extends Activity {
         home = new Intent(ChallengeEvidence.this, ChallengeOverviewActivity.class);
         startActivity(home);
         return;
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            Menu.selectItem(position, ChallengeEvidence.this);
+        }
     }
 
 }
