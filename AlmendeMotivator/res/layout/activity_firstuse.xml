@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<ScrollView android:layout_width="fill_parent"
+            android:background="@color/darkerWhite"
+            android:layout_height="fill_parent">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView android:layout_width="wrap_content"
+    <TextView android:layout_width="fill_parent"
+              style="@style/header"
               android:text="First use"
               android:layout_height="wrap_content"/>
     <TextView android:layout_width="wrap_content"
-              android:text="What would you say your current exercise behaviour is?"
+              style="@style/normalText"
+              android:text="Please fill in this form so we know what your current exercise behaviour is"
               android:layout_height="wrap_content"/>
     <TextView android:layout_width="wrap_content"
+              style="@style/header"
               android:text="What is the average time you spend on exercise?"
               android:layout_height="wrap_content"/>
     <LinearLayout android:layout_width="wrap_content"
                   android:orientation="horizontal"
                   android:layout_height="wrap_content">
         <EditText android:layout_width="wrap_content"
-                  android:hint="Number of hours"
+                  android:hint="Number of"
                   android:id="@+id/hoursInput"
+                  android:inputType="numberDecimal"
                   android:layout_height="wrap_content"/>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  style="@style/normalText"
                 android:text="hours per"/>
         <Spinner
                 android:id="@+id/spPeriod"
@@ -33,10 +47,12 @@
     </LinearLayout>
 
     <TextView android:layout_width="wrap_content"
+              style="@style/header"
               android:text="What is your motivation for exercising?"
               android:layout_height="wrap_content"/>
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              style="@style/normalText"
             android:text="Is it for fun, or for example health? Fill in at least two"/>
     <EditText android:layout_width="fill_parent"
               android:hint="Motivation"
@@ -54,17 +70,24 @@
               android:hint="Motivation"
               android:id="@+id/motivationReason4"
               android:layout_height="wrap_content"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <TextView android:layout_width="wrap_content"
+              style="@style/header"
+              android:layout_height="wrap_content"
             android:text="What part of the day do you exercise the most?"/>
     <Spinner android:layout_width="wrap_content"
              android:id="@+id/spPartOfTheDay"
              android:entries="@array/partOfTheDay"
              android:drawSelectorOnTop="true"
              android:layout_height="wrap_content"></Spinner>
-    <Button android:layout_width="wrap_content"
+    <Button android:layout_width="fill_parent"
             android:id="@+id/btnSubmitFirstUse"
-            android:text="Submit"
+            style="@style/button"
+            android:text="Submit this form +"
             android:onClick="onSubmitFirstUsePressed" android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
+
+
+    </ScrollView>
+</android.support.v4.widget.DrawerLayout>

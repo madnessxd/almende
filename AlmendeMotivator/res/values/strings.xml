@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sportopia</string>
+    <string name="app_name">SPORTOPIA</string>
     <string name="challenger">Challenger</string>
     <string name="challengee">Challengee</string>
     <string name="the_challenge">The challenge</string>
@@ -32,8 +32,6 @@
     <!-- first use arrays-->
     <string-array name="periods">
         <item>Week</item>
-        <item>Month</item>
-        <item>Year</item>
     </string-array>
 
     <string-array name="partOfTheDay">
@@ -42,6 +40,14 @@
         <item>Evening</item>
     </string-array>
 
+    <!-- pop up array -->
+
+    <string-array name="categories">
+        <item>Inspirational</item>
+        <item>Meet up</item>
+        <item>Motivational</item>
+        <item>Other</item>
+    </string-array>
 
     <!--
         Copyright 2010-present Facebook.

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="titlebar">
+        <item name="android:textSize">25sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="button">
+        <item name="android:background">@color/darkPurple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+    </style>
+
+    <style name="header">
+        <item name="android:background">@color/grey</item>
+        <item name="android:textColor">@color/darkPurple</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="listItem">
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="listItemText">
+        <item name="android:textColor">@color/darkPurple</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="normalText">
+        <item name="android:textColor">@color/darkPurple</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="largeText">
+        <item name="android:textColor">@color/darkPurple</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="backgroundAndPadding">
+        <item name="android:background">@color/darkerWhite</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="menu">
+        <item name="android:choiceMode">singleChoice</item>
+        <item name="android:divider">@color/mediumPurple</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:cacheColorHint">@color/darkPurple</item>
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:background">@color/darkPurple</item>
+    </style>
+
+    <style name="editText">
+        <item name="android:textColor">@color/darkPurple</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">top</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="status">
+        <item name="android:background">@color/purple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+    </style>
+</resources>

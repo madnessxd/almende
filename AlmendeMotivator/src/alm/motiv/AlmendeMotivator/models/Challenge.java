@@ -13,8 +13,12 @@ import java.util.ArrayList;
 public class Challenge extends BasicDBObject implements Item {
     private static final long serialVersionUID = 1L;
 
+    private String challengeeName;
+    private String challengerName;
+
     public Challenge() {}
 
+    //TODO add likeAmount to challenge. Different way then it is now. Solution below causes DBThreadExceptions
     public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps) {
         put("title", title);
         put("challenger", challenger);
@@ -25,6 +29,7 @@ public class Challenge extends BasicDBObject implements Item {
         put("reward", reward);
         put("status", status);
         put("gps", gps);
+        //put("likeAmount", likeAmount);
     }
 
     public void setStatus(String status) {
@@ -71,6 +76,10 @@ public class Challenge extends BasicDBObject implements Item {
         return (ArrayList<BasicDBObject>) this.get("evidence");
     }
 
+    public void setComments(Message message){
+        this.put("$push", new BasicDBObject("comments", message));
+    }
+
     public ArrayList<BasicDBObject> getComments(){
         return (ArrayList<BasicDBObject>) this.get("comments");
     }
@@ -83,8 +92,32 @@ public class Challenge extends BasicDBObject implements Item {
         return this.get("rated").toString();
     }
 
+    public void setRatedMessage(String ratedMessage){
+        this.put("ratedMessage", ratedMessage);
+    }
+
+    public String getRatedMessage(){
+        return this.get("ratedMessage").toString();
+    }
+
     @Override
     public boolean isSection() {
         return false;
+    }
+
+    public String getChallengeeName() {
+        return challengeeName;
+    }
+
+    public void setChallengeeName(String challengeeName) {
+        this.challengeeName = challengeeName;
+    }
+
+    public String getChallengerName() {
+        return challengerName;
+    }
+
+    public void setChallengerName(String challengerName) {
+        this.challengerName = challengerName;
     }
 }

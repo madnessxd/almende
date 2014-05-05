@@ -4,7 +4,10 @@ package alm.motiv.AlmendeMotivator.adapters;
  * Created by AsterLaptop on 4/13/14.
  */
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import alm.motiv.AlmendeMotivator.R;
 import alm.motiv.AlmendeMotivator.models.Message;
@@ -29,7 +32,6 @@ public class MessageAdapter extends ArrayAdapter<BasicDBObject> {
         vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
@@ -44,8 +46,21 @@ public class MessageAdapter extends ArrayAdapter<BasicDBObject> {
 
             if (author != null)
                 author.setText(message.get("Author").toString());
-            if (date != null)
-                date.setText(message.get("Date").toString());
+            if (date != null){
+                String string = message.get("Date").toString();
+                //we parse the date from the message object
+                Date theDate =null;
+                try {
+                   theDate = new SimpleDateFormat("EEE MMM d hh:mm:ss z yyyy").parse(string);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                //we use this parsed date that now is a date object
+                String dateString = new SimpleDateFormat("MMM d yyyy").format(theDate);
+                date.setText("on " +dateString);
+
+            }
+
             if (content != null)
                 content.setText(message.get("Content").toString());
         }

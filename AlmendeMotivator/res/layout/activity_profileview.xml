@@ -4,88 +4,93 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    <ScrollView android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:paddingLeft="0dp"
-                android:paddingRight="5dp"
                 android:background="#D8D8D8" >
-    <ImageView
-            android:id="@+id/picture"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/profilepic"
-            android:layout_alignParentLeft="true" android:layout_below="@+id/button" android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="50dp"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit your profile +"
+            android:id="@+id/btnEdit"
+            style="@style/button"
+            android:onClick="editUserBtn"
+           />
+    <TextView
+            android:id="@+id/lblName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            style="@style/header"
+            android:layout_below="@+id/btnEdit"
+/>
     <TextView
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textSize="20dp" android:textStyle="bold" android:textColor="#000"
-            android:layout_toRightOf="@+id/picture" android:layout_below="@+id/button"
-            android:layout_marginTop="50dp"/>
+            style="@style/normalText"
+            android:layout_below="@+id/lblName"
+            />
     <TextView
             android:id="@+id/age"
-            android:layout_width="50dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Age:"
-            android:textColor="#000"
-            android:layout_below="@+id/name"
-            android:layout_toRightOf="@+id/picture"/>
+            android:text="Age"
+            style="@style/header"
+            android:layout_below="@+id/name"/>
     <TextView
             android:id="@+id/ageContent"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:layout_toRightOf="@id/age" android:layout_alignBottom="@+id/age"/>
+            style="@style/normalText"
+            android:text="age..."
+            android:layout_below="@+id/age"/>
     <TextView
             android:id="@+id/goal"
-            android:layout_width="50dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Goal:"
-            android:textColor="#000"
-            android:layout_below="@+id/city"
-            android:layout_toRightOf="@+id/picture"/>
+            android:text="Goal"
+            style="@style/header"
+            android:layout_below="@+id/ageContent"/>
     <TextView
             android:id="@+id/goalContent"
-            android:layout_width="200dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:layout_alignLeft="@+id/cityContent"
-            android:layout_below="@+id/city"/>
+            style="@style/normalText"
+            android:text="goal.."
+            android:layout_below="@+id/goal"/>
     <TextView
             android:id="@+id/city"
-            android:layout_width="50dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="City:"
-            android:textColor="#000"
-            android:layout_below="@+id/age"
-            android:layout_toRightOf="@+id/picture"/>
+            android:text="City"
+            style="@style/header"
+            android:layout_below="@+id/goalContent"/>
     <TextView
             android:id="@+id/cityContent"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:text="aa"
-            android:layout_toRightOf="@+id/city" android:layout_below="@+id/age"/>
+            style="@style/normalText"
+            android:text="city.."
+            android:layout_below="@+id/city"/>
     <TextView
             android:id="@+id/level"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Level:"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:textColor="#000"
-            android:layout_below="@+id/picture" />
+            android:text="Level"
+            style="@style/header"
+            android:layout_below="@+id/cityContent" />
     <ProgressBar
-            android:id="@+id/progress"
+            android:id="@+id/progressXP"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleHorizontal"
             android:max="80"
-            android:layout_below="@+id/level" android:layout_alignParentLeft="true"
+            android:layout_below="@+id/level"
+            android:layout_alignParentLeft="true"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp" android:layout_marginRight="10dp"/>
     <TextView
@@ -94,62 +99,49 @@
             android:gravity="right"
             android:layout_height="wrap_content"
             android:text="Experience points"
-            android:textColor="#000" android:layout_below="@+id/progress" android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp" android:layout_marginRight="10dp"/>
+            android:layout_below="@+id/progressXP"
+            android:layout_alignParentLeft="true"
+            style="@style/normalText"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"/>
     <TextView
             android:id="@+id/sports"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="My Sports:"
-            android:textColor="#000" android:layout_below="@+id/progressText" android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp" android:layout_marginLeft="10dp"/>
+            style="@style/header"
+            android:layout_below="@+id/progressText"
+            android:layout_alignParentLeft="true"/>
     <TextView
             android:id="@+id/sportsContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Lorem ipsum.."
-            android:textColor="#000" android:layout_below="@+id/sports" android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"/>
+             android:layout_below="@+id/sports"
+            style="@style/normalText"/>
     <TextView
             android:id="@+id/about"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="About:"
-            android:textColor="#000" android:layout_below="@+id/sportsContent" android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"/>
+            android:layout_below="@+id/sportsContent"
+            style="@style/header"
+
+            />
     <TextView
             android:id="@+id/aboutContent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Lorem ipsum.."
-            android:textColor="#000"
             android:layout_below="@+id/about"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"/>
-    <Button
-            android:layout_width="70dp"
-            android:layout_height="35dp"
-            android:text="Edit"
-            android:id="@+id/btnEdit"
-            android:onClick="editUserBtn"
-            android:layout_alignParentTop="true" android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp" android:layout_marginRight="10dp"/>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:src="@drawable/almende" android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/city"
-            android:layout_alignLeft="@+id/aboutContent"/>
-
+            style="@style/normalText"/>
 </RelativeLayout>
+
+    </ScrollView>
     <ListView android:id="@+id/left_drawer"
               android:layout_width="240dp"
               android:layout_height="match_parent"
               android:layout_gravity="start"
-              android:choiceMode="singleChoice"
-              android:divider="@android:color/transparent"
-              android:dividerHeight="0dp"
-              android:background="#111"/>
+              style="@style/menu"/>
 
 </android.support.v4.widget.DrawerLayout>

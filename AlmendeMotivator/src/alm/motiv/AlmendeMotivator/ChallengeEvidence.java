@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -72,7 +73,7 @@ public class ChallengeEvidence extends Activity {
 
         TextView challengeLabel = (TextView) findViewById(R.id.numberOfEvidenceLbl);
 
-        challengeLabel.setText("Your challenger wants you to upload " + numberOfEvidence + " photo's");
+        challengeLabel.setText("Your challenger wants you to upload " + numberOfEvidence + " photo(s)");
     }
 
     public void addEvidence(View v) {
@@ -82,6 +83,11 @@ public class ChallengeEvidence extends Activity {
     public void addReference(final Uri uri) {
         //reference to the picture uploaded
         LinearLayout theLayout = (LinearLayout) findViewById(R.id.evidenceRow);
+
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 1, 0, 0);
 
         Button referenceButton = new Button(this);
         referenceButton.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +100,14 @@ public class ChallengeEvidence extends Activity {
             }
         });
         referenceButton.setText("Show evidence");
+        referenceButton.setBackgroundColor(getResources().getColor(R.color.darkPurple));
+        referenceButton.setTextColor(getResources().getColor(R.color.white));
+        referenceButton.setTextSize(22);
+        referenceButton.setGravity(Gravity.LEFT);
+        referenceButton.setTextAppearance(this,R.style.button);
+        referenceButton.setPadding(20,20,20,20);
+        referenceButton.setWidth(100);
+        referenceButton.setLayoutParams(params);
         theLayout.addView(referenceButton);
 
         //Check if our challengee has enough popup_evidence
@@ -101,13 +115,20 @@ public class ChallengeEvidence extends Activity {
         if (numberOfCreatedEvidence == numberOfEvidence) {
             //if so disable the add popup_evidence button
             Button addEvidenceBtn = (Button) findViewById(R.id.addEvidenceBtn);
+            addEvidenceBtn.setVisibility(View.GONE);
             addEvidenceBtn.setEnabled(false);
 
-            System.out.println(pictureUriList);
             //Add our send button
             Button sendEvidence = new Button(this);
-            sendEvidence.setText("Send evidence");
+            sendEvidence.setText("Upload the evidence");
+            sendEvidence.setBackgroundColor(getResources().getColor(R.color.darkPurple));
+            sendEvidence.setTextColor(getResources().getColor(R.color.white));
+            sendEvidence.setTextSize(22);
+            sendEvidence.setGravity(Gravity.LEFT);
+            sendEvidence.setTextAppearance(this,R.style.button);
+            sendEvidence.setPadding(20,20,20,20);
             sendEvidence.setWidth(100);
+            sendEvidence.setLayoutParams(params);
             sendEvidence.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Sportopia" parent="android:Theme">
+        <item name="pageMargin">2sp</item>
+        <item name="android:windowTitleSize">50dp</item>
+        <item name="android:windowTitleStyle">@style/titlebar</item>
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+        <item name="header">@style/header</item>
+        <item name="button">@style/button</item>
+    </style>
+
+    <style name="WindowTitleBackground">
+        <item name="android:background">@color/purple</item>
+    </style>
+</resources>

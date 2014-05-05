@@ -16,10 +16,11 @@ import org.w3c.dom.Text;
 import java.util.concurrent.ExecutionException;
 
 public class ProfileActivity extends Activity{
-    Intent home;
-    Intent k;
+    private Intent home;
+    private Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
+    private Level level = Level.BEGINNER;
 
     //our user
     User user=null;
@@ -32,6 +33,10 @@ public class ProfileActivity extends Activity{
     private EditText cityInput;
     private EditText aboutInput;
 
+    //the intent that called this activity this is used to display either the user or a friend's profile
+    private Intent requestFrom;
+    private String facebookIdFriend = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -40,6 +45,14 @@ public class ProfileActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        //we want to know whose profile we need to display
+        requestFrom = getIntent();
+        try{
+            facebookIdFriend = requestFrom.getExtras().getString("facebookIdFriend");
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
         initLabels();
 
@@ -57,6 +70,8 @@ public class ProfileActivity extends Activity{
         TextView cityContent = (TextView)findViewById(R.id.cityContent);
         TextView ageContent = (TextView)findViewById(R.id.ageContent);
         TextView goalContent = (TextView)findViewById(R.id.goalContent);
+        TextView xpText = (TextView)findViewById(R.id.progressText);
+        ProgressBar xpBar = (ProgressBar)findViewById(R.id.progressXP);
 
         nameContent.setText(user.getName());
         aboutContent.setText(user.getAbout());
@@ -64,6 +79,28 @@ public class ProfileActivity extends Activity{
         cityContent.setText(user.getCity());
         ageContent.setText(user.getAge());
         goalContent.setText(user.getGoal());
+
+        //manage XP
+        int XP=0;
+        try{XP = user.getXP();}catch (Exception e){
+            //do nothing
+        }
+        setLevelOfUser(XP);
+
+        xpBar.setMax(level.getMaxXP());
+        xpBar.setProgress(XP);
+        xpText.setText(level.toString().toLowerCase() + ": "+ XP +"xp /"+level.getMaxXP()+"xp");
+
+    }
+
+    public void setLevelOfUser(int XP){
+        if(XP<Level.BEGINNER.getMaxXP())level = level.BEGINNER;
+
+        else if(XP<Level.NOVICE.getMaxXP())level = level.NOVICE;
+
+        else if(XP<Level.ATHLETE.getMaxXP())level = level.ATHLETE;
+
+        else if(XP>Level.CHAMPION.getMaxXP()) level = level.CHAMPION;
     }
 
     private void getUser(){
@@ -97,10 +134,6 @@ public class ProfileActivity extends Activity{
         ageInput.setText(user.getAge());
         cityInput.setText(user.getCity());
         sportsInput.setText(user.getSports());
-
-        //manage XP
-        user.getXP();
-        System.out.println(Level.BEGINNER.getMaxXP());
     }
 
     public void cancelEditBtn(View v){
@@ -183,7 +216,11 @@ public class ProfileActivity extends Activity{
 
             // get the current user from database
             User current = new User();
-            current.put("facebookID", Cookie.getInstance().userEntryId);
+            if(facebookIdFriend!=null){
+                current.put("facebookID", facebookIdFriend);
+            }else{
+                current.put("facebookID", Cookie.getInstance().userEntryId);
+            }
             User aUser = (User) userCollection.find(current).toArray().get(0);
 
 

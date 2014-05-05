@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:id="@+id/buttonRow"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+        <Button android:id="@+id/btnAccept" android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Accept the challenge"
+                android:visibility="gone"
+                style="@style/button"
+                android:onClick="onAcceptPressed"
+                />
+        <Button android:id="@+id/btnDecline" android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Decline the challenge"
+                style="@style/button"
+                android:visibility="gone"
+                android:onClick="onDeclinePressed"/>
+        <Button android:id="@+id/btnComplete" android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Complete the challenge"
+                style="@style/button"
+                android:onClick="onCompletePressed"
+                android:visibility="gone"/>
+        <Button android:id="@+id/btnEvidence"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Evidence"
+                style="@style/button"
+                android:onClick="onEvidencePressed"
+                android:visibility="gone"/>
+    <TextView android:layout_width="wrap_content"
+              android:visibility="gone"
+              android:id="@+id/txtEvidence"
+              style="@style/normalText"
+              android:text="The evidence will be downloaded to the download directory of your SD cart"
+              android:layout_height="wrap_content"/>
+        <Button android:id="@+id/btnApprove"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Approve or Disapprove"
+                android:layout_marginRight="5dp"
+                style="@style/button"
+                android:layout_weight="1"
+                android:onClick="onApprovePressed"
+                android:visibility="gone"/>
+
+</LinearLayout>

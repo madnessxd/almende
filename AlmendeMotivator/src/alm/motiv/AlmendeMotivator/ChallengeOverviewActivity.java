@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -28,16 +29,32 @@ import android.widget.ListView;
 import com.mongodb.*;
 
 public class ChallengeOverviewActivity extends Activity implements OnItemClickListener {
-    Intent k;
+    private Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
-    ArrayList<Item> items = new ArrayList<Item>();
-    ListView listview = null;
-    DatabaseThread DT = new DatabaseThread();
+    private ArrayList<Item> items = new ArrayList<Item>();
+    private ListView listview = null;
+    private DatabaseThread DT = new DatabaseThread();
+    private static String PREFS_NAME = "sportopiaprefs";
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean redirect = settings.getBoolean("termsAgreement", false);
+        boolean firstUse = settings.getBoolean("firstUse", false);
+
+        //if we don't have an agreement yet on the terms of use, we redirect the user
+        if (!redirect) {
+            Intent intent = new Intent(this, TermsActivity.class);
+            startActivity(intent);
+        } else if (!firstUse) {
+            Intent intent = new Intent(this, FirstUseActivity.class);
+            startActivity(intent);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challengeoverview);
 
@@ -113,23 +130,12 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView arg0, View arg1, int position, long arg3) {
-
         Challenge item = (Challenge) items.get(position);
-        //Toast.makeText(this, "You clicked " + item.getTitle() , Toast.LENGTH_SHORT).show();
 
         //Open the challengeViewActivity and give the current selected Challenge to the activity
         Intent intent = new Intent(this, ChallengeViewActivity.class);
-        //TODO This works as a cheap workaround because I can't send a Serializable object. Fix
-        /*intent.putExtra("title", item.getTitle());
-        intent.putExtra("challenger", item.getChallenger());
-        intent.putExtra("challengee", item.getChallengee());
-        intent.putExtra("content", item.getContent());
-        intent.putExtra("evidenceAmount", item.getEvidenceAmount());
-        intent.putExtra("evidenceType", item.getEvidenceType());
-        intent.putExtra("reward", item.getReward());
-        intent.putExtra("status", item.getStatus());*/
         intent.putExtra("id", item.getID().toString());
-        /*intent.putExtra("comments", item.getComments());*/
+
         this.startActivity(intent);
     }
 
