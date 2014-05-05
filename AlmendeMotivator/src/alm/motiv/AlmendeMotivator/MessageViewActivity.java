@@ -30,6 +30,42 @@ public class MessageViewActivity extends Activity{
     private String challenger;
     private String challengee;
 
+    class GetReceiver extends AsyncTask<String, String, String> {
+        protected String doInBackground(String... args) {
+            MongoClient client = Database.getInstance();
+            DB db = client.getDB(Database.uri.getDatabase());
+            DBCollection userCollection = db.getCollection("messages");
+            userCollection.setObjectClass(Message.class);
+
+            //DBObject query = QueryBuilder.start("Author").is(challenger).get();
+            //query = QueryBuilder.start("Receiver").is(challengee).get();
+            //DBCursor cursor = userCollection.find(query);
+
+            challenger = intent.getExtras().getString("challenger");
+            challengee = intent.getExtras().getString("challengee");
+
+            BasicDBObject query = new BasicDBObject();
+            query.put("Author", challenger);
+            query.put("Receiver", challengee);
+            DBCursor cursor = userCollection.find(query);
+
+            System.out.println("ff tellen: " + cursor.count());
+            if(cursor.count()==0){
+                challengee = intent.getExtras().getString("challenger");
+                challenger = intent.getExtras().getString("challengee");
+            }
+
+            System.out.println("a");
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String string) {
+
+
+            UpdateMessages u = new UpdateMessages();
+            u.execute();
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -37,11 +73,8 @@ public class MessageViewActivity extends Activity{
 
         intent = getIntent();
 
-        challenger = intent.getExtras().getString("challenger");
-        challengee = intent.getExtras().getString("challengee");
-
-        UpdateMessages u = new UpdateMessages();
-        u.execute();
+        GetReceiver gr = new GetReceiver();
+        gr.execute();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -102,8 +135,13 @@ public class MessageViewActivity extends Activity{
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-            DBObject query = QueryBuilder.start("Author").is(challenger).get();
-            query = QueryBuilder.start("Receiver").is(challengee).get();
+            //DBObject query = QueryBuilder.start("Author").is(challenger).get();
+            //query = QueryBuilder.start("Receiver").is(challengee).get();
+            //DBCursor cursor = userCollection.find(query);
+
+            BasicDBObject query = new BasicDBObject();
+            query.put("Author", challenger);
+            query.put("Receiver", challengee);
             DBCursor cursor = userCollection.find(query);
 
             System.out.println("ff tellen: " + cursor.count());
