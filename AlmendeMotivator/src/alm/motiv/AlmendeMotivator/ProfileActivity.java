@@ -65,6 +65,7 @@ public class ProfileActivity extends Activity{
         TextView goalContent = (TextView)findViewById(R.id.goalContent);
         TextView xpText = (TextView)findViewById(R.id.progressText);
         ProgressBar xpBar = (ProgressBar)findViewById(R.id.progressXP);
+        Button btnEdit = (Button)findViewById(R.id.btnEdit);
 
         nameContent.setText(user.getName());
         aboutContent.setText(user.getAbout());
@@ -83,6 +84,10 @@ public class ProfileActivity extends Activity{
         xpBar.setMax(level.getMaxXP());
         xpBar.setProgress(XP);
         xpText.setText(level.toString().toLowerCase() + ": "+ XP +"xp /"+level.getMaxXP()+"xp");
+
+        if(facebookIdFriend==null){
+            btnEdit.setVisibility(View.VISIBLE);
+        }
 
 
     }
