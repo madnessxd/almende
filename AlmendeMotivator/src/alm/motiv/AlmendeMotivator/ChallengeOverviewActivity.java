@@ -29,12 +29,15 @@ import android.widget.ListView;
 import com.mongodb.*;
 
 public class ChallengeOverviewActivity extends Activity implements OnItemClickListener {
-    private Intent k;
+    //menu
     private String[] mMenuOptions;
     private ListView mDrawerList;
+
     private ArrayList<Item> items = new ArrayList<Item>();
     private ListView listview = null;
     private DatabaseThread DT = new DatabaseThread();
+
+    //shared preferences
     private static String PREFS_NAME = "sportopiaprefs";
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
@@ -142,31 +145,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
+            Menu.selectItem(position, ChallengeOverviewActivity.this);
         }
-    }
-
-    public void selectItem(int pos) {
-        switch (pos) {
-            case 0:
-                k = new Intent(ChallengeOverviewActivity.this, ProfileActivity.class);
-                break;
-            case 1:
-                k = new Intent(ChallengeOverviewActivity.this, MessageActivity.class);
-                break;
-            case 2:
-                k = new Intent(ChallengeOverviewActivity.this, ChallengeOverviewActivity.class);
-                break;
-            case 3:
-                k = new Intent(ChallengeOverviewActivity.this, FriendActivity.class);
-                break;
-            case 4:
-                FacebookManager.logout();
-                k = new Intent(ChallengeOverviewActivity.this, FacebookMainActivity.class);
-                break;
-        }
-        finish();
-        startActivity(k);
     }
 
     private class DatabaseThread extends AsyncTask<String, String, String> {

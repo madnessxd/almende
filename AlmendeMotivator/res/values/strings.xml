@@ -130,6 +130,7 @@
         <item>Messages</item>
         <item>Challenges</item>
         <item>My Friends</item>
+        <item>About Sportopia</item>
         <item>Log Out</item>
     </string-array>
 </resources>

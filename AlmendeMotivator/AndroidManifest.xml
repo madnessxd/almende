@@ -51,6 +51,11 @@
                   android:screenOrientation="portrait"
                 >
         </activity>
+        <activity android:name=".ProfileEditActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                >
+        </activity>
         <activity android:name=".ChallengeCreateActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"

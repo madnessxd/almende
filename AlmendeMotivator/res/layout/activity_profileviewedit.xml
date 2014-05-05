@@ -9,20 +9,21 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:background="@color/darkerWhite" >
+
         <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
-                style="@style/button"
-                android:id="@+id/btnCancel"
-                android:onClick="cancelEditBtn"/>
+                android:text="Save changes +"
+                android:id="@+id/btnSave"
+                android:onClick="saveUserBtn"
+                style="@style/button"/>
         <TextView
                 android:id="@+id/name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Name"
                 style="@style/header"
-                android:layout_below="@+id/btnCancel"/>
+                android:layout_below="@+id/btnSave"/>
         <EditText
                 android:id="@+id/nameInput"
                 android:layout_width="fill_parent"
@@ -95,14 +96,6 @@
                 style="@style/normalText"
                 android:layout_below="@id/about"
                 android:gravity="top"/>
-        <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Save +"
-                android:id="@+id/btnSave"
-                android:onClick="saveUserBtn"
-                style="@style/button"
-                android:layout_below="@id/aboutInput"/>
 
 
     </RelativeLayout>

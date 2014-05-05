@@ -30,7 +30,6 @@ public class FriendActivity extends Activity {
     private GridView friendListView;
     private List<DBObject> allUsers = null;
     private boolean manageFriends = true;
-    private Intent k;
     private boolean initializedFriends = false;
     private int positionSelectedFriend = 0;
 
@@ -246,31 +245,8 @@ public class FriendActivity extends Activity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
+            Menu.selectItem(position, FriendActivity.this);
         }
-    }
-
-    public void selectItem(int pos) {
-        switch (pos) {
-            case 0:
-                k = new Intent(FriendActivity.this, ProfileActivity.class);
-                break;
-            case 1:
-                k = new Intent(FriendActivity.this, MessageActivity.class);
-                break;
-            case 2:
-                k = new Intent(FriendActivity.this, ChallengeOverviewActivity.class);
-                break;
-            case 3:
-                k = new Intent(FriendActivity.this, FriendActivity.class);
-                break;
-            case 4:
-                FacebookManager.logout();
-                k = new Intent(FriendActivity.this, FacebookMainActivity.class);
-                break;
-        }
-        finish();
-        startActivity(k);
     }
 
     class DatabaseThread extends AsyncTask<String, String, String> {
