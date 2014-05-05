@@ -29,8 +29,8 @@ public class MessageCreateActivity extends Activity {
     private String challenger = Cookie.getInstance().userEntryId;
     private String[] facebookFriends = {"loading..."};
     private String[] facebookFriendsName = {"loading..."};
-
-
+    private String friendName;
+    private String messageText = "";
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -122,27 +122,46 @@ public class MessageCreateActivity extends Activity {
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-            DBObject query = QueryBuilder.start("Author").is(challenger).get();
-            query = QueryBuilder.start("Receiver").is(challengee).get();
+            /*DBObject query = QueryBuilder.start("Author").is(challenger).get();
+            query = QueryBuilder.start("Receiver").is(challengee).get();*/
+
+            BasicDBObject query = new BasicDBObject();
+            query.put("Author", challenger);
+            query.put("Receiver", challengee);
             DBCursor cursor = userCollection.find(query);
 
-            System.out.println("ff tellen: " + cursor.count());
+            BasicDBObject query2 = new BasicDBObject();
+            query2.put("Receiver", challenger);
+            query2.put("Author", challengee);
+            DBCursor cursor2 = userCollection.find(query2);
 
+            System.out.println("ff tellen: " + cursor.count());
+            System.out.println("ff tellen 2: " + cursor2.count());
 
             EditText textContent = (EditText) findViewById(R.id.txtChallengeContent);
-            String message = textContent.getText().toString();
+            String message = message = Cookie.getInstance().userName + ": " + textContent.getText().toString();
             Time now = new Time();
             now.setToNow();
             String date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);
 
-            if(cursor.count()==0){
+            if(cursor.count()==0 && cursor2.count()==0){
                 ArrayList<String> messages = new ArrayList<String>();
                 messages.add(message);
 
-                Message challenge = new Message(challenger, challengee, "Test Message", messages, date, "Normal message", "0");
+                Message challenge = new Message(challengee, challenger, "Test Message", messages, date, "Normal message", "0");
                 userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
-
+                messageText = "Message Send!";
             } else{
+                Session session = Session.getActiveSession();
+
+                Request request = new Request(session, challengee, null, HttpMethod.GET);
+                Response response = request.executeAndWait();
+
+                GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                String challengeeName = graphUser.getName();
+                messageText = "You already have a conversation with " + challengeeName;
+            }
+            /* else {
                 BasicDBObject update = new BasicDBObject();
                 update.put("$push", new BasicDBObject("Content", message));
 
@@ -150,12 +169,13 @@ public class MessageCreateActivity extends Activity {
                 newFriend.put("Receiver", challengee);
 
                 userCollection.update(newFriend, update);
-            }
+            }*/
 
             return null;
         }
         @Override
         protected void onPostExecute(String string) {
+            Toast.makeText(getApplicationContext(), messageText, Toast.LENGTH_LONG).show();
             finish();
             Intent home = new Intent(MessageCreateActivity.this, MessageActivity.class);
             startActivity(home);
@@ -169,7 +189,6 @@ public class MessageCreateActivity extends Activity {
         if(challengee != null && challengee != "loading..."){
             DatabaseThread db = new DatabaseThread();
             db.execute();
-            Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
         }
     }
 
