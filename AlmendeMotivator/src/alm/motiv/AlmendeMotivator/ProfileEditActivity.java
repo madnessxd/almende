@@ -9,6 +9,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 import com.mongodb.*;
@@ -20,6 +23,7 @@ public class ProfileEditActivity extends Activity{
     //menu
     private String[] mMenuOptions;
     private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
 
     //our user
     User user=null;
@@ -52,7 +56,18 @@ public class ProfileEditActivity extends Activity{
         try{ facebookIdFriend = requestFrom.getExtras().getString("facebookIdFriend"); }catch (Exception e){ }
 
         new DatabaseThread().execute("select");
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
 
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     public void initView(){

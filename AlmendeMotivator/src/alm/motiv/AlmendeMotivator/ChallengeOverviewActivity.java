@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alm.motiv.AlmendeMotivator.adapters.EntryAdapter;
-import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
-import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
 import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.Challenge;
@@ -64,13 +62,24 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         setContentView(R.layout.activity_challengeoverview);
 
         listview = (ListView) findViewById(R.id.listView_main);
-        DT.execute();
+        //DT.execute();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     public void initListview() {
@@ -103,17 +112,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     @Override
     public void onBackPressed() {
         showPopUp();
-    }
-
-
-    //on menu pressed
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            mDrawerLayout.openDrawer(Gravity.LEFT);
-            return true;
-        } else {
-            return super.onKeyUp(keyCode, event);
-        }
     }
 
     private void showPopUp() {

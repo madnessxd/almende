@@ -12,7 +12,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -42,6 +45,7 @@ public class FriendActivity extends Activity {
     //menu
     private String[] mMenuOptions;
     private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,18 @@ public class FriendActivity extends Activity {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         new DatabaseThread().execute("select");
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     public void initFriends(){

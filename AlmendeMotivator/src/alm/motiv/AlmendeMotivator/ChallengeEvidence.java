@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -33,6 +35,7 @@ public class ChallengeEvidence extends Activity {
     //menu
     private String[] mMenuOptions;
     private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
 
     //keep track of camera capture intent
     final int CAMERA_CAPTURE = 1;
@@ -81,6 +84,18 @@ public class ChallengeEvidence extends Activity {
         TextView challengeLabel = (TextView) findViewById(R.id.numberOfEvidenceLbl);
 
         challengeLabel.setText("Your challenger wants you to upload " + numberOfEvidence + " photo(s)");
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     public void addEvidence(View v) {

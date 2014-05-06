@@ -15,6 +15,9 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -41,6 +44,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     private String[] mMenuOptions;
     private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+
     private String id;
 
     //when a user adds a comment, this object will be used
@@ -76,8 +81,19 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         //first database call because we need information about the challenge
         new DatabaseThread().execute("get challenge");
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
 
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
+    }
     public void updateUI(String challengerName, String challengeeName) {
         TextView title = (TextView) findViewById(R.id.txtStaticChallengeName);
         TextView challenger = (TextView) findViewById(R.id.txtChallenger);
