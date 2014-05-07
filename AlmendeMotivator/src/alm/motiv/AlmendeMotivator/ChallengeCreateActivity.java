@@ -216,7 +216,7 @@ public class ChallengeCreateActivity extends Activity {
 
     public boolean validation() {
         boolean succes = true;
-        if (!Validation.isLetters(textTitle, true)) succes = false;
+        if(!Validation.isTitle(textTitle, true))succes=false;
         if (!Validation.isLetters(textContent, true)) succes = false;
         if (!challengeeSelected || challengee == null) {
             succes = false;

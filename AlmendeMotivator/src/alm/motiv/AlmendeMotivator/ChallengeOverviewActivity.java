@@ -43,7 +43,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private SharedPreferences.Editor editor;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         settings = getSharedPreferences(PREFS_NAME, 0);

@@ -113,6 +113,9 @@ public class ProfileActivity extends Activity{
 
         else if(XP<Level.ATHLETE.getMaxXP())level = level.ATHLETE;
 
+        else if(XP<Level.CHAMPION.getMaxXP())level = level.MASTER;
+
+
         else if(XP>Level.CHAMPION.getMaxXP()) level = level.CHAMPION;
     }
 

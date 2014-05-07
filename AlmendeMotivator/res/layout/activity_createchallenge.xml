@@ -11,10 +11,6 @@
                       android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:background="@color/darkerWhite" android:weightSum="1">
-            <Button android:layout_width="fill_parent" android:layout_height="wrap_content"
-                    android:id="@+id/btnCreateChallenge"
-                    android:text="Create the challenge +"
-                    style="@style/button"/>
             <TextView android:layout_width="fill_parent"
                       android:text="Title"
                       style="@style/header"
@@ -178,6 +174,7 @@
                         android:layout_marginTop="5dp"
                         android:textAlignment="center"
                         android:entries="@array/evidence_types"/>
+
             </LinearLayout>
 
 
@@ -207,7 +204,10 @@
                       android:id="@+id/txtReward"
                       style="@style/editText"
                     />
-
+            <Button android:layout_width="fill_parent" android:layout_height="wrap_content"
+                    android:id="@+id/btnCreateChallenge"
+                    android:text="Create the challenge +"
+                    style="@style/button"/>
         </LinearLayout>
     </ScrollView>
     <ListView android:id="@+id/left_drawer"

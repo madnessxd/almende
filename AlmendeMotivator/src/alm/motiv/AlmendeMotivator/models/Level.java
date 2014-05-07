@@ -7,6 +7,7 @@ public enum Level {
     BEGINNER(1000),
     NOVICE(3000),
     ATHLETE(10000),
+    MASTER(100000),
     CHAMPION(100000);
 
     private int maxXP;

@@ -4,10 +4,6 @@
                   android:layout_width="match_parent"
                   android:background="@color/darkerWhite"
                   android:layout_height="match_parent">
-        <Button android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Like this challenge +"
-                style="@style/button"/>
         <TextView
                 android:id="@+id/txtStaticChallengeName"
                 android:layout_width="fill_parent"
