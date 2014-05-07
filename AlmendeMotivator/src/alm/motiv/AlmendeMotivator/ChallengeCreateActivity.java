@@ -216,8 +216,9 @@ public class ChallengeCreateActivity extends Activity {
 
     public boolean validation() {
         boolean succes = true;
-        if(!Validation.isTitle(textTitle, true))succes=false;
+        if (!Validation.isTitle(textTitle, true)) succes = false;
         if (!Validation.isLetters(textContent, true)) succes = false;
+        if (!Validation.isLetters(textReward, false)) succes = false;
         if (!challengeeSelected || challengee == null) {
             succes = false;
             Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();

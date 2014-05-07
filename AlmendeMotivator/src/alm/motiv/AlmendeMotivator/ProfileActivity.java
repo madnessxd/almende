@@ -120,6 +120,7 @@ public class ProfileActivity extends Activity{
     }
 
     public void editUserBtn(View v){
+        finish();
         Intent edit = new Intent(this, ProfileEditActivity.class);
         if(facebookIdFriend!=null){
             edit.putExtra("facebookIdFriend",facebookIdFriend);
