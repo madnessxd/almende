@@ -36,6 +36,7 @@ public class FirstUseActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstuse);
         settings = getSharedPreferences(PREFS_NAME, 0);
@@ -66,7 +67,7 @@ public class FirstUseActivity extends Activity {
     //for validation
     private boolean validation(){
         boolean succes = true;
-        if(!Validation.isNumericWihtoutLimitations(hours, true))succes=false;
+        if(!Validation.isNumericWithoutLimitations(hours, true))succes=false;
         if(!Validation.isLetters(motivation1, true))succes=false;
         if(!Validation.isLetters(motivation2, true))succes=false;
         if(!Validation.isLetters(motivation3, false))succes=false;

@@ -42,13 +42,12 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         settings = getSharedPreferences(PREFS_NAME, 0);
         boolean redirect = settings.getBoolean("termsAgreement", false);
         boolean firstUse = settings.getBoolean("firstUse", false);
-
+        
         //if we don't have an agreement yet on the terms of use, we redirect the user
         if (!redirect) {
             Intent intent = new Intent(this, TermsActivity.class);
@@ -62,7 +61,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         setContentView(R.layout.activity_challengeoverview);
 
         listview = (ListView) findViewById(R.id.listView_main);
-        //DT.execute();
+        DT.execute();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);

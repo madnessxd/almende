@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class Validation {
     // Regular Expression
     private static final String NUMERIC_REGEX = "^[1-8][0-9]$";
-    private static final String NUMERIC_MSG_NO_LIMITATIONS = "^[0-9][0-9]$";
+    private static final String NUMERIC_MSG_NO_LIMITATIONS = "^[0-9]*$";
     private static final String CHAR_REGEX = "^[A-Za-z ]+$";
 
     // Error Messages
@@ -24,7 +24,7 @@ public class Validation {
         return isValid(editText, NUMERIC_REGEX, NUMERIC_MSG_AGE, required);
     }
 
-    public static boolean isNumericWihtoutLimitations(EditText editText, boolean required) {
+    public static boolean isNumericWithoutLimitations(EditText editText, boolean required) {
         return isValid(editText, NUMERIC_MSG_NO_LIMITATIONS, NUMERIC_MSG, required);
     }
 
