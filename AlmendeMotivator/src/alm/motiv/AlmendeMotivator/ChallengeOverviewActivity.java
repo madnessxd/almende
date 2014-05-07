@@ -43,6 +43,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private SharedPreferences.Editor editor;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         settings = getSharedPreferences(PREFS_NAME, 0);
@@ -62,7 +63,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         setContentView(R.layout.activity_challengeoverview);
 
         listview = (ListView) findViewById(R.id.listView_main);
-        //DT.execute();
+        DT.execute();
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -70,6 +71,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
+
 
 
     //on menu pressed
@@ -140,6 +142,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
     public void onCreatePressed(View v) {
         startActivity(new Intent(this, ChallengeCreateActivity.class));
+        finish();
     }
 
 
@@ -148,9 +151,9 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         Challenge item = (Challenge) items.get(position);
 
         //Open the challengeViewActivity and give the current selected Challenge to the activity
+        finish();
         Intent intent = new Intent(this, ChallengeViewActivity.class);
         intent.putExtra("id", item.getID().toString());
-
         this.startActivity(intent);
     }
 
@@ -199,6 +202,5 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
             return "succes";
         }
-
     }
 }

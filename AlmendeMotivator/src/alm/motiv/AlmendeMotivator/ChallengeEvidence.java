@@ -193,7 +193,6 @@ public class ChallengeEvidence extends Activity {
 
     private void showPopUp() {
         LayoutInflater inflater = getLayoutInflater();
-
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
         helpBuilder.setView(inflater.inflate(R.layout.popup_evidence, null));
 

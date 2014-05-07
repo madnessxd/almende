@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SPORTOPIA</string>
+    <string name="app_name_manifest">Sportopia</string>
     <string name="challenger">Challenger</string>
     <string name="challengee">Challengee</string>
     <string name="the_challenge">The challenge</string>

@@ -170,6 +170,17 @@ public class FacebookMainFragment extends Fragment {
         if (!isAdded()) {
             return;
         }
+        //Facebook automatically asigns a value to the authenticationButton. Here we override that call. If the authButton contains Logout, we want the button
+        //to become inusable and for the text to change. This notifies the user that a process is being done and that he just needs to wait it out.
+        if(authButton.getText().toString().equals("Logout")){
+            System.out.println("Button = logout");
+            authButton.setEnabled(false);
+            authButton.setText("Processing");
+        }
+        else{
+            authButton.setClickable(true);
+        }
+
         if (session.isOpened()) {
             if (user != null) {
                 infoLabel.setText("Logged in as: " + user.getName());
@@ -178,7 +189,7 @@ public class FacebookMainFragment extends Fragment {
                         com.facebook.android.R.string.com_facebook_usersettingsfragment_logged_in));
             }
         } else {
-            infoLabel.setTextColor( Color.BLACK);
+            infoLabel.setTextColor(Color.BLACK);
             infoLabel.setShadowLayer(0f, 0f, 0f, Color.BLACK);
             infoLabel.setText(getResources().getString(
                     com.facebook.android.R.string.com_facebook_usersettingsfragment_not_logged_in));
@@ -200,7 +211,8 @@ public class FacebookMainFragment extends Fragment {
     };
 
     /**
-     * Background Async Task to add the user to our own database, if it doesn't already exist*/
+     * Background Async Task to add the user to our own database, if it doesn't already exist
+     */
     class DatabaseThread extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
@@ -221,7 +233,7 @@ public class FacebookMainFragment extends Fragment {
 
             DBCursor cursor = userCollection.find(query);
 
-            if(cursor.count()==0){//if no result, add user
+            if (cursor.count() == 0) {//if no result, add user
                 User appUser = new User(user.getId(), user.getName());
                 userCollection.insert(appUser, WriteConcern.ACKNOWLEDGED);
             }

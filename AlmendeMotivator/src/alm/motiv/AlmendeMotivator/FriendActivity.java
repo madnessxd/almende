@@ -251,6 +251,13 @@ public class FriendActivity extends Activity {
         return null;
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent i = new Intent(FriendActivity.this, ChallengeOverviewActivity.class);
+        startActivity(i);
+    }
+
     public void onFollowFriendsPressed(View v){
         manageFriends = false;
         btnFollowMoreFriends.setVisibility(View.GONE);

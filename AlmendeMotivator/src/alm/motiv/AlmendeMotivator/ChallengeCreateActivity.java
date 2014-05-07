@@ -14,7 +14,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -48,6 +51,7 @@ public class ChallengeCreateActivity extends Activity {
     private EditText textContent;
     private EditText textReward;
     private ImageView userPic;
+    private DrawerLayout mDrawerLayout;
 
     //create challenge variables
     private String title;
@@ -58,6 +62,7 @@ public class ChallengeCreateActivity extends Activity {
     private String evidence_type;
     private String reward;
     private String status;
+    private boolean challengeeSelected = false;
 
     //Facebook variables
     private GraphUser user;
@@ -138,6 +143,16 @@ public class ChallengeCreateActivity extends Activity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -147,8 +162,8 @@ public class ChallengeCreateActivity extends Activity {
         }
     }
 
-    public void selectItem(int pos){
-        switch (pos){
+    public void selectItem(int pos) {
+        switch (pos) {
             case 0:
                 k = new Intent(ChallengeCreateActivity.this, ProfileActivity.class);
                 break;
@@ -162,6 +177,9 @@ public class ChallengeCreateActivity extends Activity {
                 k = new Intent(ChallengeCreateActivity.this, FriendActivity.class);
                 break;
             case 4:
+                k = new Intent(ChallengeCreateActivity.this, AboutActivity.class);
+                break;
+            case 5:
                 FacebookManager.logout();
                 k = new Intent(ChallengeCreateActivity.this, FacebookMainActivity.class);
                 break;
@@ -191,22 +209,19 @@ public class ChallengeCreateActivity extends Activity {
             db.execute();
             Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
             finish();
+            Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
+            startActivity(goBack);
         }
     }
 
-    public boolean validation(){
+    public boolean validation() {
         boolean succes = true;
-        if(!Validation.isLetters(textTitle, true))succes=false;
-        if(!Validation.isLetters(textContent, true))succes=false;
-        if(!Validation.isLetters(textReward, true))succes=false;
-        /*if(spinnerFriends.getSelectedItem()==null){
-            succes=false;
-            Toast.makeText(this, "You haven't chosen an item", Toast.LENGTH_LONG);
-        }else if(spinnerFriends.getSelectedItem().toString()=="Follow some friends"){
-            succes=false;
-            Toast.makeText(this, "You have to challenge a friend", Toast.LENGTH_LONG);
-        }*/
-
+        if (!Validation.isLetters(textTitle, true)) succes = false;
+        if (!Validation.isLetters(textContent, true)) succes = false;
+        if (!challengeeSelected || challengee == null) {
+            succes = false;
+            Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();
+        }
         return succes;
     }
 
@@ -222,7 +237,7 @@ public class ChallengeCreateActivity extends Activity {
         }
     }
 
-    public void updatePicture(String id, String name){
+    public void updatePicture(String id, String name) {
         TextView txtChallengee = (TextView) findViewById(R.id.txtChallengee);
         txtChallengee.setText(name);
 
@@ -266,14 +281,15 @@ public class ChallengeCreateActivity extends Activity {
         }
     }
 
-    public void onSelectFriendsPressed(View v){
+    public void onSelectFriendsPressed(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose the challengee")
 
                 .setItems(facebookFriendsName, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        challengee= facebookFriends[which];
+                        challengee = facebookFriends[which];
                         updatePicture(challengee, facebookFriendsName[which]);
+                        challengeeSelected = true;
                     }
                 });
         builder.create();
@@ -313,7 +329,7 @@ public class ChallengeCreateActivity extends Activity {
             User newUser = (User) userCollection.find(curUser).toArray().get(0);
 
 
-            if(newUser.get("friends")!=null){
+            if (newUser.get("friends") != null) {
 
                 ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
 
@@ -322,7 +338,7 @@ public class ChallengeCreateActivity extends Activity {
 
 
                 for (int i = 0; i < arrayMessages.toArray().length; i++) {
-                    facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
+                    facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ " + '"' + "facebookID" + '"' + " : " + '"', "").replace('"' + "}", "");
 
                     request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
                     response = request.executeAndWait();

@@ -104,8 +104,6 @@ public class ProfileActivity extends Activity{
         if(facebookIdFriend==null){
             btnEdit.setVisibility(View.VISIBLE);
         }
-
-
     }
 
     public void setLevelOfUser(int XP){

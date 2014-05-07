@@ -46,6 +46,13 @@ public class AboutActivity extends Activity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent i = new Intent(AboutActivity.this, ChallengeOverviewActivity.class);
+        startActivity(i);
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
