@@ -159,12 +159,10 @@ public class ChallengeEvidence extends Activity {
                     if (amountHours.getText().toString().equals("")) {
                         Toast.makeText(getApplicationContext(), "You forgot to enter the amount of hours!", Toast.LENGTH_LONG).show();
                         allowed = false;
-                    }
-                    else if (amountHours.getText().toString().length() > 2) {
+                    } else if (amountHours.getText().toString().length() > 2) {
                         Toast.makeText(getApplicationContext(), "The amount of hours can only be 2 decimals big", Toast.LENGTH_LONG).show();
                         allowed = false;
-                    }
-                    if (Integer.parseInt(amountHours.getText().toString()) - 1 == -1) {
+                    } else if (Integer.parseInt(amountHours.getText().toString()) - 1 == -1) {
                         Toast.makeText(getApplicationContext(), "Amount of hours can't be 0", Toast.LENGTH_LONG).show();
                         allowed = false;
                     }
