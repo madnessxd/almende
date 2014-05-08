@@ -171,6 +171,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         currentChallenge.setStatus("accepted");
         new DatabaseThread().execute("");
         updateStatusElements("");
+        Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
+        this.startActivity(newIntent);
     }
 
     public void onCompletePressed(View v) {
@@ -202,8 +204,11 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onDeclinePressed(View v) {
-        currentChallenge.setRated("declined");
+        currentChallenge.setStatus("declined");
         new DatabaseThread().execute("");
+        updateStatusElements("");
+        Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
+        this.startActivity(newIntent);
     }
 
     public void onCommentPressed(View v) {

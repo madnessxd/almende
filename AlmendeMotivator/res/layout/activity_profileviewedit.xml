@@ -9,21 +9,20 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:background="@color/darkerWhite" >
-
         <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Save changes +"
                 android:id="@+id/btnSave"
                 android:onClick="saveUserBtn"
-                style="@style/button"/>
+                style="@style/button"
+                android:layout_below="@+id/aboutInput"/>
         <TextView
                 android:id="@+id/name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Name"
-                style="@style/header"
-                android:layout_below="@+id/btnSave"/>
+                style="@style/header"/>
         <EditText
                 android:id="@+id/nameInput"
                 android:layout_width="fill_parent"
