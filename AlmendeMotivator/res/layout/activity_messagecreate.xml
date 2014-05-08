@@ -92,15 +92,16 @@
             </LinearLayout>
 
             <TextView android:layout_width="fill_parent"
+                      android:layout_marginTop="10dp"
                       android:layout_height="wrap_content"
-                      android:text="Message:"
+                      android:text="Create the message"
                       style="@style/header"/>
 
             <EditText android:layout_width="fill_parent" android:layout_height="150dp"
                       android:id="@+id/txtChallengeContent"
                       android:gravity="top"
                       style="@style/editText"
-                      android:hint="Send a message"
+                      android:hint="Start a conversation"
                     />
 
             <Button android:layout_width="fill_parent" android:layout_height="wrap_content"

@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,11 @@ import java.util.ArrayList;
 public class MessageCreateActivity extends Activity {
     private Spinner spinnerFriends;
 
+    //menu
+    private String[] mMenuOptions;
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+
     //views
     private ImageView challengeePic;
     private ImageView challengerPic;
@@ -44,6 +50,11 @@ public class MessageCreateActivity extends Activity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messagecreate);
+
+        mMenuOptions = getResources().getStringArray(R.array.profile_array);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         /*spinnerFriends = (Spinner) findViewById(R.id.spinner_getFriends);
         //GET FRIENDS
@@ -237,4 +248,12 @@ public class MessageCreateActivity extends Activity {
         startActivity(home);
         return;
     }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            Menu.selectItem(position, MessageCreateActivity.this);
+        }
+    }
+
 }

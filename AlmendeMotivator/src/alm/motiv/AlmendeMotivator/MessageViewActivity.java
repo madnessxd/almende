@@ -75,6 +75,10 @@ public class MessageViewActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        listView = (ListView) findViewById(R.id.listView);
+        View footer = View.inflate(this,R.layout.acitivity_message_footer,null);
+        listView.addFooterView(footer);
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -85,13 +89,8 @@ public class MessageViewActivity extends Activity{
     }
 
     public void showMessages(){
-        listView = (ListView) findViewById(R.id.listView);
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.list_item_detail_message, receivedMessages);
-
-        View footer = View.inflate(this,R.layout.acitivity_message_footer,null);
-        listView.addFooterView(footer);
 
         listView.setAdapter(adapter);
     }

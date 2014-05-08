@@ -4,6 +4,10 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
+    <TextView android:layout_width="fill_parent"
+              android:text="Send a new message"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
     <EditText
             android:layout_width="fill_parent"
             style="@style/editText"
