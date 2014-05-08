@@ -216,8 +216,8 @@ public class ChallengeCreateActivity extends Activity {
 
     public boolean validation() {
         boolean succes = true;
-        if (!Validation.isTitle(textTitle, true)) succes = false;
-        if (!Validation.isLetters(textContent, true)) succes = false;
+        //if (!Validation.isTitle(textTitle, true)) succes = false;
+        //if (!Validation.isLetters(textContent, true)) succes = false;
         if (!Validation.isLetters(textReward, false)) succes = false;
         if(succes == false){
             Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();
@@ -310,7 +310,7 @@ public class ChallengeCreateActivity extends Activity {
             DBCollection userCollection = db.getCollection("challenge");
             userCollection.setObjectClass(Challenge.class);
 
-            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null");
+            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", "null");
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }
