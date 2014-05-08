@@ -5,36 +5,44 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
-android:layout_width="fill_parent"
-android:background="@color/darkerWhite"
-android:layout_height="fill_parent">
-    
-    <TextView android:layout_width="fill_parent" 
-              android:layout_height="wrap_content"
-              style="@style/header"
-            android:text="Upload your evidence"/>
-    <TextView android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              style="@style/normalText"
-              android:id="@+id/numberOfEvidenceLbl"
-              android:text="Upload your evidence"/>
-    <Button android:layout_width="fill_parent"
-            android:text="Add evidence +"
-            android:onClick="addEvidence"
-            style="@style/button"
-            android:id="@+id/addEvidenceBtn"
-            android:layout_height="wrap_content"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="fill_parent"
+                  android:background="@color/darkerWhite"
+                  android:layout_height="fill_parent">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-               android:orientation="vertical"
-               android:id="@+id/evidenceRow"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content">
-</LinearLayout>
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  style="@style/header"
+                  android:text="How much time did this challenge take?"/>
+        <EditText android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/txtAmountHours"
+                  android:inputType="numberDecimal"
+                  android:hint="Amount of hours"/>
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  style="@style/header"
+                  android:text="Upload your evidence"/>
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  style="@style/normalText"
+                  android:id="@+id/numberOfEvidenceLbl"
+                  android:text="Upload your evidence"/>
+        <Button android:layout_width="fill_parent"
+                android:text="Add evidence +"
+                android:onClick="addEvidence"
+                style="@style/button"
+                android:id="@+id/addEvidenceBtn"
+                android:layout_height="wrap_content"/>
 
-</LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:orientation="vertical"
+                      android:id="@+id/evidenceRow"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content">
+        </LinearLayout>
+
+    </LinearLayout>
     <ListView android:id="@+id/left_drawer"
               android:layout_width="240dp"
               android:layout_height="match_parent"

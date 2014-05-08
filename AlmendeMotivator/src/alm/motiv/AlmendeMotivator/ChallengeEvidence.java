@@ -36,6 +36,7 @@ public class ChallengeEvidence extends Activity {
     private String[] mMenuOptions;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
+    private EditText amountHours;
 
     //keep track of camera capture intent
     final int CAMERA_CAPTURE = 1;
@@ -82,7 +83,7 @@ public class ChallengeEvidence extends Activity {
         pictureUriList = new ArrayList<String>();
 
         TextView challengeLabel = (TextView) findViewById(R.id.numberOfEvidenceLbl);
-
+        amountHours = (EditText) findViewById(R.id.txtAmountHours);
         challengeLabel.setText("Your challenger wants you to upload " + numberOfEvidence + " photo(s)");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
@@ -126,8 +127,8 @@ public class ChallengeEvidence extends Activity {
         referenceButton.setTextColor(getResources().getColor(R.color.white));
         referenceButton.setTextSize(22);
         referenceButton.setGravity(Gravity.LEFT);
-        referenceButton.setTextAppearance(this,R.style.button);
-        referenceButton.setPadding(20,20,20,20);
+        referenceButton.setTextAppearance(this, R.style.button);
+        referenceButton.setPadding(20, 20, 20, 20);
         referenceButton.setWidth(100);
         referenceButton.setLayoutParams(params);
         theLayout.addView(referenceButton);
@@ -147,14 +148,29 @@ public class ChallengeEvidence extends Activity {
             sendEvidence.setTextColor(getResources().getColor(R.color.white));
             sendEvidence.setTextSize(22);
             sendEvidence.setGravity(Gravity.LEFT);
-            sendEvidence.setTextAppearance(this,R.style.button);
-            sendEvidence.setPadding(20,20,20,20);
+            sendEvidence.setTextAppearance(this, R.style.button);
+            sendEvidence.setPadding(20, 20, 20, 20);
             sendEvidence.setWidth(100);
             sendEvidence.setLayoutParams(params);
             sendEvidence.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new DatabaseThread().execute("insert");
+                    boolean allowed = true;
+                    if (amountHours.getText().toString().equals("")) {
+                        Toast.makeText(getApplicationContext(), "You forgot to enter the amount of hours!", Toast.LENGTH_LONG).show();
+                        allowed = false;
+                    }
+                    else if (amountHours.getText().toString().length() > 2) {
+                        Toast.makeText(getApplicationContext(), "The amount of hours can only be 2 decimals big", Toast.LENGTH_LONG).show();
+                        allowed = false;
+                    }
+                    if (Integer.parseInt(amountHours.getText().toString()) - 1 == -1) {
+                        Toast.makeText(getApplicationContext(), "Amount of hours can't be 0", Toast.LENGTH_LONG).show();
+                        allowed = false;
+                    }
+                    if (allowed) {
+                        new DatabaseThread().execute("insert");
+                    }
                 }
             });
             theLayout.addView(sendEvidence);
@@ -267,7 +283,7 @@ public class ChallengeEvidence extends Activity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    gfsFile.setFilename(intent.getExtras().getString("title")+counter);
+                    gfsFile.setFilename(intent.getExtras().getString("title") + counter);
                     gfsFile.save();
 
                     BasicDBObject evidence = new BasicDBObject();
@@ -276,13 +292,15 @@ public class ChallengeEvidence extends Activity {
                     BasicDBObject setCarrier = new BasicDBObject();
                     setCarrier.put("gps", intent.getExtras().getString("gps"));
                     setCarrier.put("status", "completed");
+                    setCarrier.put("amountHours", amountHours.getText().toString());
 
                     Challenge update = new Challenge();
                     //update the status of the challenge, so that the challenger knows he can check the popup_evidence
-                    update.put("$set" , setCarrier);
+                    update.put("$set", setCarrier);
 
                     //put a reference to the popup_evidence picture in the challenge
                     update.put("$push", new BasicDBObject("evidence", evidence));
+
 
                     challengeCollection.update(match, update);
                     counter++;
