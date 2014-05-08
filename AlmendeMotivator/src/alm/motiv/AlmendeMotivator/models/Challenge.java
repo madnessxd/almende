@@ -19,7 +19,7 @@ public class Challenge extends BasicDBObject implements Item {
     public Challenge() {}
 
     //TODO add likeAmount to challenge. Different way then it is now. Solution below causes DBThreadExceptions
-    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps) {
+    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps, String amountHours) {
         put("title", title);
         put("challenger", challenger);
         put("challengee", challengee);
@@ -29,7 +29,7 @@ public class Challenge extends BasicDBObject implements Item {
         put("reward", reward);
         put("status", status);
         put("gps", gps);
-        //put("likeAmount", likeAmount);
+        put("amountHours", amountHours);
     }
 
     public void setStatus(String status) {
