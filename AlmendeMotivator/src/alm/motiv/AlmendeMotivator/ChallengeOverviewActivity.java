@@ -122,6 +122,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         helpBuilder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        finish();
                         android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 }

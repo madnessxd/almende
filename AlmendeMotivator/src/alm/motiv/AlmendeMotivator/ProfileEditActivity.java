@@ -137,6 +137,7 @@ public class ProfileEditActivity extends Activity{
         protected void onPostExecute(String result) {
             simpleWaitDialog.dismiss();
             if(redirect){
+                finish();
                 Intent redirection = new Intent(ProfileEditActivity.this, ProfileActivity.class);
                 startActivity(redirection);
             }else{
