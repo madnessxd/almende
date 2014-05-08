@@ -4,6 +4,8 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Message;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.text.format.Time;
 import android.view.View;
 import android.widget.*;
 import com.mongodb.*;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -37,10 +40,6 @@ public class MessageViewActivity extends Activity{
             DBCollection userCollection = db.getCollection("messages");
             userCollection.setObjectClass(Message.class);
 
-            //DBObject query = QueryBuilder.start("Author").is(challenger).get();
-            //query = QueryBuilder.start("Receiver").is(challengee).get();
-            //DBCursor cursor = userCollection.find(query);
-
             challenger = intent.getExtras().getString("challenger");
             challengee = intent.getExtras().getString("challengee");
 
@@ -49,19 +48,15 @@ public class MessageViewActivity extends Activity{
             query.put("Receiver", challengee);
             DBCursor cursor = userCollection.find(query);
 
-            System.out.println("ff tellen: " + cursor.count());
             if(cursor.count()==0){
                 challengee = intent.getExtras().getString("challenger");
                 challenger = intent.getExtras().getString("challengee");
             }
 
-            System.out.println("a");
             return null;
         }
         @Override
         protected void onPostExecute(String string) {
-
-
             UpdateMessages u = new UpdateMessages();
             u.execute();
         }
@@ -85,7 +80,7 @@ public class MessageViewActivity extends Activity{
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
+            Menu.selectItem(position, MessageViewActivity.this);
         }
     }
 
@@ -93,7 +88,10 @@ public class MessageViewActivity extends Activity{
         listView = (ListView) findViewById(R.id.listView);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, receivedMessages);
+                R.layout.list_item_detail_message, receivedMessages);
+
+        View footer = View.inflate(this,R.layout.acitivity_message_footer,null);
+        listView.addFooterView(footer);
 
         listView.setAdapter(adapter);
     }
@@ -189,28 +187,6 @@ public class MessageViewActivity extends Activity{
         }
     }
 
-    public void selectItem(int pos){
-        switch (pos){
-            case 0:
-                k = new Intent(MessageViewActivity.this, ProfileActivity.class);
-                break;
-            case 1:
-                k = new Intent(MessageViewActivity.this, MessageActivity.class);
-                break;
-            case 2:
-                k = new Intent(MessageViewActivity.this, ChallengeOverviewActivity.class);
-                break;
-            case 3:
-                k = new Intent(MessageViewActivity.this, FriendActivity.class);
-                break;
-            case 4:
-                FacebookManager.logout();
-                k = new Intent(MessageViewActivity.this, FacebookMainActivity.class);
-                break;
-        }
-        finish();
-        startActivity(k);
-    }
     @Override
     public void onBackPressed() {
         finish();

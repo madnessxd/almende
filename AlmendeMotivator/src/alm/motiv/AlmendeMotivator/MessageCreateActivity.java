@@ -3,6 +3,8 @@ package alm.motiv.AlmendeMotivator;
 import alm.motiv.AlmendeMotivator.models.Message;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,12 @@ import java.util.ArrayList;
  */
 public class MessageCreateActivity extends Activity {
     private Spinner spinnerFriends;
+
+    //views
+    private ImageView challengeePic;
+    private ImageView challengerPic;
+    private TextView txtAuthor;
+    private TextView txtReceiver;
 
     private String challengee;
     private String challenger = Cookie.getInstance().userEntryId;
@@ -36,7 +45,7 @@ public class MessageCreateActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messagecreate);
 
-        spinnerFriends = (Spinner) findViewById(R.id.spinner_getFriends);
+        /*spinnerFriends = (Spinner) findViewById(R.id.spinner_getFriends);
         //GET FRIENDS
         spinnerFriends.setOnTouchListener(Spinner_OnTouch);
 
@@ -51,13 +60,21 @@ public class MessageCreateActivity extends Activity {
                 // your code here
             }
 
-        });
+        });*/
+
+        challengeePic = (ImageView) findViewById(R.id.imgChallengee);
+        challengerPic = (ImageView) findViewById(R.id.imgChallenger);
+        txtAuthor = (TextView) findViewById(R.id.txtAuthor);
+        txtReceiver = (TextView) findViewById(R.id.txtReceiver);
+
+
+        updatePicture(challenger, Cookie.getInstance().userName, challengerPic, txtAuthor);
 
         DatabaseThread2 dbT = new DatabaseThread2();
         dbT.execute();
     }
 
-    public void updateFriends() {
+   /* public void updateFriends() {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, facebookFriendsName);
         spinnerFriends.setAdapter(spinnerArrayAdapter);
     }
@@ -70,7 +87,29 @@ public class MessageCreateActivity extends Activity {
             }
             return false;
         }
-    };
+    };*/
+
+    public void updatePicture(String id, String name, ImageView userPic, TextView userName) {
+        userName.setText(name);
+
+        String imgId = "https://graph.facebook.com/" + id + "/picture?type=normal&height=200&width=200";
+        Picasso.with(getApplicationContext()).load(imgId).into(userPic);
+        userPic.setMinimumHeight(200);
+    }
+
+    public void onSelectFriendsPressed(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose the challengee")
+
+                .setItems(facebookFriendsName, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        challengee = facebookFriends[which];
+                        updatePicture(challengee, facebookFriendsName[which], challengeePic, txtReceiver);
+                    }
+                });
+        builder.create();
+        builder.show();
+    }
 
     class DatabaseThread2 extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
@@ -135,8 +174,8 @@ public class MessageCreateActivity extends Activity {
             query2.put("Author", challengee);
             DBCursor cursor2 = userCollection.find(query2);
 
-            System.out.println("ff tellen: " + cursor.count());
-            System.out.println("ff tellen 2: " + cursor2.count());
+            /*System.out.println("ff tellen: " + cursor.count());
+            System.out.println("ff tellen 2: " + cursor2.count());*/
 
             EditText textContent = (EditText) findViewById(R.id.txtChallengeContent);
             String message = message = Cookie.getInstance().userName + ": " + textContent.getText().toString();
@@ -185,7 +224,7 @@ public class MessageCreateActivity extends Activity {
 
 
     public void sendMessage(View v) {
-        System.out.println("dit:" + challengee);
+        /*System.out.println("dit:" + challengee);*/
         if(challengee != null && challengee != "loading..."){
             DatabaseThread db = new DatabaseThread();
             db.execute();

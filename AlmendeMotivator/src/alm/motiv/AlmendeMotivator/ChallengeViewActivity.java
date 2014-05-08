@@ -163,31 +163,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
+            Menu.selectItem(position, ChallengeViewActivity.this);
         }
-    }
-
-    public void selectItem(int pos) {
-        switch (pos) {
-            case 0:
-                k = new Intent(ChallengeViewActivity.this, ProfileActivity.class);
-                break;
-            case 1:
-                k = new Intent(ChallengeViewActivity.this, MessageActivity.class);
-                break;
-            case 2:
-                k = new Intent(ChallengeViewActivity.this, ChallengeOverviewActivity.class);
-                break;
-            case 3:
-                k = new Intent(ChallengeViewActivity.this, FriendActivity.class);
-                break;
-            case 4:
-                FacebookManager.logout();
-                k = new Intent(ChallengeViewActivity.this, FacebookMainActivity.class);
-                break;
-        }
-        finish();
-        startActivity(k);
     }
 
     public void onAcceptPressed(View v) {
