@@ -6,6 +6,7 @@ import com.mongodb.BasicDBObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by AsterLaptop on 3/31/14.
@@ -13,13 +14,10 @@ import java.util.ArrayList;
 public class Challenge extends BasicDBObject implements Item {
     private static final long serialVersionUID = 1L;
 
-    private String challengeeName;
-    private String challengerName;
-
     public Challenge() {}
 
     //TODO add likeAmount to challenge. Different way then it is now. Solution below causes DBThreadExceptions
-    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps, String amountHours) {
+    public Challenge(String title, String challenger, String challengee, String content, int evidence_amount, String evidence_type, String reward, String status, String gps, String amountHours, int XPreward) {
         put("title", title);
         put("challenger", challenger);
         put("challengee", challengee);
@@ -30,6 +28,7 @@ public class Challenge extends BasicDBObject implements Item {
         put("status", status);
         put("gps", gps);
         put("amountHours", amountHours);
+        put("XPreward", XPreward);
     }
 
     public void setStatus(String status) {
@@ -100,24 +99,32 @@ public class Challenge extends BasicDBObject implements Item {
         return this.get("ratedMessage").toString();
     }
 
+    public void setStartDate(Date date){
+        this.put("startDate", date);
+    }
+
+    public int getXPreward(){
+        return this.getInt("XPreward");
+    }
+
     @Override
     public boolean isSection() {
         return false;
     }
 
     public String getChallengeeName() {
-        return challengeeName;
+        return this.getString("challengeeName");
     }
 
     public void setChallengeeName(String challengeeName) {
-        this.challengeeName = challengeeName;
+        this.put("challengeeName",challengeeName);
     }
 
     public String getChallengerName() {
-        return challengerName;
+        return this.getString("challengerName");
     }
 
     public void setChallengerName(String challengerName) {
-        this.challengerName = challengerName;
+        this.put("challengerName",challengerName);
     }
 }

@@ -62,7 +62,13 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         setContentView(R.layout.activity_challengeoverview);
 
         listview = (ListView) findViewById(R.id.listView_main);
-        DT.execute();
+
+        if(Connectivity.isOnline(this)){
+            DT.execute();
+        }else{
+            Intent goTo = new Intent (this, ChallengeOverviewActivity.class);
+            Connectivity.showError(this, goTo);
+        }
 
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);

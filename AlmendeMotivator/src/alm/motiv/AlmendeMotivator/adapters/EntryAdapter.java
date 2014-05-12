@@ -42,7 +42,7 @@ public class EntryAdapter extends ArrayAdapter<Item> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        DatabaseThread db = new DatabaseThread();
+       // DatabaseThread db = new DatabaseThread();
         final Item i = items.get(position);
         if (i != null) {
             if (i.isSection()) {
@@ -67,11 +67,11 @@ public class EntryAdapter extends ArrayAdapter<Item> {
                 if (title != null)
                     title.setText(ei.getTitle());
                 if (challengee != null)
-
+                    challengee.setText(ei.getChallengeeName());
 
                     //This gem gives the challengee's facebookID to the databaseThread. The dbThread then runs so we give the Thread 2 seconds to complete. After that we -
                     //set the challengeeName with the result of the thread. Added a while loop so application waits until all names are loaded.
-                    db.setChallengeeID(ei.getChallengee());
+                   /* db.setChallengeeID(ei.getChallengee());
                 db.execute();
                 while (db.getChallengeeName() == null) {
                     try {
@@ -84,15 +84,15 @@ public class EntryAdapter extends ArrayAdapter<Item> {
                         e.printStackTrace();
                     }
                     challengee.setText(db.getChallengeeName());
-                }
+                }*/
                 if (status != null)
-                    status.setText(ei.getStatus());
+                    status.setText("Status: "+ei.getStatus());
             }
         }
         return v;
     }
 
-    class DatabaseThread extends AsyncTask<String, String, String> {
+   /* class DatabaseThread extends AsyncTask<String, String, String> {
 
         private String challengeeName;
         private String challengeeID;
@@ -131,6 +131,6 @@ public class EntryAdapter extends ArrayAdapter<Item> {
         public void setChallengeeID(String challengeeID) {
             this.challengeeID = challengeeID;
         }
-    }
+    }*/
 
 }
