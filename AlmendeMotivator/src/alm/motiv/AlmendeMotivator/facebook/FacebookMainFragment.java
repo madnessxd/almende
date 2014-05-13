@@ -108,8 +108,12 @@ public class FacebookMainFragment extends Fragment {
         redirectLabel.setText("");*/
        //infoLabel = (TextView) view.findViewById(R.id.infoLabel);
 
+        if(!Connectivity.isOnline(getActivity())){
+            Intent goTo = new Intent (getActivity(), FacebookMainActivity.class);
+            Connectivity.showError(getActivity(),goTo);
+        }
+
         authButton = (LoginButton) view.findViewById(R.id.authButton);
-        authButton.setVisibility(View.GONE);
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("read_stream", "user_about_me"));
 
@@ -180,10 +184,9 @@ public class FacebookMainFragment extends Fragment {
         //to become inusable and for the text to change. This notifies the user that a process is being done and that he just needs to wait it out.
         if(authButton.getText().toString().equals("Logout")){
             authButton.setEnabled(false);
-            authButton.setVisibility(View.GONE);
+            authButton.setClickable(false);
         }
         else{
-            authButton.setVisibility(View.VISIBLE);
             authButton.setClickable(true);
         }
 
