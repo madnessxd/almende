@@ -157,6 +157,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         Intent displayFriend = new Intent(ChallengeViewActivity.this, ProfileActivity.class);
         displayFriend.putExtra("viewFriendProfile", true);
         displayFriend.putExtra("facebookIdFriend", viewProfileOf);
+        finish();
         startActivity(displayFriend);
     }
 
@@ -171,6 +172,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         currentChallenge.setStatus("accepted");
         new DatabaseThread().execute("");
         updateStatusElements("");
+        finish();
         Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
         this.startActivity(newIntent);
     }
@@ -182,6 +184,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         } catch (Exception e) {
             System.out.println("no gps" + e);
         }
+        finish();
         Intent newIntent = new Intent(this, ChallengeEvidence.class);
         newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
         newIntent.putExtra("title", currentChallenge.getTitle());
@@ -207,6 +210,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         currentChallenge.setStatus("declined");
         new DatabaseThread().execute("");
         updateStatusElements("");
+        finish();
         Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
         this.startActivity(newIntent);
     }
