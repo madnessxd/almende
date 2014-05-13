@@ -9,7 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.text.format.Time;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 import com.mongodb.*;
@@ -23,6 +26,8 @@ public class MessageViewActivity extends Activity{
     private String[] mMenuOptions;
     private ListView mDrawerList;
     private ListView listView;
+    private DrawerLayout mDrawerLayout;
+
     private String message;
     private String date;
     private String facebookId = Cookie.getInstance().userEntryId;
@@ -75,6 +80,18 @@ public class MessageViewActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
