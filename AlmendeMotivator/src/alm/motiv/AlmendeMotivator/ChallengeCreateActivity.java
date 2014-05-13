@@ -194,13 +194,21 @@ public class ChallengeCreateActivity extends Activity {
         if (!Validation.isTitle(textTitle, true)) succes = false;
         if (!Validation.isLetters(textContent, true)) succes = false;
         if (!Validation.isLetters(textReward, false)) succes = false;
-        if(succes == false){
-            Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();
-        }
-        /*if (!challengeeSelected || challengee == null) {
+
+        Boolean noChallengee = false;
+
+        if (!challengeeSelected || challengee == null) {
             succes = false;
-            Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();
-        }*/
+            noChallengee = true;
+        }
+        if(succes == false){
+            if(noChallengee){
+                Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();
+            } else{
+            Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
         return succes;
     }
 
