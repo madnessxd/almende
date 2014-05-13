@@ -207,10 +207,6 @@ public class ChallengeCreateActivity extends Activity {
             setChallengeInfo();
             DatabaseThread db = new DatabaseThread();
             db.execute();
-            Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
-            finish();
-            Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
-            startActivity(goBack);
         }
     }
 
@@ -313,6 +309,13 @@ public class ChallengeCreateActivity extends Activity {
             Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", "null");
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
+        }
+        @Override
+        protected void onPostExecute(String string) {
+            Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
+            finish();
+            Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
+            startActivity(goBack);
         }
     }
 

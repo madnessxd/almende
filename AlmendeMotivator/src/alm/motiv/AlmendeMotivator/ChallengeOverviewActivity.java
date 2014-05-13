@@ -202,5 +202,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
             return "succes";
         }
+
     }
 }
