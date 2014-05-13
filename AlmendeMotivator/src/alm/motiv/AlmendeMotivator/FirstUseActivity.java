@@ -94,7 +94,7 @@ public class FirstUseActivity extends Activity {
             simpleWaitDialog.dismiss();
 
             //TODO motivations need to be added to baseline
-            Intent newIntent = new Intent(FirstUseActivity.this, ChallengeOverviewActivity.class);
+            Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
             startActivity(newIntent);
             editor.putBoolean("firstUse",true);
             editor.commit();
