@@ -197,8 +197,6 @@ public class ChallengeCreateActivity extends Activity {
 
         Boolean noChallengee = false;
 
-        System.out.println(challengee);
-
         if (!challengeeSelected || challengee == null || challengee.equals("loading...")) {
             succes = false;
             noChallengee = true;
