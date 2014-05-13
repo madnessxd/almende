@@ -3,15 +3,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="#BBBBBB">
+                android:background="@color/purple">
+
+    <TextView android:layout_width="fill_parent"
+              android:text="Welcome to Sportopia!"
+              android:textColor="@color/white"
+              android:id="@+id/welcome"
+              android:gravity="center"
+              android:layout_above="@+id/wait"
+              style="@style/largeText" android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              style="@style/normalText"
+              android:textStyle="bold"
+              android:layout_centerInParent="true"
+              android:text="Please wait a moment"
+              android:textColor="@color/white"
+              android:id="@+id/wait"
+              android:layout_height="wrap_content"/>
 
     <com.facebook.widget.LoginButton
             android:id="@+id/authButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/wait"/>
 
-    <TextView
+    <!--<TextView
             android:id="@+id/infoLabel"
             android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
@@ -27,6 +44,6 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/infoLabel"
             android:textColor="#000000"
-            android:textStyle="bold"/>
+            android:textStyle="bold"/>-->
 
 </RelativeLayout>

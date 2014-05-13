@@ -48,8 +48,8 @@ public class FacebookMainFragment extends Fragment {
     private static final String URL_PREFIX_FRIENDS = "https://graph.facebook.com/me?access_token=";
     private GraphUser user;
     private LoginButton authButton;
-    private TextView redirectLabel;
-    private TextView infoLabel;
+    //private TextView redirectLabel;
+   // private TextView infoLabel;
 
 
     @Override
@@ -104,9 +104,14 @@ public class FacebookMainFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_facebook_login, container, false);
-        redirectLabel = (TextView) view.findViewById(R.id.redirectLabel);
-        redirectLabel.setText("");
-        infoLabel = (TextView) view.findViewById(R.id.infoLabel);
+       /* redirectLabel = (TextView) view.findViewById(R.id.redirectLabel);
+        redirectLabel.setText("");*/
+       //infoLabel = (TextView) view.findViewById(R.id.infoLabel);
+
+        if(!Connectivity.isOnline(getActivity())){
+            Intent goTo = new Intent (getActivity(), FacebookMainActivity.class);
+            Connectivity.showError(getActivity(),goTo);
+        }
 
         authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
@@ -123,14 +128,19 @@ public class FacebookMainFragment extends Fragment {
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        fetchUserInfo(session);
+        if(Connectivity.isOnline(getActivity())){
+            fetchUserInfo(session);
+        }else{
+            Intent goTo = new Intent (getActivity(), FacebookMainActivity.class);
+            Connectivity.showError(getActivity(),goTo);
+        }
         updateUI(session);
 
-        if (state.isOpened()) {
+        /*if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
-        }
+        }*/
     }
 
     private void fetchUserInfo(final Session session) {
@@ -173,15 +183,14 @@ public class FacebookMainFragment extends Fragment {
         //Facebook automatically asigns a value to the authenticationButton. Here we override that call. If the authButton contains Logout, we want the button
         //to become inusable and for the text to change. This notifies the user that a process is being done and that he just needs to wait it out.
         if(authButton.getText().toString().equals("Logout")){
-            System.out.println("Button = logout");
             authButton.setEnabled(false);
-            authButton.setText("Processing");
+            authButton.setClickable(false);
         }
         else{
             authButton.setClickable(true);
         }
 
-        if (session.isOpened()) {
+        /*if (session.isOpened()) {
             if (user != null) {
                 infoLabel.setText("Logged in as: " + user.getName());
             } else {
@@ -195,18 +204,16 @@ public class FacebookMainFragment extends Fragment {
                     com.facebook.android.R.string.com_facebook_usersettingsfragment_not_logged_in));
             infoLabel.setCompoundDrawables(null, null, null, null);
             infoLabel.setTag(null);
-        }
+        }*/
     }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
             onSessionStateChange(session, state, exception);
-            if (session != null && session.isOpened()) {
+            /*if (session != null && session.isOpened()) {
                 Toast.makeText(getActivity(), "User is logged in.", Toast.LENGTH_LONG).show();
-
-
-            }
+            }*/
         }
     };
 

@@ -27,6 +27,7 @@ import com.mongodb.*;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Kevin on 02/04/2014.
@@ -52,6 +53,7 @@ public class ChallengeCreateActivity extends Activity {
     private EditText textReward;
     private ImageView userPic;
     private DrawerLayout mDrawerLayout;
+    private TextView xp;
 
     //create challenge variables
     private String title;
@@ -61,8 +63,10 @@ public class ChallengeCreateActivity extends Activity {
     private int evidence_amount;
     private String evidence_type;
     private String reward;
+    private int XPreward;
     private String status;
     private boolean challengeeSelected = false;
+    private String challengeeName;
 
     //Facebook variables
     private GraphUser user;
@@ -83,9 +87,10 @@ public class ChallengeCreateActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 evidence_amount = Integer.parseInt(adapterView.getSelectedItem().toString());
-                TextView xp = (TextView) findViewById(R.id.txtExperiencePoints);
+                xp = (TextView) findViewById(R.id.txtExperiencePoints);
                 int xpAmount = Integer.parseInt(adapterView.getSelectedItem().toString()) * 300;
                 xp.setText(xpAmount + "XP");
+                XPreward = xpAmount;
             }
 
             @Override
@@ -158,34 +163,8 @@ public class ChallengeCreateActivity extends Activity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
+            Menu.selectItem(position, ChallengeCreateActivity.this);
         }
-    }
-
-    public void selectItem(int pos) {
-        switch (pos) {
-            case 0:
-                k = new Intent(ChallengeCreateActivity.this, ProfileActivity.class);
-                break;
-            case 1:
-                k = new Intent(ChallengeCreateActivity.this, MessageActivity.class);
-                break;
-            case 2:
-                k = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
-                break;
-            case 3:
-                k = new Intent(ChallengeCreateActivity.this, FriendActivity.class);
-                break;
-            case 4:
-                k = new Intent(ChallengeCreateActivity.this, AboutActivity.class);
-                break;
-            case 5:
-                FacebookManager.logout();
-                k = new Intent(ChallengeCreateActivity.this, FacebookMainActivity.class);
-                break;
-        }
-        finish();
-        startActivity(k);
     }
 
     /*private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
@@ -290,6 +269,7 @@ public class ChallengeCreateActivity extends Activity {
                         challengee = facebookFriends[which];
                         updatePicture(challengee, facebookFriendsName[which]);
                         challengeeSelected = true;
+                        challengeeName=facebookFriendsName[which];
                     }
                 });
         builder.create();
@@ -306,7 +286,10 @@ public class ChallengeCreateActivity extends Activity {
             DBCollection userCollection = db.getCollection("challenge");
             userCollection.setObjectClass(Challenge.class);
 
-            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", "null");
+            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", "null", XPreward);
+            challenge.setStartDate(new Date());
+            challenge.setChallengerName(Cookie.getInstance().userName);
+            challenge.setChallengeeName(challengeeName);
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }

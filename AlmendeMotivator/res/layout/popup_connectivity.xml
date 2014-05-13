@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:background="@color/darkerWhite"
+              android:layout_height="wrap_content">
+
+    <TextView android:layout_width="fill_parent"
+              android:text="No internet detected!"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
+
+    <TextView android:layout_width="fill_parent"
+              style="@style/normalText"
+              android:text="You can't use Sportopia without internet"
+              android:layout_height="wrap_content"/>
+    <Button android:layout_width="fill_parent"
+            android:text="I have internet now"
+            android:id="@+id/btnContinue"
+            style="@style/button" android:layout_height="wrap_content"/>
+</LinearLayout>

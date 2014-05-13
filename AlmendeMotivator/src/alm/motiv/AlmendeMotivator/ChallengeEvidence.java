@@ -27,6 +27,7 @@ import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by AsterLaptop on 4/7/14.
@@ -291,6 +292,7 @@ public class ChallengeEvidence extends Activity {
                     setCarrier.put("gps", intent.getExtras().getString("gps"));
                     setCarrier.put("status", "completed");
                     setCarrier.put("amountHours", amountHours.getText().toString());
+                    setCarrier.put("endDate", new Date());
 
                     Challenge update = new Challenge();
                     //update the status of the challenge, so that the challenger knows he can check the popup_evidence

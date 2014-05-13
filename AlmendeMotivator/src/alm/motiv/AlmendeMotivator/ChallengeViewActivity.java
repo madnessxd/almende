@@ -110,7 +110,11 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         challengee.setText(challengeeName);
         content.setText(currentChallenge.getContent());
         evidence.setText(currentChallenge.getEvidenceAmount() + " " + currentChallenge.getEvidenceType());
-        reward.setText(currentChallenge.getReward());
+        if(!currentChallenge.getReward().equals("")){
+            reward.setText("XP: "+currentChallenge.getXPreward() + "\nAdditional Reward: "+currentChallenge.getReward() );
+        }else{
+            reward.setText("XP: "+currentChallenge.getXPreward() );
+        }
 
         String imgSource1 = "https://graph.facebook.com/" + currentChallenge.getChallenger() + "/picture?type=normal&height=200&width=200";
         String imgSource2 = "https://graph.facebook.com/" + currentChallenge.getChallengee() + "/picture?type=normal&height=200&width=200";
@@ -136,7 +140,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
 
 
-        updateStatusElements("");
+        updateStatusElements();
 
         //get comments from challenge
         messages = currentChallenge.getComments();
@@ -171,7 +175,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     public void onAcceptPressed(View v) {
         currentChallenge.setStatus("accepted");
         new DatabaseThread().execute("");
-        updateStatusElements("");
+        updateStatusElements();
         finish();
         Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
         this.startActivity(newIntent);
@@ -209,7 +213,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     public void onDeclinePressed(View v) {
         currentChallenge.setStatus("declined");
         new DatabaseThread().execute("");
-        updateStatusElements("");
+        updateStatusElements();
         finish();
         Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
         this.startActivity(newIntent);
@@ -272,7 +276,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
     }
 
-    public void updateStatusElements(String status) {
+    public void updateStatusElements() {
         String temp = currentChallenge.getStatus();
         Boolean userMadeChallenge = false;
 
