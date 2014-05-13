@@ -127,7 +127,7 @@
 
             <Button android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add a comment +"
+                    android:text="Motivate Friend +"
                     style="@style/button"
                     android:id="@+id/btnComment"
                     android:onClick="onCommentPressed"/>
