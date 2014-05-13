@@ -73,7 +73,7 @@ public class ChallengeCreateActivity extends Activity {
     private Session userInfoSession;
 
     private String[] facebookFriends = {"loading..."};
-    private String[] facebookFriendsName = {"loading..."};
+    private String[] facebookFriendsName = {"loading... please try again"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
