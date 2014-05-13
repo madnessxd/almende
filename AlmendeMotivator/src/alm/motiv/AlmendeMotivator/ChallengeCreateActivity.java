@@ -191,8 +191,8 @@ public class ChallengeCreateActivity extends Activity {
 
     public boolean validation() {
         boolean succes = true;
-        //if (!Validation.isTitle(textTitle, true)) succes = false;
-        //if (!Validation.isLetters(textContent, true)) succes = false;
+        if (!Validation.isTitle(textTitle, true)) succes = false;
+        if (!Validation.isLetters(textContent, true)) succes = false;
         if (!Validation.isLetters(textReward, false)) succes = false;
         if(succes == false){
             Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();

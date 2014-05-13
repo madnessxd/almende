@@ -277,11 +277,4 @@ public class MessageCreateActivity extends Activity {
         return;
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            Menu.selectItem(position, MessageCreateActivity.this);
-        }
-    }
-
 }
