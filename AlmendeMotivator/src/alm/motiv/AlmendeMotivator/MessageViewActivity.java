@@ -5,11 +5,15 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.text.format.Time;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 import com.mongodb.*;
@@ -23,6 +27,8 @@ public class MessageViewActivity extends Activity{
     private String[] mMenuOptions;
     private ListView mDrawerList;
     private ListView listView;
+    private DrawerLayout mDrawerLayout;
+
     private String message;
     private String date;
     private String facebookId = Cookie.getInstance().userEntryId;
@@ -32,6 +38,9 @@ public class MessageViewActivity extends Activity{
 
     private String challenger;
     private String challengee;
+
+    private ProgressDialog simpleWaitDialog;
+    private EditText mEdit;
 
     class GetReceiver extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
@@ -75,10 +84,23 @@ public class MessageViewActivity extends Activity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
+        
         listView = (ListView) findViewById(R.id.listView);
         View footer = View.inflate(this,R.layout.acitivity_message_footer,null);
         listView.addFooterView(footer);
+        
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -96,7 +118,7 @@ public class MessageViewActivity extends Activity{
     }
 
     public void sendMessage(View v) throws InterruptedException {
-        EditText mEdit = (EditText)findViewById(R.id.messageInput);
+        mEdit = (EditText)findViewById(R.id.messageInput);
         message = Cookie.getInstance().userName + ": " + mEdit.getText().toString();
         Time now = new Time();
         now.setToNow();
@@ -104,8 +126,6 @@ public class MessageViewActivity extends Activity{
 
         DatabaseThread db = new DatabaseThread();
         db.execute();
-        Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
-        mEdit.setText("");
     }
 
     class UpdateMessages extends AsyncTask<String, String, String> {
@@ -120,7 +140,15 @@ public class MessageViewActivity extends Activity{
             return null;
         }
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(MessageViewActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
             showMessages();
         }
     }
@@ -171,7 +199,17 @@ public class MessageViewActivity extends Activity{
             return null;
         }
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(MessageViewActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
+            mEdit.setText("");
             showMessages();
         }
     }

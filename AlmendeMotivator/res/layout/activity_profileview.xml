@@ -21,23 +21,24 @@
            />
     <TextView
             android:id="@+id/lblName"
-            android:layout_width="fill_parent"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Name"
             style="@style/header"
             android:layout_below="@+id/btnEdit"
-/>
+            />
     <TextView
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Name"
             style="@style/normalText"
-            android:layout_below="@+id/lblName"
+            android:layout_toRightOf="@+id/lblName"
+            android:layout_below="@+id/btnEdit"
             />
     <TextView
             android:id="@+id/age"
-            android:layout_width="fill_parent"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Age"
             style="@style/header"
@@ -48,10 +49,11 @@
             android:layout_height="wrap_content"
             style="@style/normalText"
             android:text="age..."
-            android:layout_below="@+id/age"/>
+            android:layout_toRightOf="@+id/age"
+            android:layout_below="@+id/name"/>
     <TextView
             android:id="@+id/goal"
-            android:layout_width="fill_parent"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Goal"
             style="@style/header"
@@ -62,10 +64,11 @@
             android:layout_height="wrap_content"
             style="@style/normalText"
             android:text="goal.."
-            android:layout_below="@+id/goal"/>
+            android:layout_below="@+id/ageContent"
+            android:layout_toRightOf="@+id/goal"/>
     <TextView
             android:id="@+id/city"
-            android:layout_width="fill_parent"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="City"
             style="@style/header"
@@ -76,14 +79,17 @@
             android:layout_height="wrap_content"
             style="@style/normalText"
             android:text="city.."
-            android:layout_below="@+id/city"/>
+            android:layout_below="@+id/goalContent"
+            android:layout_toRightOf="@+id/city"
+            />
+
     <TextView
             android:id="@+id/level"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Level"
             style="@style/header"
-            android:layout_below="@+id/cityContent" />
+            android:layout_below="@+id/aboutContent" />
     <ProgressBar
             android:id="@+id/progressXP"
             android:layout_width="fill_parent"
@@ -111,7 +117,7 @@
             android:layout_height="wrap_content"
             android:text="My Sports:"
             style="@style/header"
-            android:layout_below="@+id/progressText"
+            android:layout_below="@+id/cityContent"
             android:layout_alignParentLeft="true"/>
     <TextView
             android:id="@+id/sportsContent"
@@ -127,7 +133,6 @@
             android:text="About:"
             android:layout_below="@+id/sportsContent"
             style="@style/header"
-
             />
     <TextView
             android:id="@+id/aboutContent"
@@ -136,6 +141,18 @@
             android:text="Lorem ipsum.."
             android:layout_below="@+id/about"
             style="@style/normalText"/>
+    <View
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="5dp"
+            android:background="@color/darkerWhite"
+            android:layout_below="@+id/cityContent"/>
+    <View
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="5dp"
+            android:background="@color/darkerWhite"
+            android:layout_below="@+id/aboutContent"/>
 </RelativeLayout>
 
     </ScrollView>

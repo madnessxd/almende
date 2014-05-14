@@ -4,12 +4,15 @@ import alm.motiv.AlmendeMotivator.models.Message;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.format.Time;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
@@ -46,6 +49,9 @@ public class MessageCreateActivity extends Activity {
     private String[] facebookFriendsName = {"loading..."};
     private String friendName;
     private String messageText = "";
+
+    private ProgressDialog simpleWaitDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -83,6 +89,32 @@ public class MessageCreateActivity extends Activity {
 
         DatabaseThread2 dbT = new DatabaseThread2();
         dbT.execute();
+
+        mMenuOptions = getResources().getStringArray(R.array.profile_array);
+
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+
+    //on menu pressed
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            Menu.selectItem(position, MessageCreateActivity.this);
+        }
     }
 
    /* public void updateFriends() {
@@ -224,7 +256,15 @@ public class MessageCreateActivity extends Activity {
             return null;
         }
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(MessageCreateActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
             Toast.makeText(getApplicationContext(), messageText, Toast.LENGTH_LONG).show();
             finish();
             Intent home = new Intent(MessageCreateActivity.this, MessageActivity.class);
@@ -239,6 +279,8 @@ public class MessageCreateActivity extends Activity {
         if(challengee != null && challengee != "loading..."){
             DatabaseThread db = new DatabaseThread();
             db.execute();
+        } else{
+            Toast.makeText(getApplicationContext(), "Not everything is filled in properly.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -247,13 +289,6 @@ public class MessageCreateActivity extends Activity {
         Intent home = new Intent(MessageCreateActivity.this, MessageActivity.class);
         startActivity(home);
         return;
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            Menu.selectItem(position, MessageCreateActivity.this);
-        }
     }
 
 }

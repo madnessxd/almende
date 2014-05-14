@@ -21,6 +21,10 @@ public class Baseline extends BasicDBObject {
         this.put("hours", hours);
     }
 
+    public void setMotivations(String motivation1, String motivation2, String motivation3, String motivation4){
+        put("motivation", new String[]{motivation1, motivation2, motivation3, motivation4});
+    }
+
     public void setPeriod(String period){
         this.put("period", period);
     }

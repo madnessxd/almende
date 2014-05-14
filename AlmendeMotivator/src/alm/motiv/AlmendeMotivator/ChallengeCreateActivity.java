@@ -6,6 +6,7 @@ import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
@@ -73,8 +74,9 @@ public class ChallengeCreateActivity extends Activity {
     private Session userInfoSession;
 
     private String[] facebookFriends = {"loading..."};
-    private String[] facebookFriendsName = {"loading..."};
+    private String[] facebookFriendsName = {"loading... please try again"};
 
+    private ProgressDialog simpleWaitDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,25 +188,29 @@ public class ChallengeCreateActivity extends Activity {
             setChallengeInfo();
             DatabaseThread db = new DatabaseThread();
             db.execute();
-            Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
-            finish();
-            Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
-            startActivity(goBack);
         }
     }
 
     public boolean validation() {
         boolean succes = true;
-        //if (!Validation.isTitle(textTitle, true)) succes = false;
-        //if (!Validation.isLetters(textContent, true)) succes = false;
+        if (!Validation.isTitle(textTitle, true)) succes = false;
+        if (!Validation.isLetters(textContent, true)) succes = false;
         if (!Validation.isLetters(textReward, false)) succes = false;
-        if(succes == false){
-            Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();
-        }
-        /*if (!challengeeSelected || challengee == null) {
+
+        Boolean noChallengee = false;
+
+        if (!challengeeSelected || challengee == null || challengee.equals("loading...")) {
             succes = false;
-            Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();
-        }*/
+            noChallengee = true;
+        }
+        if(succes == false){
+            if(noChallengee){
+                Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();
+            } else{
+            Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
         return succes;
     }
 
@@ -296,6 +302,22 @@ public class ChallengeCreateActivity extends Activity {
             challenge.setChallengeeName(challengeeName);
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(ChallengeCreateActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
+            finish();
+            Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
+            startActivity(goBack);
         }
     }
 
