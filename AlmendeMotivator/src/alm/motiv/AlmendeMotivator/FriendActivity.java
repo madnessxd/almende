@@ -23,6 +23,7 @@ import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -51,8 +52,8 @@ public class FriendActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmenu);
-        btnFollowMoreFriends=(Button)findViewById(R.id.followFriends);
-        lblFriendsYouFollow=(TextView)findViewById(R.id.lblFriendsYouFollow);
+        btnFollowMoreFriends = (Button) findViewById(R.id.followFriends);
+        lblFriendsYouFollow = (TextView) findViewById(R.id.lblFriendsYouFollow);
 
         //for the menu
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
@@ -75,7 +76,7 @@ public class FriendActivity extends Activity {
         }
     }
 
-    public void initFriends(){
+    public void initFriends() {
         FacebookManager.getFriendsOfUser(new CustomCallback() {
             @Override
             public Object callback(Object object) {
@@ -85,7 +86,7 @@ public class FriendActivity extends Activity {
                     usersArray.addAll(users);
 
                     //we want to save the facebookfriends in case we need to access it somewhere else?
-                    if(Cookie.getInstance().facebookFriends==null){
+                    if (Cookie.getInstance().facebookFriends == null) {
                         Cookie.getInstance().facebookFriends = hasSportopiaAccount(usersArray);
                     }
 
@@ -102,10 +103,10 @@ public class FriendActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 friend = adapter.getItem(position);
 
-                if(manageFriends){
-                    positionSelectedFriend=position;
+                if (manageFriends) {
+                    positionSelectedFriend = position;
                     showPopUpUnfollow();
-                }else{
+                } else {
                     showPopUp(position);
                 }
             }
@@ -114,8 +115,8 @@ public class FriendActivity extends Activity {
 
     }
 
-     //we want to sort the usersArray alphabetically
-     public static Comparator<GraphUser> sortUsers = new Comparator<GraphUser>() {
+    //we want to sort the usersArray alphabetically
+    public static Comparator<GraphUser> sortUsers = new Comparator<GraphUser>() {
         @Override
         public int compare(GraphUser first, GraphUser second) {
             String user1 = first.getName().toLowerCase();
@@ -127,7 +128,8 @@ public class FriendActivity extends Activity {
     };
 
     private AlertDialog helpDialog;
-    private void showPopUpUnfollow(){
+
+    private void showPopUpUnfollow() {
         LayoutInflater inflater = getLayoutInflater();
 
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
@@ -150,14 +152,14 @@ public class FriendActivity extends Activity {
         helpDialog.show();
     }
 
-    public void onVisitProfilePressed(View v){
+    public void onVisitProfilePressed(View v) {
         Intent displayFriend = new Intent(this, ProfileActivity.class);
         displayFriend.putExtra("viewFriendProfile", true);
         displayFriend.putExtra("facebookIdFriend", friend.getId());
         startActivity(displayFriend);
     }
 
-    public void onUnfollowFriendPressed(View v){
+    public void onUnfollowFriendPressed(View v) {
         adapter.removeModel(positionSelectedFriend);
         new DatabaseThread().execute("remove");
         helpDialog.dismiss();
@@ -170,8 +172,8 @@ public class FriendActivity extends Activity {
         helpBuilder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                       adapter.removeModel(position);
-                       new DatabaseThread().execute("insert");
+                        adapter.removeModel(position);
+                        new DatabaseThread().execute("insert");
                     }
                 });
 
@@ -190,34 +192,39 @@ public class FriendActivity extends Activity {
         adapter.setModels(users);
     }
 
-    public ArrayList compareFriends(){
+    public ArrayList compareFriends() {
         ArrayList<GraphUser> facebookFriends = Cookie.getInstance().facebookFriends;
+        ArrayList<BasicDBObject> currentFriends = new ArrayList<BasicDBObject>();
+        try {
+            currentFriends = user.getFriends();
+        } catch (Exception e) {
+            System.out.println(e);
+            return currentFriends;
+        }
 
-        ArrayList<BasicDBObject> currentFriends = user.getFriends();
+        ArrayList<GraphUser> result = new ArrayList<GraphUser>();
 
-        ArrayList<GraphUser> result =new ArrayList<GraphUser>();
-
-        if(currentFriends!=null){
+        if (currentFriends != null) {
             Set<String> set = new HashSet<String>();
             //fill our set, we are going to compare strings
-            for(BasicDBObject aFriend: currentFriends){
+            for (BasicDBObject aFriend : currentFriends) {
                 set.add((String) aFriend.get("facebookID"));
             }
 
-                    if(manageFriends){
-                        //we want only to show the facebookfriends that the user follows so that he can manage it
-                        for(GraphUser facebookFriend: facebookFriends){
-                            if(set.contains(facebookFriend.getId())){
-                                result.add(facebookFriend);
-                            }
-                        }
-                        Collections.sort(result, sortUsers);
-                        return result;
+            if (manageFriends) {
+                //we want only to show the facebookfriends that the user follows so that he can manage it
+                for (GraphUser facebookFriend : facebookFriends) {
+                    if (set.contains(facebookFriend.getId())) {
+                        result.add(facebookFriend);
                     }
+                }
+                Collections.sort(result, sortUsers);
+                return result;
+            }
 
             //compare strings and put the facebook user that's not yet followed by the user in result
-            for(GraphUser facebookFriend: facebookFriends){
-                if(!set.contains(facebookFriend.getId())){
+            for (GraphUser facebookFriend : facebookFriends) {
+                if (!set.contains(facebookFriend.getId())) {
                     result.add(facebookFriend);
                 }
             }
@@ -228,21 +235,21 @@ public class FriendActivity extends Activity {
 
     }
 
-    public ArrayList<GraphUser> hasSportopiaAccount(ArrayList<GraphUser> facebookFriends){
+    public ArrayList<GraphUser> hasSportopiaAccount(ArrayList<GraphUser> facebookFriends) {
 
         //we use this method so that in the friendlist only the facebookfriends with a sportopia account are showed
-        ArrayList<GraphUser> result =new ArrayList<GraphUser>();
+        ArrayList<GraphUser> result = new ArrayList<GraphUser>();
 
-        if(facebookFriends!=null){
+        if (facebookFriends != null) {
             Set<String> set = new HashSet<String>();
             //fill our set, we are going to compare strings
-            for(DBObject aFriend: allUsers){
+            for (DBObject aFriend : allUsers) {
                 set.add((String) aFriend.get("facebookID"));
             }
 
             //compare strings and put the facebook user that also has a sportopia account in the array
-            for(GraphUser facebookFriend: facebookFriends){
-                if(set.contains(facebookFriend.getId())){
+            for (GraphUser facebookFriend : facebookFriends) {
+                if (set.contains(facebookFriend.getId())) {
                     result.add(facebookFriend);
                 }
             }
@@ -258,7 +265,7 @@ public class FriendActivity extends Activity {
         startActivity(i);
     }
 
-    public void onFollowFriendsPressed(View v){
+    public void onFollowFriendsPressed(View v) {
         manageFriends = false;
         btnFollowMoreFriends.setVisibility(View.GONE);
         lblFriendsYouFollow.setText("Choose friends to follow");
@@ -276,29 +283,38 @@ public class FriendActivity extends Activity {
         private ProgressDialog simpleWaitDialog;
 
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+            if (!Cookie.getInstance().internet) {
+                System.out.println("I COME HERE");
+                return null;
+            }
 
-            User match = new User();
-            match.put("facebookID", Cookie.getInstance().userEntryId);
-            if(args[0].equals("select")){
-                user = (User) userCollection.find(match).toArray().get(0);
-                allUsers = userCollection.find().toArray();
-            }else{
-                //update the user with new friends/followers
-                User aFriend = new User();
-                aFriend.put("facebookID", friend.getId());
+            try {
+                MongoClient client = Database.getInstance();
+                DB db = client.getDB(Database.uri.getDatabase());
+                DBCollection userCollection = db.getCollection("user");
+                userCollection.setObjectClass(User.class);
 
-                BasicDBObject update = new BasicDBObject();
-                if(args[0].equals("remove")){
-                    //removes friend from array with pull key
-                    update.put("$pull", new BasicDBObject("friends", aFriend));
-                }else{
-                    update.put("$push", new BasicDBObject("friends", aFriend));
+                User match = new User();
+                match.put("facebookID", Cookie.getInstance().userEntryId);
+                if (args[0].equals("select")) {
+                    user = (User) userCollection.find(match).toArray().get(0);
+                    allUsers = userCollection.find().toArray();
+                } else {
+                    //update the user with new friends/followers
+                    User aFriend = new User();
+                    aFriend.put("facebookID", friend.getId());
+
+                    BasicDBObject update = new BasicDBObject();
+                    if (args[0].equals("remove")) {
+                        //removes friend from array with pull key
+                        update.put("$pull", new BasicDBObject("friends", aFriend));
+                    } else {
+                        update.put("$push", new BasicDBObject("friends", aFriend));
+                    }
+                    userCollection.update(match, update);
                 }
-                userCollection.update(match, update);
+            } catch (Exception e) {
+                System.out.println(e);
             }
             return null;
         }
@@ -310,12 +326,12 @@ public class FriendActivity extends Activity {
 
         }
 
-       protected void onPostExecute(String result) {
-          simpleWaitDialog.dismiss();
-          if(!initializedFriends){
-              initFriends();
-              initializedFriends=true;
-          }
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.dismiss();
+            if (!initializedFriends) {
+                initFriends();
+                initializedFriends = true;
+            }
         }
     }
 }

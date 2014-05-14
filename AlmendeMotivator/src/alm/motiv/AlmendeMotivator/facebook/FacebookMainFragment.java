@@ -109,8 +109,7 @@ public class FacebookMainFragment extends Fragment {
        //infoLabel = (TextView) view.findViewById(R.id.infoLabel);
 
         if(!Connectivity.isOnline(getActivity())){
-            Intent goTo = new Intent (getActivity(), FacebookMainActivity.class);
-            Connectivity.showError(getActivity(),goTo);
+            Connectivity.showError(getActivity());
         }
 
         authButton = (LoginButton) view.findViewById(R.id.authButton);
@@ -131,8 +130,7 @@ public class FacebookMainFragment extends Fragment {
         if(Connectivity.isOnline(getActivity())){
             fetchUserInfo(session);
         }else{
-            Intent goTo = new Intent (getActivity(), FacebookMainActivity.class);
-            Connectivity.showError(getActivity(),goTo);
+            Connectivity.showError(getActivity());
         }
         updateUI(session);
 

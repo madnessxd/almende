@@ -63,21 +63,14 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
         listview = (ListView) findViewById(R.id.listView_main);
 
-        if(Connectivity.isOnline(this)){
-            DT.execute();
-        }else{
-            Intent goTo = new Intent (this, ChallengeOverviewActivity.class);
-            Connectivity.showError(this, goTo);
-        }
-
         mMenuOptions = getResources().getStringArray(R.array.profile_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_menu, mMenuOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        DT.execute();
     }
-
-
 
     //on menu pressed
     public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -90,30 +83,35 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     }
 
     public void initListview() {
-        List<DBObject> send = DT.sendChallenges;
-        List<DBObject> received = DT.receivedChallenges;
+        try{
+            List<DBObject> send = DT.sendChallenges;
+            List<DBObject> received = DT.receivedChallenges;
 
-        items.add(new ChallengeHeader("Challenges you send"));
-        if (send != null) {
-            for (DBObject aChallenge : send) {
-                items.add((Item) aChallenge);
+            items.add(new ChallengeHeader("Challenges you send"));
+            if (send != null) {
+                for (DBObject aChallenge : send) {
+                    items.add((Item) aChallenge);
+                }
+            } else {
+                items.add(new ChallengeHeader("No challenges send"));
             }
-        } else {
-            items.add(new ChallengeHeader("No challenges send"));
+
+            items.add(new ChallengeHeader("Challenges you received"));
+            if (received != null) {
+                for (DBObject aChallenge : received) {
+                    items.add((Item) aChallenge);
+                }
+            } else {
+                items.add(new ChallengeHeader("No challenges received"));
+            }
+
+            EntryAdapter adapter = new EntryAdapter(this, items);
+            listview.setAdapter(adapter);
+            listview.setOnItemClickListener(this);
+        }catch(Exception e){
+            System.out.println(e);
         }
 
-        items.add(new ChallengeHeader("Challenges you received"));
-        if (received != null) {
-            for (DBObject aChallenge : received) {
-                items.add((Item) aChallenge);
-            }
-        } else {
-            items.add(new ChallengeHeader("No challenges received"));
-        }
-
-        EntryAdapter adapter = new EntryAdapter(this, items);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(this);
     }
 
     @Override
@@ -174,7 +172,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         public List<DBObject> sendChallenges = null;
         public List<DBObject> receivedChallenges = null;
 
-        ProgressDialog simpleWaitDialog;
+        ProgressDialog simpleWaitDialog = null;
 
         @Override
         protected void onPreExecute() {
@@ -184,27 +182,35 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
         @Override
         protected void onPostExecute(String string) {
-            simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
             initListview();
         }
 
         @Override
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection challengeCollection = db.getCollection("challenge");
-            challengeCollection.setObjectClass(Challenge.class);
+            if(!Cookie.getInstance().internet){
+                return null;
+            }
 
-            //find al the challenges the user send
-            Challenge query1 = new Challenge();
-            query1.put("challenger", Cookie.getInstance().userEntryId);
-            sendChallenges = challengeCollection.find(query1).toArray();
+            try{
+                MongoClient client = Database.getInstance();
+                DB db = client.getDB(Database.uri.getDatabase());
+                DBCollection challengeCollection = db.getCollection("challenge");
+                challengeCollection.setObjectClass(Challenge.class);
 
-            //find al the challenges the user received
-            Challenge query2 = new Challenge();
-            query2.put("challengee", Cookie.getInstance().userEntryId);
-            receivedChallenges = challengeCollection.find(query2).toArray();
+                //find al the challenges the user send
+                Challenge query1 = new Challenge();
+                query1.put("challenger", Cookie.getInstance().userEntryId);
+                sendChallenges = challengeCollection.find(query1).toArray();
+
+                //find al the challenges the user received
+                Challenge query2 = new Challenge();
+                query2.put("challengee", Cookie.getInstance().userEntryId);
+                receivedChallenges = challengeCollection.find(query2).toArray();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+
 
             return "succes";
         }

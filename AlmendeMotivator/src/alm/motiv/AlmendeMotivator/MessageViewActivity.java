@@ -127,40 +127,47 @@ public class MessageViewActivity extends Activity{
 
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("messages");
-            userCollection.setObjectClass(Message.class);
-
-            //DBObject query = QueryBuilder.start("Author").is(challenger).get();
-            //query = QueryBuilder.start("Receiver").is(challengee).get();
-            //DBCursor cursor = userCollection.find(query);
-
-            BasicDBObject query = new BasicDBObject();
-            query.put("Author", challenger);
-            query.put("Receiver", challengee);
-            DBCursor cursor = userCollection.find(query);
-
-            System.out.println("ff tellen: " + cursor.count());
-            if(cursor.count()==0){
-                ArrayList<String> messages = new ArrayList<String>();
-                messages.add(message);
-
-                Message challenge = new Message(challenger, challengee, "Test Message", messages, date, "Normal message", "0");
-                userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
-
-            } else{
-                BasicDBObject update = new BasicDBObject();
-                update.put("$push", new BasicDBObject("Content", message));
-
-                Message newFriend = new Message();
-                newFriend.put("Receiver", challengee);
-
-                userCollection.update(newFriend, update);
+            if(!Cookie.getInstance().internet){
+                return null;
             }
 
-            getMessages(userCollection);
+            try{
+                MongoClient client = Database.getInstance();
+                DB db = client.getDB(Database.uri.getDatabase());
+                DBCollection userCollection = db.getCollection("messages");
+                userCollection.setObjectClass(Message.class);
 
+                //DBObject query = QueryBuilder.start("Author").is(challenger).get();
+                //query = QueryBuilder.start("Receiver").is(challengee).get();
+                //DBCursor cursor = userCollection.find(query);
+
+                BasicDBObject query = new BasicDBObject();
+                query.put("Author", challenger);
+                query.put("Receiver", challengee);
+                DBCursor cursor = userCollection.find(query);
+
+                System.out.println("ff tellen: " + cursor.count());
+                if(cursor.count()==0){
+                    ArrayList<String> messages = new ArrayList<String>();
+                    messages.add(message);
+
+                    Message challenge = new Message(challenger, challengee, "Test Message", messages, date, "Normal message", "0");
+                    userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+
+                } else{
+                    BasicDBObject update = new BasicDBObject();
+                    update.put("$push", new BasicDBObject("Content", message));
+
+                    Message newFriend = new Message();
+                    newFriend.put("Receiver", challengee);
+
+                    userCollection.update(newFriend, update);
+                }
+
+                getMessages(userCollection);
+            }catch (Exception e){
+                System.out.println(e);
+            }
             return null;
         }
         @Override

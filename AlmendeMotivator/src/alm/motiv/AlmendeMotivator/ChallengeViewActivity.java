@@ -455,47 +455,55 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         protected Challenge doInBackground(String... args) {
-
-            MongoClient client = Database.getInstance();
-            db = client.getDB(Database.uri.getDatabase());
-            challengeCollection = db.getCollection("challenge");
-            challengeCollection.setObjectClass(Challenge.class);
-
-            userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
-
-            // get the current challenge from database
-            current = new Challenge();
-            current.put("_id", new ObjectId(id));
-
-            if (currentChallenge == null) {
-                //this variable tells us that the view needs to be constructed for use
-                updateUI = true;
-                currentChallenge = (Challenge) challengeCollection.findOne(current);
-
-
-                User challengeeUser = new User();
-                challengeeUser.put("facebookID", currentChallenge.getChallengee());
-                User newUser1 = (User) userCollection.find(challengeeUser).toArray().get(0);
-                challengeeName = newUser1.getName();
-
-                User challengerUser = new User();
-                challengerUser.put("facebookID", currentChallenge.getChallenger());
-                User newUser2 = (User) userCollection.find(challengerUser).toArray().get(0);
-                challengerName = newUser2.getName();
+            if(!Cookie.getInstance().internet){
                 return null;
             }
 
-            if (args[0].equals("select")) {
-                ArrayList<BasicDBObject> evidenceList = currentChallenge.getEvidence();
-                downloadEvidence(evidenceList);
-                return null;
-            } else if (args[0].equals("unchanged")) {
-                //if the status is unchanged, we want to add a comment
-                addCommentToChallenge();
-                return null;
-            } else if (args[0] == "") {
-                updateQuery();
+            try{
+                MongoClient client = Database.getInstance();
+                db = client.getDB(Database.uri.getDatabase());
+                challengeCollection = db.getCollection("challenge");
+                challengeCollection.setObjectClass(Challenge.class);
+
+                userCollection = db.getCollection("user");
+                userCollection.setObjectClass(User.class);
+
+                // get the current challenge from database
+                current = new Challenge();
+                current.put("_id", new ObjectId(id));
+
+                if (currentChallenge == null) {
+                    //this variable tells us that the view needs to be constructed for use
+                    updateUI = true;
+                    currentChallenge = (Challenge) challengeCollection.findOne(current);
+
+
+                    User challengeeUser = new User();
+                    challengeeUser.put("facebookID", currentChallenge.getChallengee());
+                    User newUser1 = (User) userCollection.find(challengeeUser).toArray().get(0);
+                    challengeeName = newUser1.getName();
+
+                    User challengerUser = new User();
+                    challengerUser.put("facebookID", currentChallenge.getChallenger());
+                    User newUser2 = (User) userCollection.find(challengerUser).toArray().get(0);
+                    challengerName = newUser2.getName();
+                    return null;
+                }
+
+                if (args[0].equals("select")) {
+                    ArrayList<BasicDBObject> evidenceList = currentChallenge.getEvidence();
+                    downloadEvidence(evidenceList);
+                    return null;
+                } else if (args[0].equals("unchanged")) {
+                    //if the status is unchanged, we want to add a comment
+                    addCommentToChallenge();
+                    return null;
+                } else if (args[0] == "") {
+                    updateQuery();
+                }
+
+            }catch(Exception e){
+                System.out.println(e);
             }
 
             return null;

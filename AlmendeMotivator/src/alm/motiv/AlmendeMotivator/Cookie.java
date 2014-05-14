@@ -13,6 +13,7 @@ public class Cookie {
     public String userEntryId;
     public ArrayList<GraphUser> facebookFriends=null;
     public String userName;
+    public boolean internet = true;
 
     private static Cookie instance =null;
 

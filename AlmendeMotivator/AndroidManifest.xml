@@ -11,6 +11,12 @@
     <application android:label="Sportopia"
                  android:icon="@drawable/sportoptia"
             android:theme="@style/Sportopia">
+        <receiver android:name="ConnectionChangeReceiver"
+                  android:label="NetworkConnection">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
         <activity android:name=".MainMenuActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"

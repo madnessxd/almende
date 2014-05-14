@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.zip.Inflater;
 
@@ -24,11 +25,11 @@ public class Connectivity {
                 cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-    public static void showError(final Activity activity, final Intent goTo){
+    public static void showError(final Activity activity){
       // LayoutInflater inflater = activity.getLayoutInflater();
 
 
-        View view = View.inflate(activity,R.layout.popup_connectivity,null);
+        /*View view = View.inflate(activity,R.layout.popup_connectivity,null);
 
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(activity);
         final AlertDialog helpDialog = helpBuilder.create();
@@ -40,11 +41,11 @@ public class Connectivity {
             @Override
             public void onClick(View view) {
                 helpDialog.dismiss();
-                activity.finish();
-                activity.startActivity(goTo);
                 //android.os.Process.killProcess(android.os.Process.myPid());
             }
-        });
+        });*/
+
+        Toast.makeText(activity.getApplicationContext(),"You don't have internet", Toast.LENGTH_LONG).show();
 
 
     }
