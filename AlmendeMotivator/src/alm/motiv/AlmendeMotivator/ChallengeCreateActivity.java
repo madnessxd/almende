@@ -6,6 +6,7 @@ import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
@@ -75,6 +76,7 @@ public class ChallengeCreateActivity extends Activity {
     private String[] facebookFriends = {"loading..."};
     private String[] facebookFriendsName = {"loading... please try again"};
 
+    private ProgressDialog simpleWaitDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -301,8 +303,17 @@ public class ChallengeCreateActivity extends Activity {
             userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
             return null;
         }
+
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(ChallengeCreateActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
             Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
             finish();
             Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);

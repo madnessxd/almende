@@ -5,6 +5,7 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Message;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class MessageActivity extends Activity{
 
     private ArrayList<String> nameArray = new ArrayList<String>();
 
+    private ProgressDialog simpleWaitDialog;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -89,8 +91,11 @@ public class MessageActivity extends Activity{
             }
             return null;
         }
+
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
             showMessages();
         }
 
@@ -113,6 +118,12 @@ public class MessageActivity extends Activity{
 
             return null;
         }
+        @Override
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(MessageActivity.this,
+            "Please wait", "Processing");
+        }
+
         @Override
         protected void onPostExecute(String string) {
             showMessages();

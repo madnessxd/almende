@@ -4,6 +4,7 @@ import alm.motiv.AlmendeMotivator.models.Message;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -48,6 +49,9 @@ public class MessageCreateActivity extends Activity {
     private String[] facebookFriendsName = {"loading..."};
     private String friendName;
     private String messageText = "";
+
+    private ProgressDialog simpleWaitDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -252,7 +256,15 @@ public class MessageCreateActivity extends Activity {
             return null;
         }
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(MessageCreateActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
             Toast.makeText(getApplicationContext(), messageText, Toast.LENGTH_LONG).show();
             finish();
             Intent home = new Intent(MessageCreateActivity.this, MessageActivity.class);
@@ -267,6 +279,8 @@ public class MessageCreateActivity extends Activity {
         if(challengee != null && challengee != "loading..."){
             DatabaseThread db = new DatabaseThread();
             db.execute();
+        } else{
+            Toast.makeText(getApplicationContext(), "Not everything is filled in properly.", Toast.LENGTH_LONG).show();
         }
     }
 

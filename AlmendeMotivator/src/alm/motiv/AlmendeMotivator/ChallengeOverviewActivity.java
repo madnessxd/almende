@@ -49,8 +49,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         boolean redirect = settings.getBoolean("termsAgreement", false);
         boolean firstUse = settings.getBoolean("firstUse", false);
 
-        firstUse = false;
-
         //if we don't have an agreement yet on the terms of use, we redirect the user
         if (!redirect) {
             Intent intent = new Intent(this, TermsActivity.class);

@@ -5,6 +5,7 @@ import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -37,6 +38,9 @@ public class MessageViewActivity extends Activity{
 
     private String challenger;
     private String challengee;
+
+    private ProgressDialog simpleWaitDialog;
+    private EditText mEdit;
 
     class GetReceiver extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
@@ -114,7 +118,7 @@ public class MessageViewActivity extends Activity{
     }
 
     public void sendMessage(View v) throws InterruptedException {
-        EditText mEdit = (EditText)findViewById(R.id.messageInput);
+        mEdit = (EditText)findViewById(R.id.messageInput);
         message = Cookie.getInstance().userName + ": " + mEdit.getText().toString();
         Time now = new Time();
         now.setToNow();
@@ -122,8 +126,6 @@ public class MessageViewActivity extends Activity{
 
         DatabaseThread db = new DatabaseThread();
         db.execute();
-        Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
-        mEdit.setText("");
     }
 
     class UpdateMessages extends AsyncTask<String, String, String> {
@@ -138,7 +140,15 @@ public class MessageViewActivity extends Activity{
             return null;
         }
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(MessageViewActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
             showMessages();
         }
     }
@@ -182,7 +192,17 @@ public class MessageViewActivity extends Activity{
             return null;
         }
         @Override
-        protected void onPostExecute(String string) {
+        protected void onPreExecute() {
+            simpleWaitDialog = ProgressDialog.show(MessageViewActivity.this,
+                    "Please wait", "Processing");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            simpleWaitDialog.setMessage("Process completed.");
+            simpleWaitDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Message Send!", Toast.LENGTH_LONG).show();
+            mEdit.setText("");
             showMessages();
         }
     }
