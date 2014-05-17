@@ -272,6 +272,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 User current = new User();
                 current.put("facebookID", Cookie.getInstance().userEntryId);
                 User updateUser = (User) userCollection.find(current).toArray().get(0);
+
                 lastLogin = updateUser.getLoginDate();
                 updateUser.updateLoginDate();
                 userCollection.findAndModify(current, updateUser);

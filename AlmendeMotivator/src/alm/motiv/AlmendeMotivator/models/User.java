@@ -79,12 +79,25 @@ public class User extends BasicDBObject {
     }
 
     public void updateLoginDate(){
-        long time= System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         this.put("lastlogin", time);
     }
 
     public long getLoginDate(){
-        return this.getLong("lastlogin");
+        long lastLogin = 0;
+        long time = System.currentTimeMillis();
+
+        try{
+            lastLogin = this.getLong("lastlogin");
+        }catch (Exception e){
+            this.put("lastlogin", time);
+        }
+        if(lastLogin != 0){
+            System.out.println("test");
+            return lastLogin;
+        }
+
+        return time;
     }
 
     public ArrayList<BasicDBObject> getFriends(){
