@@ -93,7 +93,6 @@ public class User extends BasicDBObject {
             this.put("lastlogin", time);
         }
         if(lastLogin != 0){
-            System.out.println("test");
             return lastLogin;
         }
 
