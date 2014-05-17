@@ -120,10 +120,6 @@ public class MessageViewActivity extends Activity{
     public void sendMessage(View v) throws InterruptedException {
         mEdit = (EditText)findViewById(R.id.messageInput);
         message = Cookie.getInstance().userName + ": " + mEdit.getText().toString();
-        Time now = new Time();
-        now.setToNow();
-        date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);
-
         DatabaseThread db = new DatabaseThread();
         db.execute();
     }
@@ -179,12 +175,15 @@ public class MessageViewActivity extends Activity{
                     ArrayList<String> messages = new ArrayList<String>();
                     messages.add(message);
 
-                    Message challenge = new Message(challenger, challengee, "Test Message", messages, date, "Normal message", "0");
+                    Message challenge = new Message(challenger, challengee, "Test Message", messages, "Normal message", "0");
                     userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
 
                 } else{
                     BasicDBObject update = new BasicDBObject();
                     update.put("$push", new BasicDBObject("Content", message));
+
+                    long time= System.currentTimeMillis();
+                    update.put("$set", new BasicDBObject("Date", time));
 
                     Message newFriend = new Message();
                     newFriend.put("Receiver", challengee);

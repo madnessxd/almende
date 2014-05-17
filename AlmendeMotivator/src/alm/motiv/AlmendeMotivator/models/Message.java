@@ -17,14 +17,15 @@ public class Message extends BasicDBObject {
 
     }
 
-    public Message(String receiver, String author, String title, ArrayList<String> receivedMessages, String date, String category, String liked){
+    public Message(String receiver, String author, String title, ArrayList<String> receivedMessages, String category, String liked){
         put("Receiver", receiver);
         put("Author", author);
         put("Title", title);
         put("Content", receivedMessages);
-        put("Date", date);
         put("Category", category);
         put("Liked", liked);
+        long time= System.currentTimeMillis();
+        this.put("Date", time);
     }
 
     public void setLiked(String liked){

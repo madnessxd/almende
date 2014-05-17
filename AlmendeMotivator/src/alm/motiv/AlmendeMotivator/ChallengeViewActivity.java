@@ -138,8 +138,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             }
         });
 
-
-
         updateStatusElements();
 
         //get comments from challenge
@@ -174,6 +172,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     public void onAcceptPressed(View v) {
         currentChallenge.setStatus("accepted");
+        currentChallenge.updateLoginDate();
         new DatabaseThread().execute("");
         updateStatusElements();
         finish();
@@ -189,6 +188,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             System.out.println("no gps" + e);
         }
         finish();
+        currentChallenge.updateLoginDate();
         Intent newIntent = new Intent(this, ChallengeEvidence.class);
         newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
         newIntent.putExtra("title", currentChallenge.getTitle());
@@ -212,6 +212,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     public void onDeclinePressed(View v) {
         currentChallenge.setStatus("declined");
+        currentChallenge.updateLoginDate();
         new DatabaseThread().execute("");
         updateStatusElements();
         finish();
@@ -229,7 +230,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         LayoutInflater inflater = getLayoutInflater();
         View convertView = inflater.inflate(R.layout.popup_approvement,null);
         content = (EditText)convertView.findViewById(R.id.txtApprovementExplained);
-
+        currentChallenge.updateLoginDate();
        d = new AlertDialog.Builder(this)
                .setView(convertView)
                 .show();
@@ -240,6 +241,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             currentChallenge.setRated("Approved");
             currentChallenge.setStatus("closed");
             currentChallenge.setRatedMessage(content.getText().toString());
+            currentChallenge.updateLoginDate();
             new DatabaseThread().execute("");
             d.dismiss();
         }
@@ -250,6 +252,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             currentChallenge.setStatus("closed");
             currentChallenge.setRated("Disapproved");
             currentChallenge.setRatedMessage(content.getText().toString());
+            currentChallenge.updateLoginDate();
             new DatabaseThread().execute("");
             d.dismiss();
         }
@@ -456,6 +459,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             if (updateUI) {
                 updateUI(challengerName, challengeeName);
             }
+
         }
 
         protected Challenge doInBackground(String... args) {

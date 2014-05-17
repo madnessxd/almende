@@ -11,14 +11,16 @@ import alm.motiv.AlmendeMotivator.adapters.EntryAdapter;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
 import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.Challenge;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import alm.motiv.AlmendeMotivator.models.User;
+import android.app.*;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -42,6 +44,34 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
+    //Notification
+    private long lastLogin;
+    private ArrayList<String> updateList = new ArrayList<String>();
+    private Boolean updateNotification = false;
+
+    public void showNotification(){
+        //TODO: if statement updateList vullen
+        //NOTIFICATION
+        for(int i = 0 ; i < updateList.size() ; i++){
+            if(lastLogin < Long.parseLong(updateList.get(i))){
+                updateNotification = true;
+            }
+        }
+        if(updateNotification == true){
+            String message = "One of your Challenges has been updated";
+            System.out.println(message);
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.sportoptia)
+                            .setContentTitle("Sportopia")
+                            .setContentText(message);
+            int mNotificationId = 001;
+            NotificationManager mNotifyMgr =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +100,21 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         DT.execute();
+
+        //TODO: if statement
+        //NOTIFICATION
+        /*String message = "last login: " + Long.toString(lastLogin);
+
+        NotificationCompat.Builder mBuilder =
+            new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.sportoptia)
+                    .setContentTitle("Sportopia")
+                    .setContentText(message);
+        int mNotificationId = 001;
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());*/
+
     }
 
     //on menu pressed
@@ -184,6 +229,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         protected void onPostExecute(String string) {
             simpleWaitDialog.dismiss();
             initListview();
+
+            showNotification();
         }
 
         @Override
@@ -197,6 +244,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 DB db = client.getDB(Database.uri.getDatabase());
                 DBCollection challengeCollection = db.getCollection("challenge");
                 challengeCollection.setObjectClass(Challenge.class);
+                DBCollection userCollection = db.getCollection("user");
+                userCollection.setObjectClass(User.class);
 
                 //find al the challenges the user send
                 Challenge query1 = new Challenge();
@@ -207,10 +256,29 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 Challenge query2 = new Challenge();
                 query2.put("challengee", Cookie.getInstance().userEntryId);
                 receivedChallenges = challengeCollection.find(query2).toArray();
+
+                for(int i = 0 ; i < sendChallenges.size() ; i++){
+                    System.out.println(sendChallenges.get(i).get("Date"));
+                    updateList.add(sendChallenges.get(i).get("Date").toString());
+                }
+                for(int i = 0 ; i < receivedChallenges.size() ; i++){
+                    System.out.println(receivedChallenges.get(i).get("Date"));
+                    updateList.add(receivedChallenges.get(i).get("Date").toString());
+                }
+
+                //updateList
+
+                //Update user last login time/date
+                User current = new User();
+                current.put("facebookID", Cookie.getInstance().userEntryId);
+                User updateUser = (User) userCollection.find(current).toArray().get(0);
+                lastLogin = updateUser.getLoginDate();
+                updateUser.updateLoginDate();
+                userCollection.findAndModify(current, updateUser);
+
             }catch(Exception e){
                 System.out.println(e);
             }
-
 
             return "succes";
         }

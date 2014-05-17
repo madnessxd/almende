@@ -291,6 +291,9 @@ public class ChallengeEvidence extends Activity {
                     BasicDBObject setCarrier = new BasicDBObject();
                     setCarrier.put("gps", intent.getExtras().getString("gps"));
                     setCarrier.put("status", "completed");
+
+                    long time= System.currentTimeMillis();
+                    setCarrier.put("Date", time);
                     setCarrier.put("amountHours", amountHours.getText().toString());
                     setCarrier.put("endDate", new Date());
 
