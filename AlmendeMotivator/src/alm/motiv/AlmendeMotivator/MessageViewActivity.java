@@ -44,23 +44,30 @@ public class MessageViewActivity extends Activity{
 
     class GetReceiver extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("messages");
-            userCollection.setObjectClass(Message.class);
+            if(Cookie.getInstance().internet){
+                try{
+                MongoClient client = Database.getInstance();
+                DB db = client.getDB(Database.uri.getDatabase());
+                DBCollection userCollection = db.getCollection("messages");
+                userCollection.setObjectClass(Message.class);
 
-            challenger = intent.getExtras().getString("challenger");
-            challengee = intent.getExtras().getString("challengee");
+                challenger = intent.getExtras().getString("challenger");
+                challengee = intent.getExtras().getString("challengee");
 
-            BasicDBObject query = new BasicDBObject();
-            query.put("Author", challenger);
-            query.put("Receiver", challengee);
-            DBCursor cursor = userCollection.find(query);
+                BasicDBObject query = new BasicDBObject();
+                query.put("Author", challenger);
+                query.put("Receiver", challengee);
+                DBCursor cursor = userCollection.find(query);
 
-            if(cursor.count()==0){
-                challengee = intent.getExtras().getString("challenger");
-                challenger = intent.getExtras().getString("challengee");
+                if(cursor.count()==0){
+                    challengee = intent.getExtras().getString("challenger");
+                    challenger = intent.getExtras().getString("challengee");
+                }
+                }catch(Exception e){
+                    System.out.println(e);
+                }
             }
+
 
             return null;
         }
@@ -118,20 +125,28 @@ public class MessageViewActivity extends Activity{
     }
 
     public void sendMessage(View v) throws InterruptedException {
-        mEdit = (EditText)findViewById(R.id.messageInput);
-        message = Cookie.getInstance().userName + ": " + mEdit.getText().toString();
-        DatabaseThread db = new DatabaseThread();
-        db.execute();
+        if(Cookie.getInstance().internet){
+            mEdit = (EditText)findViewById(R.id.messageInput);
+            message = Cookie.getInstance().userName + ": " + mEdit.getText().toString();
+            DatabaseThread db = new DatabaseThread();
+            db.execute();
+        }
     }
 
     class UpdateMessages extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("messages");
-            userCollection.setObjectClass(Message.class);
+            if(Cookie.getInstance().internet){
+               try{
+                   MongoClient client = Database.getInstance();
+                   DB db = client.getDB(Database.uri.getDatabase());
+                   DBCollection userCollection = db.getCollection("messages");
+                   userCollection.setObjectClass(Message.class);
 
-            getMessages(userCollection);
+                   getMessages(userCollection);
+               }catch (Exception e){
+                   System.out.println(e);
+               }
+            }
 
             return null;
         }
@@ -151,9 +166,7 @@ public class MessageViewActivity extends Activity{
 
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            if(!Cookie.getInstance().internet){
-                return null;
-            }
+            if(Cookie.getInstance().internet){
 
             try{
                 MongoClient client = Database.getInstance();
@@ -194,6 +207,7 @@ public class MessageViewActivity extends Activity{
                 getMessages(userCollection);
             }catch (Exception e){
                 System.out.println(e);
+            }
             }
             return null;
         }
