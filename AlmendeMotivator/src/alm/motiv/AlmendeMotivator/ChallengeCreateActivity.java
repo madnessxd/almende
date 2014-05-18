@@ -77,6 +77,7 @@ public class ChallengeCreateActivity extends Activity {
     private String[] facebookFriendsName = {"loading... please try again"};
 
     private ProgressDialog simpleWaitDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,11 +204,11 @@ public class ChallengeCreateActivity extends Activity {
             succes = false;
             noChallengee = true;
         }
-        if(succes == false){
-            if(noChallengee){
+        if (succes == false) {
+            if (noChallengee) {
                 Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();
-            } else{
-            Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Not everything is filled in correctly.", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -279,7 +280,7 @@ public class ChallengeCreateActivity extends Activity {
                         challengee = facebookFriends[which];
                         updatePicture(challengee, facebookFriendsName[which]);
                         challengeeSelected = true;
-                        challengeeName=facebookFriendsName[which];
+                        challengeeName = facebookFriendsName[which];
                     }
                 });
         builder.create();
@@ -293,14 +294,30 @@ public class ChallengeCreateActivity extends Activity {
             DB db = client.getDB(Database.uri.getDatabase());
 
             //get collection and attach class to it
-            DBCollection userCollection = db.getCollection("challenge");
-            userCollection.setObjectClass(Challenge.class);
+            DBCollection challengeCollection = db.getCollection("challenge");
+            challengeCollection.setObjectClass(Challenge.class);
 
             Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", "null", XPreward);
             challenge.setStartDate(new Date());
             challenge.setChallengerName(Cookie.getInstance().userName);
             challenge.setChallengeeName(challengeeName);
-            userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+            challengeCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+
+            DBCollection userCollection = db.getCollection("user");
+            userCollection.setObjectClass(User.class);
+
+            User match = new User();
+            match.put("facebookID", Cookie.getInstance().userEntryId);
+
+            User update = (User) userCollection.findOne(match);
+            int reward = 100;
+            try {
+                update.setXP(update.getXP() + reward);
+            } catch (Exception e) {
+                update.setXP(reward);
+            }
+
+            userCollection.update(match, update);
             return null;
         }
 
