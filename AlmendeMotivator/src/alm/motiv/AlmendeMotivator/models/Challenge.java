@@ -29,6 +29,13 @@ public class Challenge extends BasicDBObject implements Item {
         put("gps", gps);
         put("amountHours", amountHours);
         put("XPreward", XPreward);
+        long time= System.currentTimeMillis();
+        this.put("Date", time);
+    }
+
+    public void updateLoginDate(){
+        long time= System.currentTimeMillis();
+        this.put("Date", time);
     }
 
     public void setStatus(String status) {

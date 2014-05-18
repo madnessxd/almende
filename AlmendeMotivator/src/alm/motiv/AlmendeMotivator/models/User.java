@@ -1,9 +1,11 @@
 package alm.motiv.AlmendeMotivator.models;
 
+import android.text.format.Time;
 import com.mongodb.BasicDBObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -74,6 +76,27 @@ public class User extends BasicDBObject {
 
     public void setXP(int XP){
         this.put("XP", XP);
+    }
+
+    public void updateLoginDate(){
+        long time = System.currentTimeMillis();
+        this.put("lastlogin", time);
+    }
+
+    public long getLoginDate(){
+        long lastLogin = 0;
+        long time = System.currentTimeMillis();
+
+        try{
+            lastLogin = this.getLong("lastlogin");
+        }catch (Exception e){
+            this.put("lastlogin", time);
+        }
+        if(lastLogin != 0){
+            return lastLogin;
+        }
+
+        return time;
     }
 
     public ArrayList<BasicDBObject> getFriends(){

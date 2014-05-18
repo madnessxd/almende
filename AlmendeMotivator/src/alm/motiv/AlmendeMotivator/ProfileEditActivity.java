@@ -160,7 +160,6 @@ public class ProfileEditActivity extends Activity{
             }
             User aUser = (User) userCollection.find(current).toArray().get(0);
 
-
             if(args[0]=="select"){
                 user = aUser;
             }else if(args[0]=="insert"){

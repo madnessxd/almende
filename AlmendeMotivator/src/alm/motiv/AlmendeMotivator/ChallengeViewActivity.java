@@ -94,7 +94,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             return super.onKeyUp(keyCode, event);
         }
     }
-
     public void updateUI(String challengerName, String challengeeName) {
         TextView title = (TextView) findViewById(R.id.txtStaticChallengeName);
         TextView challenger = (TextView) findViewById(R.id.txtChallenger);
@@ -104,17 +103,17 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         TextView reward = (TextView) findViewById(R.id.viewChallengeReward);
         ImageView imgChallenger = (ImageView) findViewById(R.id.imgChallenger);
         ImageView imgChallengee = (ImageView) findViewById(R.id.imgChallengee);
-        txtStatus = (TextView) findViewById(R.id.txtStatus);
+        txtStatus = (TextView)findViewById(R.id.txtStatus);
 
         title.setText(currentChallenge.getTitle());
         challenger.setText(challengerName);
         challengee.setText(challengeeName);
         content.setText(currentChallenge.getContent());
         evidence.setText(currentChallenge.getEvidenceAmount() + " " + currentChallenge.getEvidenceType());
-        if (!currentChallenge.getReward().equals("")) {
-            reward.setText("XP: " + currentChallenge.getXPreward() + "\nAdditional Reward: " + currentChallenge.getReward());
-        } else {
-            reward.setText("XP: " + currentChallenge.getXPreward());
+        if(!currentChallenge.getReward().equals("")){
+            reward.setText("XP: "+currentChallenge.getXPreward() + "\nAdditional Reward: "+currentChallenge.getReward() );
+        }else{
+            reward.setText("XP: "+currentChallenge.getXPreward() );
         }
 
         String imgSource1 = "https://graph.facebook.com/" + currentChallenge.getChallenger() + "/picture?type=normal&height=200&width=200";
@@ -139,7 +138,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             }
         });
 
-
         updateStatusElements();
 
         //get comments from challenge
@@ -157,7 +155,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     }
 
-    public void visitProfile(String viewProfileOf) {
+    public void visitProfile(String viewProfileOf){
         Intent displayFriend = new Intent(ChallengeViewActivity.this, ProfileActivity.class);
         displayFriend.putExtra("viewFriendProfile", true);
         displayFriend.putExtra("facebookIdFriend", viewProfileOf);
@@ -173,32 +171,30 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onAcceptPressed(View v) {
-        if (Cookie.getInstance().internet) {
-            currentChallenge.setStatus("accepted");
-            new DatabaseThread().execute("");
-            updateStatusElements();
-            finish();
-            Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
-            this.startActivity(newIntent);
-        }
+        currentChallenge.setStatus("accepted");
+        currentChallenge.updateLoginDate();
+        new DatabaseThread().execute("");
+        updateStatusElements();
+        finish();
+        Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
+        this.startActivity(newIntent);
     }
 
     public void onCompletePressed(View v) {
-        if (Cookie.getInstance().internet) {
-            String gps = "no GPS";
-            try {
-                gps = getGPS();
-            } catch (Exception e) {
-                System.out.println("no gps" + e);
-            }
-            finish();
-            Intent newIntent = new Intent(this, ChallengeEvidence.class);
-            newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
-            newIntent.putExtra("title", currentChallenge.getTitle());
-            newIntent.putExtra("challengeid", id);
-            newIntent.putExtra("gps", gps);
-            this.startActivity(newIntent);
+        String gps = "no GPS";
+        try {
+            gps = getGPS();
+        } catch (Exception e) {
+            System.out.println("no gps" + e);
         }
+        finish();
+        currentChallenge.updateLoginDate();
+        Intent newIntent = new Intent(this, ChallengeEvidence.class);
+        newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
+        newIntent.putExtra("title", currentChallenge.getTitle());
+        newIntent.putExtra("challengeid", id);
+        newIntent.putExtra("gps", gps);
+        this.startActivity(newIntent);
     }
 
     public String getGPS() {
@@ -215,51 +211,48 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onDeclinePressed(View v) {
-        if (Cookie.getInstance().internet) {
-            currentChallenge.setStatus("declined");
-            new DatabaseThread().execute("");
-            updateStatusElements();
-            finish();
-            Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
-            this.startActivity(newIntent);
-        }
-
+        currentChallenge.setStatus("declined");
+        currentChallenge.updateLoginDate();
+        new DatabaseThread().execute("");
+        updateStatusElements();
+        finish();
+        Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
+        this.startActivity(newIntent);
     }
 
     public void onCommentPressed(View v) {
-        if (Cookie.getInstance().internet) {
-            showPopup();
-        }
+        showPopup();
     }
 
     private AlertDialog d;
     private EditText content;
-
     public void onApprovePressed(View v) {
         LayoutInflater inflater = getLayoutInflater();
-        View convertView = inflater.inflate(R.layout.popup_approvement, null);
-        content = (EditText) convertView.findViewById(R.id.txtApprovementExplained);
-
-        d = new AlertDialog.Builder(this)
-                .setView(convertView)
+        View convertView = inflater.inflate(R.layout.popup_approvement,null);
+        content = (EditText)convertView.findViewById(R.id.txtApprovementExplained);
+        currentChallenge.updateLoginDate();
+       d = new AlertDialog.Builder(this)
+               .setView(convertView)
                 .show();
     }
 
-    public void onApproveEvidencePressed(View v) {
+    public void onApproveEvidencePressed(View v){
         if (popUpValidation(content)) {
             currentChallenge.setRated("Approved");
             currentChallenge.setStatus("closed");
             currentChallenge.setRatedMessage(content.getText().toString());
+            currentChallenge.updateLoginDate();
             new DatabaseThread().execute("");
             d.dismiss();
         }
     }
 
-    public void onDisapproveEvidencePressed(View v) {
+    public void onDisapproveEvidencePressed(View v){
         if (popUpValidation(content)) {
             currentChallenge.setStatus("closed");
             currentChallenge.setRated("Disapproved");
             currentChallenge.setRatedMessage(content.getText().toString());
+            currentChallenge.updateLoginDate();
             new DatabaseThread().execute("");
             d.dismiss();
         }
@@ -299,9 +292,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         Button complete = (Button) findViewById(R.id.btnComplete);
 
         if (temp.equals("new")) {
-            if (userMadeChallenge) {
+            if(userMadeChallenge){
                 txtStatus.setText("Challenge is waiting for reply");
-            } else {
+            }else{
                 accept.setVisibility(View.VISIBLE);
                 decline.setVisibility(View.VISIBLE);
                 txtStatus.setText("The challenger is waiting for your reply");
@@ -311,9 +304,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         if (temp.equals("accepted")) {
-            if (userMadeChallenge) {
+            if(userMadeChallenge){
                 txtStatus.setText("Challenge has been accepted");
-            } else {
+            }else{
                 complete.setVisibility(View.VISIBLE);
                 txtStatus.setText("You have accepted the challenge");
 
@@ -327,7 +320,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
         if (temp.equals("closed")) {
             String text = txtStatus.getText().toString();
-            text += " It has been " + currentChallenge.getRated().toLowerCase();
+            text += " It has been "+currentChallenge.getRated().toLowerCase();
             txtStatus.setText(text);
             txtStatus.setVisibility(View.VISIBLE);
             LinearLayout buttonRow = (LinearLayout) findViewById(R.id.buttonRow);
@@ -336,7 +329,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         if (temp.equals("completed")) {
-            if (userMadeChallenge) {
+            if(userMadeChallenge){
                 //we only want the challenger to see this button
                 Button approve = (Button) findViewById(R.id.btnApprove);
                 approve.setVisibility(View.VISIBLE);
@@ -344,14 +337,14 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 //text for the status bar
                 txtStatus.setText("You have turned in evidence");
 
-            } else {
+            }else{
                 txtStatus.setText("Evidence has been turned in");
             }
 
             Button evidence = (Button) findViewById(R.id.btnEvidence);
             evidence.setVisibility(View.VISIBLE);
 
-            TextView evidenceText = (TextView) findViewById(R.id.txtEvidence);
+            TextView evidenceText = (TextView)findViewById(R.id.txtEvidence);
             evidenceText.setVisibility(View.VISIBLE);
 
             txtStatus.setBackgroundColor(getResources().getColor(R.color.completedChallenge));
@@ -378,7 +371,20 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         //input for content for the comment
         final EditText content = (EditText) convertView.findViewById(R.id.txtContent);
 
-        spCategories = (Spinner) convertView.findViewById(R.id.spCategories);
+        //listview so that the categoryf of the comment can be selected
+       /* String categories[] = {"Motivational", "Meet Up", "Inspirational", "Other"};
+        final ListView lv = (ListView) convertView.findViewById(R.id.lstCategories);
+        lv.setVisibility(View.VISIBLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                message.setCategory(lv.getItemAtPosition(i).toString());
+            }
+        });*/
+
+        spCategories = (Spinner)convertView.findViewById(R.id.spCategories);
 
         final AlertDialog d = new AlertDialog.Builder(this)
                 .setPositiveButton("Add Comment", null)
@@ -420,7 +426,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     public void updateMessagesInListview() {
         if (messages != null) {
             BasicDBObject aMessage = messages.get(0);
-            if (aMessage.get("Content") == "This challenge doesn't have comments.") {
+            System.out.println(aMessage);
+            if(aMessage.get("Content")=="This challenge doesn't have comments."){
                 messages.remove(0);
             }
             messages.add(message);
@@ -452,58 +459,61 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             if (updateUI) {
                 updateUI(challengerName, challengeeName);
             }
+
         }
 
         protected Challenge doInBackground(String... args) {
-            if (Cookie.getInstance().internet) {
-
-                try {
-                    MongoClient client = Database.getInstance();
-                    db = client.getDB(Database.uri.getDatabase());
-                    challengeCollection = db.getCollection("challenge");
-                    challengeCollection.setObjectClass(Challenge.class);
-
-                    userCollection = db.getCollection("user");
-                    userCollection.setObjectClass(User.class);
-
-                    // get the current challenge from database
-                    current = new Challenge();
-                    current.put("_id", new ObjectId(id));
-
-                    if (currentChallenge == null) {
-                        //this variable tells us that the view needs to be constructed for use
-                        updateUI = true;
-                        currentChallenge = (Challenge) challengeCollection.findOne(current);
-
-
-                        User challengeeUser = new User();
-                        challengeeUser.put("facebookID", currentChallenge.getChallengee());
-                        User newUser1 = (User) userCollection.find(challengeeUser).toArray().get(0);
-                        challengeeName = newUser1.getName();
-
-                        User challengerUser = new User();
-                        challengerUser.put("facebookID", currentChallenge.getChallenger());
-                        User newUser2 = (User) userCollection.find(challengerUser).toArray().get(0);
-                        challengerName = newUser2.getName();
-                        return null;
-                    }
-
-                    if (args[0].equals("select")) {
-                        ArrayList<BasicDBObject> evidenceList = currentChallenge.getEvidence();
-                        downloadEvidence(evidenceList);
-                        return null;
-                    } else if (args[0].equals("unchanged")) {
-                        //if the status is unchanged, we want to add a comment
-                        addCommentToChallenge();
-                        return null;
-                    } else if (args[0] == "") {
-                        updateQuery();
-                    }
-
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+            if(!Cookie.getInstance().internet){
+                return null;
             }
+
+            try{
+                MongoClient client = Database.getInstance();
+                db = client.getDB(Database.uri.getDatabase());
+                challengeCollection = db.getCollection("challenge");
+                challengeCollection.setObjectClass(Challenge.class);
+
+                userCollection = db.getCollection("user");
+                userCollection.setObjectClass(User.class);
+
+                // get the current challenge from database
+                current = new Challenge();
+                current.put("_id", new ObjectId(id));
+
+                if (currentChallenge == null) {
+                    //this variable tells us that the view needs to be constructed for use
+                    updateUI = true;
+                    currentChallenge = (Challenge) challengeCollection.findOne(current);
+
+
+                    User challengeeUser = new User();
+                    challengeeUser.put("facebookID", currentChallenge.getChallengee());
+                    User newUser1 = (User) userCollection.find(challengeeUser).toArray().get(0);
+                    challengeeName = newUser1.getName();
+
+                    User challengerUser = new User();
+                    challengerUser.put("facebookID", currentChallenge.getChallenger());
+                    User newUser2 = (User) userCollection.find(challengerUser).toArray().get(0);
+                    challengerName = newUser2.getName();
+                    return null;
+                }
+
+                if (args[0].equals("select")) {
+                    ArrayList<BasicDBObject> evidenceList = currentChallenge.getEvidence();
+                    downloadEvidence(evidenceList);
+                    return null;
+                } else if (args[0].equals("unchanged")) {
+                    //if the status is unchanged, we want to add a comment
+                    addCommentToChallenge();
+                    return null;
+                } else if (args[0] == "") {
+                    updateQuery();
+                }
+
+            }catch(Exception e){
+                System.out.println(e);
+            }
+
             return null;
         }
 
