@@ -71,39 +71,43 @@ public class ProfileActivity extends Activity{
     }
 
     private void initLabels(){
+        try{
+            //set labels
+            TextView nameContent = (TextView)findViewById(R.id.name);
+            TextView aboutContent = (TextView)findViewById(R.id.aboutContent);
+            TextView sportsContent = (TextView)findViewById(R.id.sportsContent);
+            TextView cityContent = (TextView)findViewById(R.id.cityContent);
+            TextView ageContent = (TextView)findViewById(R.id.ageContent);
+            TextView goalContent = (TextView)findViewById(R.id.goalContent);
+            TextView xpText = (TextView)findViewById(R.id.progressText);
+            ProgressBar xpBar = (ProgressBar)findViewById(R.id.progressXP);
+            Button btnEdit = (Button)findViewById(R.id.btnEdit);
 
-        //set labels
-        TextView nameContent = (TextView)findViewById(R.id.name);
-        TextView aboutContent = (TextView)findViewById(R.id.aboutContent);
-        TextView sportsContent = (TextView)findViewById(R.id.sportsContent);
-        TextView cityContent = (TextView)findViewById(R.id.cityContent);
-        TextView ageContent = (TextView)findViewById(R.id.ageContent);
-        TextView goalContent = (TextView)findViewById(R.id.goalContent);
-        TextView xpText = (TextView)findViewById(R.id.progressText);
-        ProgressBar xpBar = (ProgressBar)findViewById(R.id.progressXP);
-        Button btnEdit = (Button)findViewById(R.id.btnEdit);
+            nameContent.setText(user.getName());
+            aboutContent.setText(user.getAbout());
+            sportsContent.setText(user.getSports());
+            cityContent.setText(user.getCity());
+            ageContent.setText(user.getAge());
+            goalContent.setText(user.getGoal());
 
-        nameContent.setText(user.getName());
-        aboutContent.setText(user.getAbout());
-        sportsContent.setText(user.getSports());
-        cityContent.setText(user.getCity());
-        ageContent.setText(user.getAge());
-        goalContent.setText(user.getGoal());
+            //manage XP
+            int XP=0;
+            try{XP = user.getXP();}catch (Exception e){
+                //do nothing
+            }
+            setLevelOfUser(XP);
 
-        //manage XP
-        int XP=0;
-        try{XP = user.getXP();}catch (Exception e){
-            //do nothing
+            xpBar.setMax(level.getMaxXP());
+            xpBar.setProgress(XP);
+            xpText.setText(level.toString().toLowerCase() + ": "+ XP +"xp /"+level.getMaxXP()+"xp");
+
+            if(facebookIdFriend==null){
+                btnEdit.setVisibility(View.VISIBLE);
+            }
+        }catch (Exception e){
+            System.out.println(e);
         }
-        setLevelOfUser(XP);
 
-        xpBar.setMax(level.getMaxXP());
-        xpBar.setProgress(XP);
-        xpText.setText(level.toString().toLowerCase() + ": "+ XP +"xp /"+level.getMaxXP()+"xp");
-
-        if(facebookIdFriend==null){
-            btnEdit.setVisibility(View.VISIBLE);
-        }
     }
 
     public void setLevelOfUser(int XP){
@@ -159,19 +163,27 @@ public class ProfileActivity extends Activity{
         }
 
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+            if(Cookie.getInstance().internet)
+            {
+                try{
 
-            // get the current user from database
-            User current = new User();
-            if(facebookIdFriend!=null){
-                current.put("facebookID", facebookIdFriend);
-            }else{
-                current.put("facebookID", Cookie.getInstance().userEntryId);
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
+
+                    // get the current user from database
+                    User current = new User();
+                    if(facebookIdFriend!=null){
+                        current.put("facebookID", facebookIdFriend);
+                    }else{
+                        current.put("facebookID", Cookie.getInstance().userEntryId);
+                    }
+                    user = (User) userCollection.find(current).toArray().get(0);
+                }catch(Exception e){
+                    System.out.println(e);
+                }
             }
-            user = (User) userCollection.find(current).toArray().get(0);
             return null;
         }
     }

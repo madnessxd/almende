@@ -71,24 +71,31 @@ public class MessageActivity extends Activity{
 
     class GetNameThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            Session session = Session.getActiveSession();
+            if(Cookie.getInstance().internet){
+                try{
+                    Session session = Session.getActiveSession();
 
-            Request request = new Request(session, "me", null, HttpMethod.GET);
-            Response response = request.executeAndWait();
+                    Request request = new Request(session, "me", null, HttpMethod.GET);
+                    Response response = request.executeAndWait();
 
 
-            for (int i = 0; i < runningMessages.size(); i++){
-                request = new Request(session, runningMessages.get(i), null, HttpMethod.GET);
-                response = request.executeAndWait();
+                    for (int i = 0; i < runningMessages.size(); i++){
+                        request = new Request(session, runningMessages.get(i), null, HttpMethod.GET);
+                        response = request.executeAndWait();
 
-                if (response.getError() != null) {
-                    System.out.println("NOPE");
-                } else {
-                    GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-                    nameArray.add(graphUser.getName());
-                    System.out.println(graphUser.getName());
+                        if (response.getError() != null) {
+                            System.out.println("NOPE");
+                        } else {
+                            GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                            nameArray.add(graphUser.getName());
+                            System.out.println(graphUser.getName());
+                        }
+                    }
+                }catch(Exception e){
+                    System.out.println(e);
                 }
             }
+
             return null;
         }
 
@@ -109,12 +116,18 @@ public class MessageActivity extends Activity{
 
     class UpdateMessages extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("messages");
-            userCollection.setObjectClass(Message.class);
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection userCollection = db.getCollection("messages");
+                    userCollection.setObjectClass(Message.class);
 
-            getMessages(userCollection);
+                    getMessages(userCollection);
+                }catch (Exception e){
+                    System.out.println(e);
+                }
+            }
 
             return null;
         }
@@ -126,29 +139,34 @@ public class MessageActivity extends Activity{
 
         @Override
         protected void onPostExecute(String string) {
+            simpleWaitDialog.dismiss();
             showMessages();
         }
     }
 
     public void getMessages(DBCollection userCollection){
+        try{
 
-        DBObject query = QueryBuilder.start("Author").is(Cookie.getInstance().userEntryId).get();
-        DBCursor myCursor = userCollection.find(query);
+            DBObject query = QueryBuilder.start("Author").is(Cookie.getInstance().userEntryId).get();
+            DBCursor myCursor = userCollection.find(query);
 
-        while(myCursor.hasNext()){
-            DBObject testObj = myCursor.next();
-            runningMessages.add(testObj.get("Receiver").toString());
+            while(myCursor.hasNext()){
+                DBObject testObj = myCursor.next();
+                runningMessages.add(testObj.get("Receiver").toString());
+            }
+
+            query = QueryBuilder.start("Receiver").is(Cookie.getInstance().userEntryId).get();
+            myCursor = userCollection.find(query);
+
+            while(myCursor.hasNext()){
+                DBObject testObj = myCursor.next();
+                runningMessages.add(testObj.get("Author").toString());
+            }
+            GetNameThread dbT = new GetNameThread();
+            dbT.execute();
+        }catch (Exception e){
+            System.out.println(e);
         }
-
-        query = QueryBuilder.start("Receiver").is(Cookie.getInstance().userEntryId).get();
-        myCursor = userCollection.find(query);
-
-        while(myCursor.hasNext()){
-            DBObject testObj = myCursor.next();
-            runningMessages.add(testObj.get("Author").toString());
-        }
-        GetNameThread dbT = new GetNameThread();
-        dbT.execute();
     }
 
     public void showMessages(){
@@ -164,7 +182,6 @@ public class MessageActivity extends Activity{
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             //GA NAAR DE JUISTE MESSAGE
-            System.out.println(runningMessages.get(position));
             String butName = runningMessages.get(position);
 
             k = new Intent(MessageActivity.this, MessageViewActivity.class);

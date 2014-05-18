@@ -97,63 +97,67 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
     }
     public void updateUI(String challengerName, String challengeeName) {
-        TextView title = (TextView) findViewById(R.id.txtStaticChallengeName);
-        TextView challenger = (TextView) findViewById(R.id.txtChallenger);
-        TextView challengee = (TextView) findViewById(R.id.txtChallengee);
-        TextView content = (TextView) findViewById(R.id.viewChallengeContent);
-        TextView evidence = (TextView) findViewById(R.id.viewChallengeEvidence);
-        TextView reward = (TextView) findViewById(R.id.viewChallengeReward);
-        ImageView imgChallenger = (ImageView) findViewById(R.id.imgChallenger);
-        ImageView imgChallengee = (ImageView) findViewById(R.id.imgChallengee);
-        txtStatus = (TextView)findViewById(R.id.txtStatus);
+        try{
+            TextView title = (TextView) findViewById(R.id.txtStaticChallengeName);
+            TextView challenger = (TextView) findViewById(R.id.txtChallenger);
+            TextView challengee = (TextView) findViewById(R.id.txtChallengee);
+            TextView content = (TextView) findViewById(R.id.viewChallengeContent);
+            TextView evidence = (TextView) findViewById(R.id.viewChallengeEvidence);
+            TextView reward = (TextView) findViewById(R.id.viewChallengeReward);
+            ImageView imgChallenger = (ImageView) findViewById(R.id.imgChallenger);
+            ImageView imgChallengee = (ImageView) findViewById(R.id.imgChallengee);
+            txtStatus = (TextView)findViewById(R.id.txtStatus);
 
-        title.setText(currentChallenge.getTitle());
-        challenger.setText(challengerName);
-        challengee.setText(challengeeName);
-        content.setText(currentChallenge.getContent());
-        evidence.setText(currentChallenge.getEvidenceAmount() + " " + currentChallenge.getEvidenceType());
-        if(!currentChallenge.getReward().equals("")){
-            reward.setText("XP: "+currentChallenge.getXPreward() + "\nAdditional Reward: "+currentChallenge.getReward() );
-        }else{
-            reward.setText("XP: "+currentChallenge.getXPreward() );
-        }
-
-        String imgSource1 = "https://graph.facebook.com/" + currentChallenge.getChallenger() + "/picture?type=normal&height=200&width=200";
-        String imgSource2 = "https://graph.facebook.com/" + currentChallenge.getChallengee() + "/picture?type=normal&height=200&width=200";
-
-        Picasso.with(getApplicationContext()).load(imgSource1).into(imgChallenger);
-        Picasso.with(getApplicationContext()).load(imgSource2).into(imgChallengee);
-
-        imgChallengee.setMinimumHeight(300);
-        imgChallengee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                visitProfile(currentChallenge.getChallengee());
+            title.setText(currentChallenge.getTitle());
+            challenger.setText(challengerName);
+            challengee.setText(challengeeName);
+            content.setText(currentChallenge.getContent());
+            evidence.setText(currentChallenge.getEvidenceAmount() + " " + currentChallenge.getEvidenceType());
+            if(!currentChallenge.getReward().equals("")){
+                reward.setText("XP: "+currentChallenge.getXPreward() + "\nAdditional Reward: "+currentChallenge.getReward() );
+            }else{
+                reward.setText("XP: "+currentChallenge.getXPreward() );
             }
-        });
 
-        imgChallenger.setMinimumHeight(300);
-        imgChallenger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                visitProfile(currentChallenge.getChallenger());
+            String imgSource1 = "https://graph.facebook.com/" + currentChallenge.getChallenger() + "/picture?type=normal&height=200&width=200";
+            String imgSource2 = "https://graph.facebook.com/" + currentChallenge.getChallengee() + "/picture?type=normal&height=200&width=200";
+
+            Picasso.with(getApplicationContext()).load(imgSource1).into(imgChallenger);
+            Picasso.with(getApplicationContext()).load(imgSource2).into(imgChallengee);
+
+            imgChallengee.setMinimumHeight(300);
+            imgChallengee.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    visitProfile(currentChallenge.getChallengee());
+                }
+            });
+
+            imgChallenger.setMinimumHeight(300);
+            imgChallenger.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    visitProfile(currentChallenge.getChallenger());
+                }
+            });
+
+            updateStatusElements();
+
+            //get comments from challenge
+            messages = currentChallenge.getComments();
+            if (messages == null) {
+                Message emptyMessage = new Message();
+                emptyMessage.setContent("This challenge doesn't have comments.");
+                emptyMessage.setAuthor(" ");
+                emptyMessage.setDate(new Date());
+                messages = new ArrayList<BasicDBObject>();
+                messages.add(emptyMessage);
             }
-        });
+            MessageAdapter adapter = new MessageAdapter(this, messages);
+            messagesListview.setAdapter(adapter);
+        }catch(Exception e){
+            System.out.println(e);}
 
-        updateStatusElements();
-
-        //get comments from challenge
-        messages = currentChallenge.getComments();
-        if (messages == null) {
-            Message emptyMessage = new Message();
-            emptyMessage.setContent("This challenge doesn't have comments.");
-            emptyMessage.setAuthor(" ");
-            emptyMessage.setDate(new Date());
-            messages = new ArrayList<BasicDBObject>();
-            messages.add(emptyMessage);
-        }
-        MessageAdapter adapter = new MessageAdapter(this, messages);
-        messagesListview.setAdapter(adapter);
 
     }
 
@@ -173,30 +177,35 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onAcceptPressed(View v) {
-        currentChallenge.setStatus("accepted");
-        currentChallenge.updateLoginDate();
-        new DatabaseThread().execute("");
-        updateStatusElements();
-        finish();
-        Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
-        this.startActivity(newIntent);
+        if(Cookie.getInstance().internet){
+            currentChallenge.setStatus("accepted");
+            currentChallenge.updateLoginDate();
+            new DatabaseThread().execute("");
+            updateStatusElements();
+            finish();
+            Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
+            this.startActivity(newIntent);
+        }
+
     }
 
     public void onCompletePressed(View v) {
-        String gps = "no GPS";
-        try {
-            gps = getGPS();
-        } catch (Exception e) {
-            System.out.println("no gps" + e);
+        if(Cookie.getInstance().internet){
+            String gps = "no GPS";
+            try {
+                gps = getGPS();
+            } catch (Exception e) {
+                System.out.println("no gps" + e);
+            }
+            finish();
+            currentChallenge.updateLoginDate();
+            Intent newIntent = new Intent(this, ChallengeEvidence.class);
+            newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
+            newIntent.putExtra("title", currentChallenge.getTitle());
+            newIntent.putExtra("challengeid", id);
+            newIntent.putExtra("gps", gps);
+            this.startActivity(newIntent);
         }
-        finish();
-        currentChallenge.updateLoginDate();
-        Intent newIntent = new Intent(this, ChallengeEvidence.class);
-        newIntent.putExtra("evidenceAmount", currentChallenge.getEvidenceAmount());
-        newIntent.putExtra("title", currentChallenge.getTitle());
-        newIntent.putExtra("challengeid", id);
-        newIntent.putExtra("gps", gps);
-        this.startActivity(newIntent);
     }
 
     public String getGPS() {
@@ -209,36 +218,45 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onEvidencePressed(View v) {
-        new DatabaseThread().execute("select");
+        if(Cookie.getInstance().internet){
+            new DatabaseThread().execute("select");
+        }
     }
 
     public void onDeclinePressed(View v) {
-        currentChallenge.setStatus("declined");
-        currentChallenge.updateLoginDate();
-        new DatabaseThread().execute("");
-        updateStatusElements();
-        finish();
-        Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
-        this.startActivity(newIntent);
+        if(Cookie.getInstance().internet){
+            currentChallenge.setStatus("declined");
+            currentChallenge.updateLoginDate();
+            new DatabaseThread().execute("");
+            updateStatusElements();
+            finish();
+            Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
+            this.startActivity(newIntent);
+        }
     }
 
     public void onCommentPressed(View v) {
-        currentChallenge.updateLoginDate();
-        new DatabaseThread().execute("");
-        updateStatusElements();
-        showPopup();
+        if(Cookie.getInstance().internet){
+            currentChallenge.updateLoginDate();
+       	    new DatabaseThread().execute("");
+            updateStatusElements();
+            showPopup();
+        }
     }
 
     private AlertDialog d;
     private EditText content;
     public void onApprovePressed(View v) {
-        LayoutInflater inflater = getLayoutInflater();
-        View convertView = inflater.inflate(R.layout.popup_approvement,null);
-        content = (EditText)convertView.findViewById(R.id.txtApprovementExplained);
-        currentChallenge.updateLoginDate();
-       d = new AlertDialog.Builder(this)
-               .setView(convertView)
-                .show();
+        if(Cookie.getInstance().internet){
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = inflater.inflate(R.layout.popup_approvement,null);
+            content = (EditText)convertView.findViewById(R.id.txtApprovementExplained);
+            currentChallenge.updateLoginDate();
+            d = new AlertDialog.Builder(this)
+                    .setView(convertView)
+                    .show();
+        }
+
     }
 
     public void onApproveEvidencePressed(View v){
@@ -467,10 +485,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         protected Challenge doInBackground(String... args) {
-            if(!Cookie.getInstance().internet){
-                return null;
-            }
-
+            if(Cookie.getInstance().internet){
             try{
                 MongoClient client = Database.getInstance();
                 db = client.getDB(Database.uri.getDatabase());
@@ -516,6 +531,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
             }catch(Exception e){
                 System.out.println(e);
+            }
             }
 
             return null;
