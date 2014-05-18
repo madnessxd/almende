@@ -141,6 +141,7 @@ public class MessageCreateActivity extends Activity {
     }
 
     public void onSelectFriendsPressed(View v) {
+        if(Cookie.getInstance().internet){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose the challengee")
 
@@ -152,97 +153,112 @@ public class MessageCreateActivity extends Activity {
                 });
         builder.create();
         builder.show();
+        }
     }
 
     class DatabaseThread2 extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
 
-            Session session = Session.getActiveSession();
+                    Session session = Session.getActiveSession();
 
-            Request request = new Request(session, "me", null, HttpMethod.GET);
-            Response response = request.executeAndWait();
+                    Request request = new Request(session, "me", null, HttpMethod.GET);
+                    Response response = request.executeAndWait();
 
-            User curUser = new User();
-            curUser.put("facebookID", Cookie.getInstance().userEntryId);
-            User newUser = (User) userCollection.find(curUser).toArray().get(0);
-
-
-            ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
-
-            String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
-            String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
+                    User curUser = new User();
+                    curUser.put("facebookID", Cookie.getInstance().userEntryId);
+                    User newUser = (User) userCollection.find(curUser).toArray().get(0);
 
 
-            for (int i = 0; i < arrayMessages.toArray().length; i++) {
-                facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
+                    ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
 
-                request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
-                response = request.executeAndWait();
+                    String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
+                    String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
 
-                if (response.getError() != null) {
-                    System.out.println("NOPE");
-                } else {
-                    GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-                    facebookFriendsNameTemp[i] = graphUser.getName();
+
+                    for (int i = 0; i < arrayMessages.toArray().length; i++) {
+                        facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ "  + '"' + "facebookID" + '"' + " : " + '"',"").replace('"' + "}","");
+
+                        request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
+                        response = request.executeAndWait();
+
+                        if (response.getError() != null) {
+                            System.out.println("NOPE");
+                        } else {
+                            GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                            facebookFriendsNameTemp[i] = graphUser.getName();
+                        }
+                    }
+
+                    facebookFriends = facebookFriendsTemp;
+                    facebookFriendsName = facebookFriendsNameTemp;
+                }catch (Exception e){
+                    System.out.println(e);
                 }
             }
 
-            facebookFriends = facebookFriendsTemp;
-            facebookFriendsName = facebookFriendsNameTemp;
             return null;
         }
     }
 
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("messages");
-            userCollection.setObjectClass(Message.class);
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection userCollection = db.getCollection("messages");
+                    userCollection.setObjectClass(Message.class);
 
             /*DBObject query = QueryBuilder.start("Author").is(challenger).get();
             query = QueryBuilder.start("Receiver").is(challengee).get();*/
 
-            BasicDBObject query = new BasicDBObject();
-            query.put("Author", challenger);
-            query.put("Receiver", challengee);
-            DBCursor cursor = userCollection.find(query);
+                    BasicDBObject query = new BasicDBObject();
+                    query.put("Author", challenger);
+                    query.put("Receiver", challengee);
+                    DBCursor cursor = userCollection.find(query);
 
-            BasicDBObject query2 = new BasicDBObject();
-            query2.put("Receiver", challenger);
-            query2.put("Author", challengee);
-            DBCursor cursor2 = userCollection.find(query2);
+                    BasicDBObject query2 = new BasicDBObject();
+                    query2.put("Receiver", challenger);
+                    query2.put("Author", challengee);
+                    DBCursor cursor2 = userCollection.find(query2);
 
             /*System.out.println("ff tellen: " + cursor.count());
             System.out.println("ff tellen 2: " + cursor2.count());*/
 
-            EditText textContent = (EditText) findViewById(R.id.txtChallengeContent);
-            String message = message = Cookie.getInstance().userName + ": " + textContent.getText().toString();
-            Time now = new Time();
-            now.setToNow();
-            String date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);
+                    EditText textContent = (EditText) findViewById(R.id.txtChallengeContent);
+                    String message = message = Cookie.getInstance().userName + ": " + textContent.getText().toString();
+                    Time now = new Time();
+                    now.setToNow();
+                    String date = (now.year + "/" + now.month + "/" + now.monthDay + "-" + now.hour + ":" + now.minute + ":" + now.second);
 
-            if(cursor.count()==0 && cursor2.count()==0){
-                ArrayList<String> messages = new ArrayList<String>();
-                messages.add(message);
+                    if(cursor.count()==0 && cursor2.count()==0){
+                        ArrayList<String> messages = new ArrayList<String>();
+                        messages.add(message);
 
-                Message challenge = new Message(challengee, challenger, "Test Message", messages, "Normal message", "0");
-                userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
-                messageText = "Message Send!";
-            } else{
-                Session session = Session.getActiveSession();
+                        Message challenge = new Message(challengee, challenger, "Test Message", messages, "Normal message", "0");
+                        userCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+                        messageText = "Message Send!";
+                    } else{
+                        Session session = Session.getActiveSession();
 
-                Request request = new Request(session, challengee, null, HttpMethod.GET);
-                Response response = request.executeAndWait();
+                        Request request = new Request(session, challengee, null, HttpMethod.GET);
+                        Response response = request.executeAndWait();
 
-                GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-                String challengeeName = graphUser.getName();
-                messageText = "You already have a conversation with " + challengeeName;
+                        GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                        String challengeeName = graphUser.getName();
+                        messageText = "You already have a conversation with " + challengeeName;
+                    }
+                }catch (Exception e){
+                    System.out.println(e);
+                }
             }
+
             /* else {
                 BasicDBObject update = new BasicDBObject();
                 update.put("$push", new BasicDBObject("Content", message));
