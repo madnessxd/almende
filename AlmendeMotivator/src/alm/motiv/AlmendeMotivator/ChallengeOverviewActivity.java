@@ -59,7 +59,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         }
         if(updateNotification == true){
             String message = "One of your Challenges has been updated";
-            System.out.println(message);
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
@@ -258,11 +257,9 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 receivedChallenges = challengeCollection.find(query2).toArray();
 
                 for(int i = 0 ; i < sendChallenges.size() ; i++){
-                    System.out.println(sendChallenges.get(i).get("Date"));
                     updateList.add(sendChallenges.get(i).get("Date").toString());
                 }
                 for(int i = 0 ; i < receivedChallenges.size() ; i++){
-                    System.out.println(receivedChallenges.get(i).get("Date"));
                     updateList.add(receivedChallenges.get(i).get("Date").toString());
                 }
 

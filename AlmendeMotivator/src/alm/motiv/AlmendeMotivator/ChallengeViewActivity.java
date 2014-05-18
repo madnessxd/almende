@@ -60,6 +60,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     private ArrayList<BasicDBObject> messages = null;
 
+    private Boolean messageSend = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,6 +223,9 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     }
 
     public void onCommentPressed(View v) {
+        currentChallenge.updateLoginDate();
+        new DatabaseThread().execute("");
+        updateStatusElements();
         showPopup();
     }
 
@@ -426,7 +431,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
     public void updateMessagesInListview() {
         if (messages != null) {
             BasicDBObject aMessage = messages.get(0);
-            System.out.println(aMessage);
             if(aMessage.get("Content")=="This challenge doesn't have comments."){
                 messages.remove(0);
             }
@@ -459,7 +463,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             if (updateUI) {
                 updateUI(challengerName, challengeeName);
             }
-
+            currentChallenge.updateLoginDate();
         }
 
         protected Challenge doInBackground(String... args) {
@@ -520,8 +524,10 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         private void addCommentToChallenge() {
             Challenge challenge = (Challenge) challengeCollection.findOne(current);
             //for some reason we need to get the currentchallenge again from mongodb otherwise it won't update the document
-
+            //long time= System.currentTimeMillis();
+            //challengeCollection.update(challenge, new BasicDBObject("$set", new BasicDBObject("Date", time)));
             challengeCollection.update(challenge, new BasicDBObject("$push", new BasicDBObject("comments", message)));
+            messageSend = true;
         }
 
         private void updateQuery() {
