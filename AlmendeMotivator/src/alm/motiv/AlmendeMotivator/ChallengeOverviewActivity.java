@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alm.motiv.AlmendeMotivator.adapters.EntryAdapter;
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
 import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.Challenge;
@@ -50,6 +51,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private Boolean updateNotification = false;
 
     public void showNotification(){
+        Intent myIntent = new Intent(this, FacebookMainActivity.class);
+        PendingIntent myPendingIntent = PendingIntent.getActivity(this, 0, myIntent, 0);
         //TODO: if statement updateList vullen
         //NOTIFICATION
         for(int i = 0 ; i < updateList.size() ; i++){
@@ -64,6 +67,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.sportoptia)
                             .setContentTitle("Sportopia")
+                            .setContentIntent(myPendingIntent)
+                            .setAutoCancel(true)
                             .setContentText(message);
             int mNotificationId = 001;
             NotificationManager mNotifyMgr =
@@ -99,21 +104,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         DT.execute();
-
-        //TODO: if statement
-        //NOTIFICATION
-        /*String message = "last login: " + Long.toString(lastLogin);
-
-        NotificationCompat.Builder mBuilder =
-            new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.sportoptia)
-                    .setContentTitle("Sportopia")
-                    .setContentText(message);
-        int mNotificationId = 001;
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());*/
-
     }
 
     //on menu pressed
