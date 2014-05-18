@@ -83,7 +83,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     }
 
     public void initListview() {
-        try{
+        try {
             List<DBObject> send = DT.sendChallenges;
             List<DBObject> received = DT.receivedChallenges;
 
@@ -108,7 +108,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
             EntryAdapter adapter = new EntryAdapter(this, items);
             listview.setAdapter(adapter);
             listview.setOnItemClickListener(this);
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
 
@@ -188,31 +188,29 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
         @Override
         protected String doInBackground(String... args) {
-            if(!Cookie.getInstance().internet){
-                return null;
+            if (Cookie.getInstance().internet) {
+                try {
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection challengeCollection = db.getCollection("challenge");
+                    challengeCollection.setObjectClass(Challenge.class);
+
+                    //find al the challenges the user send
+                    Challenge query1 = new Challenge();
+                    query1.put("challenger", Cookie.getInstance().userEntryId);
+                    sendChallenges = challengeCollection.find(query1).toArray();
+
+                    //find al the challenges the user received
+                    Challenge query2 = new Challenge();
+                    query2.put("challengee", Cookie.getInstance().userEntryId);
+                    receivedChallenges = challengeCollection.find(query2).toArray();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
             }
 
-            try{
-                MongoClient client = Database.getInstance();
-                DB db = client.getDB(Database.uri.getDatabase());
-                DBCollection challengeCollection = db.getCollection("challenge");
-                challengeCollection.setObjectClass(Challenge.class);
 
-                //find al the challenges the user send
-                Challenge query1 = new Challenge();
-                query1.put("challenger", Cookie.getInstance().userEntryId);
-                sendChallenges = challengeCollection.find(query1).toArray();
-
-                //find al the challenges the user received
-                Challenge query2 = new Challenge();
-                query2.put("challengee", Cookie.getInstance().userEntryId);
-                receivedChallenges = challengeCollection.find(query2).toArray();
-            }catch(Exception e){
-                System.out.println(e);
-            }
-
-
-            return "succes";
+            return null;
         }
 
     }
