@@ -117,13 +117,10 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
                     try {
                         Thread.sleep(10000);
-                        System.out.println("--");
-                        System.out.println(CU.getStatus());
                         if(CU.getStatus().toString().equals("FINISHED")){
                             CU = new CheckUpdates();
                         }
                         if(CU.getStatus().toString().equals("PENDING")){
-                            System.out.println("a");
                             showNotification();
                             CU.execute();
                         }
@@ -275,8 +272,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
                     lastLogin = updateUser.getLoginDate();
 
-                    System.out.println(lastLogin);
-
                     updateUser.updateLoginDate();
                     userCollection.findAndModify(current, updateUser);
 
@@ -288,11 +283,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
 
             return null;
-        }
-        @Override
-        protected void onPostExecute(String string){
-            System.out.println("ow snap");
-            //showNotification();
         }
     }
 
