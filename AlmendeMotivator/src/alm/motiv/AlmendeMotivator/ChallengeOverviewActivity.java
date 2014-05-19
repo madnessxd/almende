@@ -4,6 +4,7 @@ package alm.motiv.AlmendeMotivator;
  * Created by AsterLaptop on 4/13/14.
  */
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,26 +51,31 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private Boolean updateNotification = false;
 
     public void showNotification(){
-        //TODO: if statement updateList vullen
-        //NOTIFICATION
-        for(int i = 0 ; i < updateList.size() ; i++){
-            if(lastLogin < Long.parseLong(updateList.get(i))){
-                updateNotification = true;
-            }
-        }
-        if(updateNotification == true){
-            String message = "One of your Challenges has been updated";
-            System.out.println(message);
+        try{
 
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.sportoptia)
-                            .setContentTitle("Sportopia")
-                            .setContentText(message);
-            int mNotificationId = 001;
-            NotificationManager mNotifyMgr =
-                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            //TODO: if statement updateList vullen
+            //NOTIFICATION
+            for(int i = 0 ; i < updateList.size() ; i++){
+                if(lastLogin < Long.parseLong(updateList.get(i))){
+                    updateNotification = true;
+                }
+            }
+            if(updateNotification == true){
+                String message = "One of your Challenges has been updated";
+                System.out.println(message);
+
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.drawable.sportoptia)
+                                .setContentTitle("Sportopia")
+                                .setContentText(message);
+                int mNotificationId = 001;
+                NotificationManager mNotifyMgr =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            }
+        }catch (Exception e){
+            System.out.println(e);
         }
     }
 
@@ -230,15 +236,16 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
             simpleWaitDialog.dismiss();
             initListview();
 
-            showNotification();
+            try{
+                showNotification();
+            }catch (Exception e){
+                System.out.println(e);
+            }
         }
 
         @Override
         protected String doInBackground(String... args) {
-            if(!Cookie.getInstance().internet){
-                return null;
-            }
-
+            if(Cookie.getInstance().internet){
             try{
                 MongoClient client = Database.getInstance();
                 DB db = client.getDB(Database.uri.getDatabase());
@@ -280,6 +287,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
             }catch(Exception e){
                 System.out.println(e);
             }
+        }
 
             return "succes";
         }

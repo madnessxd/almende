@@ -35,6 +35,26 @@
         <item>Week</item>
     </string-array>
 
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="living">
+        <item>Student</item>
+        <item>Employee</item>
+        <item>Employer</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="company">
+        <item>Alone</item>
+        <item>With a friend</item>
+        <item>With friends</item>
+        <item>With family</item>
+        <item>Varies</item>
+    </string-array>
+
     <string-array name="partOfTheDay">
         <item>Morning</item>
         <item>Midday</item>

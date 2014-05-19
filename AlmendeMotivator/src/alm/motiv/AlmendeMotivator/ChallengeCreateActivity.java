@@ -227,13 +227,17 @@ public class ChallengeCreateActivity extends Activity {
     }
 
     public void updatePicture(String id, String name) {
-        TextView txtChallengee = (TextView) findViewById(R.id.txtChallengee);
-        txtChallengee.setText(name);
 
-        String imgId = "https://graph.facebook.com/" + id + "/picture?type=normal&height=200&width=200";
-        userPic = (ImageView) findViewById(R.id.imgChallengee);
-        Picasso.with(getApplicationContext()).load(imgId).into(userPic);
-        userPic.setMinimumHeight(300);
+        if(!name.equals("loading... please try again")){
+            TextView txtChallengee = (TextView) findViewById(R.id.txtChallengee);
+            txtChallengee.setText(name);
+
+            String imgId = "https://graph.facebook.com/" + id + "/picture?type=normal&height=200&width=200";
+            userPic = (ImageView) findViewById(R.id.imgChallengee);
+            Picasso.with(getApplicationContext()).load(imgId).into(userPic);
+            userPic.setMinimumHeight(300);
+        }
+
     }
 
     public void setChallengeInfo() {

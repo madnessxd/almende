@@ -9,9 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.*;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
@@ -33,6 +31,11 @@ public class FirstUseActivity extends Activity {
     private EditText motivation3;
     private EditText motivation4;
     private Spinner partOfTheDay;
+    private Spinner gender;
+    private EditText reasonsNotToExercise;
+    private EditText email;
+    private Spinner living;
+    private Spinner company;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -45,20 +48,28 @@ public class FirstUseActivity extends Activity {
         //views
 
         hours = (EditText)findViewById(R.id.hoursInput);
-        period = (Spinner)findViewById(R.id.spPeriod);
         motivation1 = (EditText)findViewById(R.id.motivationReason1);
         motivation2 = (EditText)findViewById(R.id.motivationReason2);
         motivation3 = (EditText)findViewById(R.id.motivationReason3);
         motivation4 = (EditText)findViewById(R.id.motivationReason4);
         partOfTheDay = (Spinner)findViewById(R.id.spPartOfTheDay);
+        gender = (Spinner)findViewById(R.id.spGender);
+        living = (Spinner)findViewById(R.id.spLiving);
+        company = (Spinner)findViewById(R.id.spCompany);
+        reasonsNotToExercise = (EditText)findViewById(R.id.reasonsNoToSport);
+        email = (EditText)findViewById(R.id.email);
     }
 
     public void onSubmitFirstUsePressed(View v){
-        if(validation()){
+        if(validation()&&Cookie.getInstance().internet){
             baseline.setHours(hours.getText().toString());
-            baseline.setPeriod(period.getSelectedItem().toString());
             baseline.setPartOfTheDay(partOfTheDay.getSelectedItem().toString());
             baseline.setMotivations(motivation1.getText().toString(), motivation2.getText().toString(), motivation3.getText().toString(), motivation4.getText().toString());
+            baseline.setCompany(company.getSelectedItem().toString());
+            baseline.setLiving(living.getSelectedItem().toString());
+            baseline.setGender(gender.getSelectedItem().toString());
+            baseline.setReasonsNotToSport(reasonsNotToExercise.getText().toString());
+            baseline.setEmail(email.getText().toString());
 
             new DatabaseThread().execute();
 
@@ -73,6 +84,7 @@ public class FirstUseActivity extends Activity {
         if(!Validation.isLetters(motivation2, true))succes=false;
         if(!Validation.isLetters(motivation3, false))succes=false;
         if(!Validation.isLetters(motivation4, false))succes=false;
+        if(!Validation.isLetters(reasonsNotToExercise, false))succes=false;
         return succes;
     }
 
@@ -94,7 +106,6 @@ public class FirstUseActivity extends Activity {
             simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
 
-            //TODO motivations need to be added to baseline
             Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
             startActivity(newIntent);
             editor.putBoolean("firstUse",true);
@@ -103,19 +114,25 @@ public class FirstUseActivity extends Activity {
 
         @Override
         protected String doInBackground(String... strings) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
 
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
 
-            User match = new User();
-            match.put("facebookID", Cookie.getInstance().userEntryId);
+                    User match = new User();
+                    match.put("facebookID", Cookie.getInstance().userEntryId);
 
-            User update = (User)userCollection.findOne(match);
-            update.put("nulmeting", baseline);
+                    User update = (User)userCollection.findOne(match);
+                    update.put("nulmeting", baseline);
 
-            userCollection.update(match, update);
+                    userCollection.update(match, update);
+                }catch (Exception e){
+                    System.out.println(e);
+                }
+            }
 
             return null;
         }

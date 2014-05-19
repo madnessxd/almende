@@ -82,6 +82,10 @@ public class Challenge extends BasicDBObject implements Item {
         return (ArrayList<BasicDBObject>) this.get("evidence");
     }
 
+    public void setEvidence(String evidence){
+        this.put("evidence", evidence);
+    }
+
     public void setComments(Message message){
         this.put("$push", new BasicDBObject("comments", message));
     }

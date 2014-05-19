@@ -197,7 +197,11 @@ public class ChallengeEvidence extends Activity {
                 //get the Uri for the captured image
                 picUri = data.getData();
                 addReference(picUri);
-                pictureUriList.add(getRealPathFromURI(picUri));
+                try{
+                    pictureUriList.add(getRealPathFromURI(picUri));
+                }catch (Exception e){
+                    System.out.println(e + "huh");
+                }
             } else if (requestCode == SELECT_PICTURE) {
                 picUri = data.getData();
                 addReference(picUri);
@@ -253,62 +257,68 @@ public class ChallengeEvidence extends Activity {
         }
 
         protected void onPostExecute(byte[] result) {
-            simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
             Intent newIntent = new Intent(ChallengeEvidence.this, ChallengeOverviewActivity.class);
             startActivity(newIntent);
         }
 
         protected byte[] doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
 
-            DBCollection challengeCollection = db.getCollection("challenge");
-            challengeCollection.setObjectClass(Challenge.class);
+                    DBCollection challengeCollection = db.getCollection("challenge");
+                    challengeCollection.setObjectClass(Challenge.class);
 
-            Challenge match = new Challenge();
-            match.put("_id", new ObjectId(intent.getExtras().getString("challengeid")));
+                    Challenge match = new Challenge();
+                    match.put("_id", new ObjectId(intent.getExtras().getString("challengeid")));
 
-            if (args[0] == "insert") {
-                GridFS gfsPhoto = new GridFS(db, "challenge");
+                    if (args[0] == "insert") {
+                        GridFS gfsPhoto = new GridFS(db, "challenge");
 
-                int counter = 1;
-                //loop through the picture uri list
-                for (String uri : pictureUriList) {
-                    File imageFile = new File(uri);
-                    GridFSInputFile gfsFile = null;
-                    try {
-                        gfsFile = gfsPhoto.createFile(imageFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        int counter = 1;
+                        //loop through the picture uri list
+                        for (String uri : pictureUriList) {
+                            File imageFile = new File(uri);
+                            GridFSInputFile gfsFile = null;
+                            try {
+                                gfsFile = gfsPhoto.createFile(imageFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            gfsFile.setFilename(intent.getExtras().getString("title") + counter);
+                            gfsFile.save();
+
+                            BasicDBObject evidence = new BasicDBObject();
+                            evidence.put("evidenceID", gfsFile.getId().toString());
+
+                            BasicDBObject setCarrier = new BasicDBObject();
+                            setCarrier.put("gps", intent.getExtras().getString("gps"));
+                            setCarrier.put("status", "completed");
+
+                            long time= System.currentTimeMillis();
+                            setCarrier.put("Date", time);
+                            setCarrier.put("amountHours", amountHours.getText().toString());
+                            setCarrier.put("endDate", new Date());
+
+                            Challenge update = new Challenge();
+                            //update the status of the challenge, so that the challenger knows he can check the popup_evidence
+                            update.put("$set", setCarrier);
+
+                            //put a reference to the popup_evidence picture in the challenge
+                            update.put("$push", new BasicDBObject("evidence", evidence));
+
+
+                            challengeCollection.update(match, update);
+                            counter++;
+                        }
                     }
-                    gfsFile.setFilename(intent.getExtras().getString("title") + counter);
-                    gfsFile.save();
-
-                    BasicDBObject evidence = new BasicDBObject();
-                    evidence.put("evidenceID", gfsFile.getId().toString());
-
-                    BasicDBObject setCarrier = new BasicDBObject();
-                    setCarrier.put("gps", intent.getExtras().getString("gps"));
-                    setCarrier.put("status", "completed");
-
-                    long time= System.currentTimeMillis();
-                    setCarrier.put("Date", time);
-                    setCarrier.put("amountHours", amountHours.getText().toString());
-                    setCarrier.put("endDate", new Date());
-
-                    Challenge update = new Challenge();
-                    //update the status of the challenge, so that the challenger knows he can check the popup_evidence
-                    update.put("$set", setCarrier);
-
-                    //put a reference to the popup_evidence picture in the challenge
-                    update.put("$push", new BasicDBObject("evidence", evidence));
-
-
-                    challengeCollection.update(match, update);
-                    counter++;
+                }catch (Exception e){
+                    System.out.println(e);
                 }
             }
+
             return null;
         }
     }

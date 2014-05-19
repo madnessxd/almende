@@ -184,7 +184,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
             this.startActivity(newIntent);
         }
-
     }
 
     public void onCompletePressed(View v) {
@@ -460,6 +459,7 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         private DBCollection challengeCollection;
         private DBCollection userCollection;
         private Challenge current;
+        private ArrayList<BasicDBObject> evidenceList;
 
         private String challengeeName = "";
         private String challengerName = "";
@@ -472,7 +472,6 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         protected void onPostExecute(Challenge result) {
-            simpleWaitDialog.setMessage("Process completed.");
             simpleWaitDialog.dismiss();
             if (updateUI) {
                 updateUI(challengerName, challengeeName);
@@ -514,8 +513,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 }
 
                 if (args[0].equals("select")) {
-                    ArrayList<BasicDBObject> evidenceList = currentChallenge.getEvidence();
-                    downloadEvidence(evidenceList);
+                    evidenceList = currentChallenge.getEvidence();
+                    downloadEvidence();
                     return null;
                 } else if (args[0].equals("unchanged")) {
                     //if the status is unchanged, we want to add a comment
@@ -541,8 +540,12 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         private void updateQuery() {
-            if (currentChallenge.getStatus().equals("closed") && currentChallenge.getRated().equals("Approved")) {
-                updateXP();
+            if (currentChallenge.getStatus().equals("closed")) {
+                if(currentChallenge.getRated().equals("Approved")){
+                    updateXP();
+                }
+                evidenceList = currentChallenge.getEvidence();
+                deleteEvidence();
             }
             challengeCollection.findAndModify(current, currentChallenge);
         }
@@ -564,7 +567,18 @@ public class ChallengeViewActivity extends Activity implements Serializable {
             userCollection.update(match, update);
         }
 
-        private void downloadEvidence(ArrayList<BasicDBObject> evidenceList) {
+        private void deleteEvidence(){
+            GridFS gfsPhoto = new GridFS(db, "challenge");
+
+            for (BasicDBObject evidence : evidenceList) {
+                String evidenceID = evidence.get("evidenceID").toString();
+                gfsPhoto.remove(new ObjectId(evidenceID));
+            }
+
+            currentChallenge.setEvidence("removed");
+        }
+
+        private void downloadEvidence() {
             GridFS gfsPhoto = new GridFS(db, "challenge");
 
             for (BasicDBObject evidence : evidenceList) {

@@ -22,6 +22,29 @@
               style="@style/normalText"
               android:text="Please fill in this form so we know what your current exercise behaviour is"
               android:layout_height="wrap_content"/>
+    <TextView android:layout_width="fill_parent"
+              style="@style/header"
+              android:text="What is your gender?"
+              android:layout_height="wrap_content"/>
+    <Spinner android:layout_width="wrap_content"
+             android:drawSelectorOnTop="true"
+             android:entries="@array/gender"
+             android:layout_margin="10dp"
+             android:id="@+id/spGender"
+             android:layout_height="wrap_content"></Spinner>
+
+    <TextView android:layout_width="fill_parent"
+              android:text="What do you do for a living?"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
+
+    <Spinner android:layout_width="wrap_content"
+             android:drawSelectorOnTop="true"
+             android:entries="@array/living"
+             android:id="@+id/spLiving"
+             android:layout_margin="10dp"
+             android:layout_height="wrap_content"></Spinner>
+
     <TextView android:layout_width="wrap_content"
               style="@style/header"
               android:text="What is the average time you spend on exercise?"
@@ -32,18 +55,20 @@
         <EditText android:layout_width="wrap_content"
                   android:hint="Number of"
                   android:id="@+id/hoursInput"
+                  style="@style/editText"
                   android:inputType="numberDecimal"
                   android:layout_height="wrap_content"/>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   style="@style/normalText"
-                android:text="hours per"/>
-        <Spinner
+                  android:layout_marginTop="15dp"
+                android:text="hours per week"/>
+        <!--<Spinner
                 android:id="@+id/spPeriod"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawSelectorOnTop="true"
                 android:entries="@array/periods"
-                />
+                />-->
     </LinearLayout>
 
     <TextView android:layout_width="wrap_content"
@@ -70,6 +95,14 @@
               android:hint="Motivation"
               android:id="@+id/motivationReason4"
               android:layout_height="wrap_content"/>
+    <TextView android:layout_width="fill_parent"
+              android:text="If you sometimes have reasons not to exercise, please fill them in here"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
+    <EditText android:layout_width="fill_parent"
+              android:id="@+id/reasonsNoToSport"
+              style="@style/editText"
+              android:layout_height="150dp"/>
     <TextView android:layout_width="wrap_content"
               style="@style/header"
               android:layout_height="wrap_content"
@@ -77,8 +110,32 @@
     <Spinner android:layout_width="wrap_content"
              android:id="@+id/spPartOfTheDay"
              android:entries="@array/partOfTheDay"
+             android:layout_margin="10dp"
              android:drawSelectorOnTop="true"
              android:layout_height="wrap_content"></Spinner>
+    <TextView android:layout_width="fill_parent"
+              style="@style/header"
+              android:text="What's your company when you exercise?"
+              android:layout_height="wrap_content"/>
+    <Spinner android:layout_width="wrap_content"
+             android:id="@+id/spCompany"
+             android:entries="@array/company"
+             android:drawSelectorOnTop="true"
+             android:layout_margin="10dp"
+             android:layout_height="wrap_content"></Spinner>
+    <TextView android:layout_width="fill_parent"
+              android:text="What is your email?"
+              style="@style/header"
+              android:layout_height="wrap_content"/>
+    <TextView android:layout_width="wrap_content"
+              android:text="In about four weeks we would like you to fill in another survey to help our research.
+              We would appreciate it if you fill in a valid email."
+              style="@style/normalText"
+              android:layout_height="wrap_content"/>
+    <EditText android:layout_width="fill_parent"
+              style="@style/editText"
+              android:id="@+id/email"
+              android:layout_height="wrap_content"/>
     <Button android:layout_width="fill_parent"
             android:id="@+id/btnSubmitFirstUse"
             style="@style/button"

@@ -30,7 +30,6 @@ public class ProfileEditActivity extends Activity{
 
     //edit fields
     private EditText sportsInput;
-    private EditText nameInput;
     private EditText ageInput;
     private EditText goalInput;
     private EditText cityInput;
@@ -75,13 +74,11 @@ public class ProfileEditActivity extends Activity{
         //fields
         aboutInput = (EditText)findViewById(R.id.aboutInput);
         sportsInput = (EditText)findViewById(R.id.sportsInput);
-        nameInput = (EditText)findViewById(R.id.nameInput);
         ageInput = (EditText)findViewById(R.id.ageInput);
         goalInput = (EditText)findViewById(R.id.goalInput);
         cityInput = (EditText)findViewById(R.id.cityInput);
 
         //set content fields with existing data
-        nameInput.setText(user.getName());
         goalInput.setText(user.getGoal());
         aboutInput.setText(user.getAbout());
         ageInput.setText(user.getAge());
@@ -91,7 +88,7 @@ public class ProfileEditActivity extends Activity{
     }
 
     public void saveUserBtn(View v) throws InterruptedException {
-        if(validation()){
+        if(validation()&&Cookie.getInstance().internet){
             new DatabaseThread().execute("insert");
         }
     }
@@ -117,7 +114,6 @@ public class ProfileEditActivity extends Activity{
         if(!Validation.hasText(aboutInput))succes=false;
         if(!Validation.isNumeric(ageInput,true))succes=false;
         if(!Validation.isLetters(cityInput, false))succes=false;
-        if(!Validation.isLetters(nameInput, true))succes=false;
         if(!Validation.hasText(sportsInput))succes=false;
         if(!Validation.isLetters(goalInput, false))succes=false;
         return succes;
@@ -146,33 +142,37 @@ public class ProfileEditActivity extends Activity{
         }
 
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
 
-            // get the current user from database
-            User current = new User();
-            if(facebookIdFriend!=null){
-                current.put("facebookID", facebookIdFriend);
-            }else{
-                current.put("facebookID", Cookie.getInstance().userEntryId);
+                    // get the current user from database
+                    User current = new User();
+                    if(facebookIdFriend!=null){
+                        current.put("facebookID", facebookIdFriend);
+                    }else{
+                        current.put("facebookID", Cookie.getInstance().userEntryId);
+                    }
+                    User aUser = (User) userCollection.find(current).toArray().get(0);
+
+                    if(args[0]=="select"){
+                        user = aUser;
+                    }else if(args[0]=="insert"){
+                        insertQuery(current,aUser, userCollection);
+                        redirect=true;
+                    }
+                }catch (Exception e){
+                    System.out.println(e);
+                }
             }
-            User aUser = (User) userCollection.find(current).toArray().get(0);
-
-            if(args[0]=="select"){
-                user = aUser;
-            }else if(args[0]=="insert"){
-                insertQuery(current,aUser, userCollection);
-                redirect=true;
-            }
-
             return null;
         }
 
         private void insertQuery(User current, User newUser, DBCollection userCollection){
             newUser.setAbout(String.valueOf(aboutInput.getText()));
-            newUser.setName(String.valueOf(nameInput.getText()));
             newUser.setAge(String.valueOf(ageInput.getText()));
             newUser.setCity(String.valueOf(cityInput.getText()));
             newUser.setGoal(String.valueOf(goalInput.getText()));

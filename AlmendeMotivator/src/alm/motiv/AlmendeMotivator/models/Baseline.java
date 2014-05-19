@@ -17,6 +17,10 @@ public class Baseline extends BasicDBObject {
         put("partOfTheDay", partOfTheDay);
     }
 
+    public void setEmail(String email){
+        this.put("email", email);
+    }
+
     public void setHours(String hours){
         this.put("hours", hours);
     }
@@ -31,5 +35,21 @@ public class Baseline extends BasicDBObject {
 
     public void setPartOfTheDay(String partOfTheDay){
         this.put("partOfTheDay", partOfTheDay);
+    }
+
+    public void setGender(String gender){
+        this.put("gender", gender);
+    }
+
+    public void setLiving(String living){
+        this.put("living", living);
+    }
+
+    public void setCompany(String company){
+        this.put("company",company);
+    }
+
+    public void setReasonsNotToSport(String reasonsNotToSport){
+        this.put("reasonsNotToSport", reasonsNotToSport);
     }
 }

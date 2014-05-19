@@ -152,12 +152,19 @@ public class FacebookMainFragment extends Fragment {
                             user = me;
 
                             //need this so we can access the user's data in mongodb with database entry key
-                            Cookie entry = Cookie.getInstance();
-                            entry.userEntryId = user.getId();
-                            entry.userName = user.getName();
+                            try{
+                                Cookie entry = Cookie.getInstance();
+                                entry.userEntryId = user.getId();
+                                entry.userName = user.getName();
 
-                            updateUI(session);
-                            new DatabaseThread().execute();
+                                updateUI(session);
+                                new DatabaseThread().execute();
+                            }catch (Exception e){
+                                //TODO need to test this
+                                Toast.makeText(getActivity().getApplicationContext(),"Something went wrong trying to get your facebook account.", Toast.LENGTH_LONG);
+                                fetchUserInfo(session);
+                            }
+
                         }
                         if (response.getError() != null) {
                         }
@@ -225,22 +232,29 @@ public class FacebookMainFragment extends Fragment {
         }
 
         protected String doInBackground(String... args) {
-            // To connect to mongodb server
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
+            if(Cookie.getInstance().internet){
+                try{
+                    // To connect to mongodb server
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
 
-            //get collection and attach class to it
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+                    //get collection and attach class to it
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
 
-            //query the database to see if the user is already known in our database
-            DBObject query = QueryBuilder.start("facebookID").is(user.getId()).get();
+                    //query the database to see if the user is already known in our database
+                    DBObject query = QueryBuilder.start("facebookID").is(user.getId()).get();
 
-            DBCursor cursor = userCollection.find(query);
+                    DBCursor cursor = userCollection.find(query);
 
-            if (cursor.count() == 0) {//if no result, add user
-                User appUser = new User(user.getId(), user.getName());
-                userCollection.insert(appUser, WriteConcern.ACKNOWLEDGED);
+                    if (cursor.count() == 0) {//if no result, add user
+                        User appUser = new User(user.getId(), user.getName());
+                        userCollection.insert(appUser, WriteConcern.ACKNOWLEDGED);
+                    }
+
+                }catch (Exception e){
+                    System.out.println(e);
+                }
             }
 
             return null;
