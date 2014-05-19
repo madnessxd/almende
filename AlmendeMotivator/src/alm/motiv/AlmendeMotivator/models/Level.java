@@ -4,11 +4,11 @@ package alm.motiv.AlmendeMotivator.models;
  * Created by AsterLaptop on 4/22/14.
  */
 public enum Level {
-    BEGINNER(1000),
-    NOVICE(3000),
-    ATHLETE(10000),
-    MASTER(100000),
-    CHAMPION(100000);
+    BEGINNER(10000),
+    NOVICE(50000),
+    ATHLETE(1000000),
+    MASTER(5000000),
+    CHAMPION(10000000);
 
     private int maxXP;
 
