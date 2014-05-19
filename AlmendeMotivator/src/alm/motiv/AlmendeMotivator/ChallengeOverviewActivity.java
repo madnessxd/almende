@@ -4,7 +4,6 @@ package alm.motiv.AlmendeMotivator;
  * Created by AsterLaptop on 4/13/14.
  */
 
-import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +14,12 @@ import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.*;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -40,7 +37,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private ArrayList<Item> items = new ArrayList<Item>();
     private ListView listview = null;
     private DatabaseThread DT = new DatabaseThread();
-
+    private CheckUpdates CU;
+    
     //shared preferences
     private static String PREFS_NAME = "sportopiaprefs";
     private SharedPreferences settings;
@@ -77,6 +75,7 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 NotificationManager mNotifyMgr =
                         (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                updateNotification = false;
             }
         }catch (Exception e){
             System.out.println(e);
@@ -110,6 +109,31 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         DT.execute();
+
+        new Thread(new Runnable() {
+            public void run() {
+                while (true){
+                    CU = new CheckUpdates();
+
+                    try {
+                        Thread.sleep(10000);
+                        System.out.println("--");
+                        System.out.println(CU.getStatus());
+                        if(CU.getStatus().toString().equals("FINISHED")){
+                            CU = new CheckUpdates();
+                        }
+                        if(CU.getStatus().toString().equals("PENDING")){
+                            System.out.println("a");
+                            showNotification();
+                            CU.execute();
+                        }
+
+                    } catch (Exception e){}
+                }
+            }
+
+        }).start();
+
     }
 
     //on menu pressed
@@ -208,6 +232,70 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         }
     }
 
+    private class CheckUpdates extends AsyncTask<String, String, String> {
+        public List<DBObject> sendChallenges = null;
+        public List<DBObject> receivedChallenges = null;
+
+        ProgressDialog simpleWaitDialog = null;
+
+        @Override
+        protected String doInBackground(String... args) {
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection challengeCollection = db.getCollection("challenge");
+                    challengeCollection.setObjectClass(Challenge.class);
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
+
+                    //find al the challenges the user send
+                    Challenge query1 = new Challenge();
+                    query1.put("challenger", Cookie.getInstance().userEntryId);
+                    sendChallenges = challengeCollection.find(query1).toArray();
+
+                    //find al the challenges the user received
+                    Challenge query2 = new Challenge();
+                    query2.put("challengee", Cookie.getInstance().userEntryId);
+                    receivedChallenges = challengeCollection.find(query2).toArray();
+
+                    for(int i = 0 ; i < sendChallenges.size() ; i++){
+                        updateList.add(sendChallenges.get(i).get("Date").toString());
+                    }
+                    for(int i = 0 ; i < receivedChallenges.size() ; i++){
+                        updateList.add(receivedChallenges.get(i).get("Date").toString());
+                    }
+
+                    //updateList
+
+                    //Update user last login time/date
+                    User current = new User();
+                    current.put("facebookID", Cookie.getInstance().userEntryId);
+                    User updateUser = (User) userCollection.find(current).toArray().get(0);
+
+                    lastLogin = updateUser.getLoginDate();
+
+                    System.out.println(lastLogin);
+
+                    updateUser.updateLoginDate();
+                    userCollection.findAndModify(current, updateUser);
+
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+
+            }
+
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String string){
+            System.out.println("ow snap");
+            //showNotification();
+        }
+    }
+
     private class DatabaseThread extends AsyncTask<String, String, String> {
         public List<DBObject> sendChallenges = null;
         public List<DBObject> receivedChallenges = null;
@@ -225,11 +313,11 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
             simpleWaitDialog.dismiss();
             initListview();
 
-            try{
+            /*try{
                 showNotification();
             }catch (Exception e){
                 System.out.println(e);
-            }
+            }*/
         }
 
         @Override
@@ -240,8 +328,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 DB db = client.getDB(Database.uri.getDatabase());
                 DBCollection challengeCollection = db.getCollection("challenge");
                 challengeCollection.setObjectClass(Challenge.class);
-                DBCollection userCollection = db.getCollection("user");
-                userCollection.setObjectClass(User.class);
 
                 //find al the challenges the user send
                 Challenge query1 = new Challenge();
@@ -252,24 +338,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 Challenge query2 = new Challenge();
                 query2.put("challengee", Cookie.getInstance().userEntryId);
                 receivedChallenges = challengeCollection.find(query2).toArray();
-
-                for(int i = 0 ; i < sendChallenges.size() ; i++){
-                    updateList.add(sendChallenges.get(i).get("Date").toString());
-                }
-                for(int i = 0 ; i < receivedChallenges.size() ; i++){
-                    updateList.add(receivedChallenges.get(i).get("Date").toString());
-                }
-
-                //updateList
-
-                //Update user last login time/date
-                User current = new User();
-                current.put("facebookID", Cookie.getInstance().userEntryId);
-                User updateUser = (User) userCollection.find(current).toArray().get(0);
-
-                lastLogin = updateUser.getLoginDate();
-                updateUser.updateLoginDate();
-                userCollection.findAndModify(current, updateUser);
 
             }catch(Exception e){
                 System.out.println(e);
