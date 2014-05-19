@@ -24,6 +24,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="picasso-2.2.0" level="project" />
   </component>
 </module>
 
