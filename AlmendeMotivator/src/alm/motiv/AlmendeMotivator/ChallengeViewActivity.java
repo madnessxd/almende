@@ -355,12 +355,14 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 //we only want the challenger to see this button
                 Button approve = (Button) findViewById(R.id.btnApprove);
                 approve.setVisibility(View.VISIBLE);
+                txtStatus.setText("Evidence has been turned in");
+
 
                 //text for the status bar
-                txtStatus.setText("You have turned in evidence");
 
             }else{
-                txtStatus.setText("Evidence has been turned in");
+                txtStatus.setText("You have turned in evidence");
+
             }
 
             Button evidence = (Button) findViewById(R.id.btnEvidence);
@@ -552,6 +554,8 @@ public class ChallengeViewActivity extends Activity implements Serializable {
                 }
                 evidenceList = currentChallenge.getEvidence();
                 deleteEvidence();
+                Intent redirectMe = new Intent(ChallengeViewActivity.this, ChallengeOverviewActivity.class);
+                startActivity(redirectMe);
             }
             challengeCollection.findAndModify(current, currentChallenge);
         }
