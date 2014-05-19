@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alm.motiv.AlmendeMotivator.adapters.EntryAdapter;
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
 import alm.motiv.AlmendeMotivator.adapters.Item;
 import alm.motiv.AlmendeMotivator.models.Challenge;
@@ -52,7 +53,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
     public void showNotification(){
         try{
-
+        Intent myIntent = new Intent(this, FacebookMainActivity.class);
+        PendingIntent myPendingIntent = PendingIntent.getActivity(this, 0, myIntent, 0);
             //TODO: if statement updateList vullen
             //NOTIFICATION
             for(int i = 0 ; i < updateList.size() ; i++){
@@ -62,12 +64,14 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
             }
             if(updateNotification == true){
                 String message = "One of your Challenges has been updated";
-                System.out.println(message);
+                
 
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.drawable.sportoptia)
                                 .setContentTitle("Sportopia")
+                            .setContentIntent(myPendingIntent)
+                            .setAutoCancel(true)
                                 .setContentText(message);
                 int mNotificationId = 001;
                 NotificationManager mNotifyMgr =
@@ -106,21 +110,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         DT.execute();
-
-        //TODO: if statement
-        //NOTIFICATION
-        /*String message = "last login: " + Long.toString(lastLogin);
-
-        NotificationCompat.Builder mBuilder =
-            new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.sportoptia)
-                    .setContentTitle("Sportopia")
-                    .setContentText(message);
-        int mNotificationId = 001;
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());*/
-
     }
 
     //on menu pressed
@@ -265,11 +254,9 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 receivedChallenges = challengeCollection.find(query2).toArray();
 
                 for(int i = 0 ; i < sendChallenges.size() ; i++){
-                    System.out.println(sendChallenges.get(i).get("Date"));
                     updateList.add(sendChallenges.get(i).get("Date").toString());
                 }
                 for(int i = 0 ; i < receivedChallenges.size() ; i++){
-                    System.out.println(receivedChallenges.get(i).get("Date"));
                     updateList.add(receivedChallenges.get(i).get("Date").toString());
                 }
 
