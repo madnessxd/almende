@@ -46,5 +46,10 @@
                 android:layout_weight="1"
                 android:onClick="onApprovePressed"
                 android:visibility="gone"/>
-
+    <Button android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Motivate Friend +"
+            style="@style/button"
+            android:id="@+id/btnComment"
+            android:onClick="onCommentPressed"/>
 </LinearLayout>
