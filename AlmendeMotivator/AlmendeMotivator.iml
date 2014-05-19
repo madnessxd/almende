@@ -2,12 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android" name="Android">
-      <configuration>
-        <proGuardCfgFiles>
-          <file>file://C:/Program Files/Java/jdk1.7.0_45/tools/proguard/proguard-android.txt</file>
-        </proGuardCfgFiles>
-        <option name="UPDATE_PROPERTY_FILES" value="true" />
-      </configuration>
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
@@ -19,7 +14,7 @@
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="facebook" />
-    <orderEntry type="library" name="libs" level="project" />
+    <orderEntry type="library" name="picasso-2.2.0" level="project" />
     <orderEntry type="library" name="mongo-2.10.1" level="project" />
   </component>
 </module>
