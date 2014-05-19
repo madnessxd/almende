@@ -21,10 +21,21 @@
 
     <TextView android:layout_width="fill_parent"
               style="@style/normalText"
+              android:textSize="15dp"
               android:id="@+id/aboutSportopiaContent"
-              android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac turpis vitae odio.Proin tincidunt tortor vel felis porttitor, sit amet pretium arcu porttitor. Donec porta neque suscipit, congue tortor vel, sollicitudin dui.
+              android:text="Thank you for downloading the Sportopia app for android!
 
-Nulla quis diam eget tortor consequat volutpat at a tortor. Proin tincidunt tortor vel felis porttitor, sit amet pretium arcu porttitor. Donec porta neque suscipit, congue tortor vel, sollicitudin dui. Donec hendrerit eros nibh, et rhoncus tortor convallis eu. Praesent a elementum nisi. Ut ornare est ut imperdiet posuere."
+Sportopia is a sport app that allows you to send challenges to your friends! How long can they run? How far
+can they swim? You can find out! Send them a challenge today! \n\n
+
+Sportopia serves as a way for us to find out if people get more motivated to exercise by completing challenges.
+The app keeps track of the amount of hours that you exercise in a week. Then we monitor how many challenges you complete in a week.
+With that information we can see if you did more or less exercise activities than you usually would. \n\n
+
+This is all done for a observation research. To see if a motivational sporting app really encourages people
+to go out and exercise more. We're going to write an official paper about it.\n\n
+
+Sportopia was build in cooperation with Almende and the Hogeschool van Amsterdam. "
               android:layout_height="wrap_content"/>
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
         <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
