@@ -90,6 +90,8 @@ public class ProfileEditActivity extends Activity{
     public void saveUserBtn(View v) throws InterruptedException {
         if(validation()&&Cookie.getInstance().internet){
             new DatabaseThread().execute("insert");
+        } else{
+            Toast.makeText(getApplicationContext(), "You forgot to select a challengee", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -73,6 +73,8 @@ public class FirstUseActivity extends Activity {
 
             new DatabaseThread().execute();
 
+        } else{
+            Toast.makeText(getApplicationContext(), "Not everything has been filled in correctly.", Toast.LENGTH_SHORT).show();
         }
     }
 
