@@ -49,9 +49,8 @@
 
     <string-array name="company">
         <item>Alone</item>
-        <item>With a friend</item>
-        <item>With friends</item>
-        <item>With family</item>
+        <item>With 1 person</item>
+        <item>With more than 1 person</item>
         <item>Varies</item>
     </string-array>
 
