@@ -2,6 +2,7 @@ package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.adapters.FriendsAdapter;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainFragment;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.misc.CustomCallback;
 import alm.motiv.AlmendeMotivator.models.User;
@@ -270,6 +271,12 @@ public class FriendActivity extends Activity {
         btnFollowMoreFriends.setVisibility(View.GONE);
         lblFriendsYouFollow.setText("Choose friends to follow");
         addFriendsToList(compareFriends());
+    }
+
+    public void onInvitePressed(View v){
+        if(Cookie.getInstance().internet){
+                    FacebookMainFragment.sendRequestDialog(this);
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

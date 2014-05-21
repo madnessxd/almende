@@ -13,6 +13,15 @@
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="Invite friends to use Sportopia +"
+            android:id="@+id/sendRequestButton"
+            android:onClick="onInvitePressed"
+            android:layout_marginBottom="1dp"
+            style="@style/button"/>
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="Follow more friends +"
             android:id="@+id/followFriends"
             android:onClick="onFollowFriendsPressed"
