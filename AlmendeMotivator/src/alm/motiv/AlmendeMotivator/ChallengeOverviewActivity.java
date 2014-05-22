@@ -17,6 +17,7 @@ import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -37,50 +38,11 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
     private ArrayList<Item> items = new ArrayList<Item>();
     private ListView listview = null;
     private DatabaseThread DT = new DatabaseThread();
-    private CheckUpdates CU;
-    
+
     //shared preferences
     private static String PREFS_NAME = "sportopiaprefs";
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
-
-    //Notification
-    private long lastLogin;
-    private ArrayList<String> updateList = new ArrayList<String>();
-    private Boolean updateNotification = false;
-
-    public void showNotification(){
-        try{
-        Intent myIntent = new Intent(this, FacebookMainActivity.class);
-        PendingIntent myPendingIntent = PendingIntent.getActivity(this, 0, myIntent, 0);
-            //TODO: if statement updateList vullen
-            //NOTIFICATION
-            for(int i = 0 ; i < updateList.size() ; i++){
-                if(lastLogin < Long.parseLong(updateList.get(i))){
-                    updateNotification = true;
-                }
-            }
-            if(updateNotification == true){
-                String message = "One of your Challenges has been updated";
-                
-
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.drawable.sportoptia)
-                                .setContentTitle("Sportopia")
-                            .setContentIntent(myPendingIntent)
-                            .setAutoCancel(true)
-                                .setContentText(message);
-                int mNotificationId = 001;
-                NotificationManager mNotifyMgr =
-                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                mNotifyMgr.notify(mNotificationId, mBuilder.build());
-                updateNotification = false;
-            }
-        }catch (Exception e){
-            System.out.println(e);
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,27 +72,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
         DT.execute();
 
-        new Thread(new Runnable() {
-            public void run() {
-                while (true){
-                    CU = new CheckUpdates();
-
-                    try {
-                        Thread.sleep(10000);
-                        if(CU.getStatus().toString().equals("FINISHED")){
-                            CU = new CheckUpdates();
-                        }
-                        if(CU.getStatus().toString().equals("PENDING")){
-                            showNotification();
-                            CU.execute();
-                        }
-
-                    } catch (Exception e){}
-                }
-            }
-
-        }).start();
-
+        Intent mServiceIntent = new Intent(ChallengeOverviewActivity.this, MongoPull.class);
+        ChallengeOverviewActivity.this.startService(mServiceIntent);
     }
 
     //on menu pressed
@@ -226,63 +169,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             Menu.selectItem(position, ChallengeOverviewActivity.this);
-        }
-    }
-
-    private class CheckUpdates extends AsyncTask<String, String, String> {
-        public List<DBObject> sendChallenges = null;
-        public List<DBObject> receivedChallenges = null;
-
-        ProgressDialog simpleWaitDialog = null;
-
-        @Override
-        protected String doInBackground(String... args) {
-            if(Cookie.getInstance().internet){
-                try{
-                    MongoClient client = Database.getInstance();
-                    DB db = client.getDB(Database.uri.getDatabase());
-                    DBCollection challengeCollection = db.getCollection("challenge");
-                    challengeCollection.setObjectClass(Challenge.class);
-                    DBCollection userCollection = db.getCollection("user");
-                    userCollection.setObjectClass(User.class);
-
-                    //find al the challenges the user send
-                    Challenge query1 = new Challenge();
-                    query1.put("challenger", Cookie.getInstance().userEntryId);
-                    sendChallenges = challengeCollection.find(query1).toArray();
-
-                    //find al the challenges the user received
-                    Challenge query2 = new Challenge();
-                    query2.put("challengee", Cookie.getInstance().userEntryId);
-                    receivedChallenges = challengeCollection.find(query2).toArray();
-
-                    for(int i = 0 ; i < sendChallenges.size() ; i++){
-                        updateList.add(sendChallenges.get(i).get("Date").toString());
-                    }
-                    for(int i = 0 ; i < receivedChallenges.size() ; i++){
-                        updateList.add(receivedChallenges.get(i).get("Date").toString());
-                    }
-
-                    //updateList
-
-                    //Update user last login time/date
-                    User current = new User();
-                    current.put("facebookID", Cookie.getInstance().userEntryId);
-                    User updateUser = (User) userCollection.find(current).toArray().get(0);
-
-                    lastLogin = updateUser.getLoginDate();
-
-                    updateUser.updateLoginDate();
-                    userCollection.findAndModify(current, updateUser);
-
-                }catch(Exception e){
-                    System.out.println(e);
-                }
-
-            }
-
-
-            return null;
         }
     }
 
