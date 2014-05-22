@@ -222,7 +222,12 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
         @Override
         protected void onPostExecute(String string) {
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             initListview();
 
             try{
@@ -275,7 +280,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
                 System.out.println(e);
             }
         }
-
             return "succes";
         }
 

@@ -290,11 +290,7 @@ public class FriendActivity extends Activity {
         private ProgressDialog simpleWaitDialog;
 
         protected String doInBackground(String... args) {
-            if (!Cookie.getInstance().internet) {
-                System.out.println("I COME HERE");
-                return null;
-            }
-
+            if (Cookie.getInstance().internet) {
             try {
                 MongoClient client = Database.getInstance();
                 DB db = client.getDB(Database.uri.getDatabase());
@@ -323,6 +319,7 @@ public class FriendActivity extends Activity {
             } catch (Exception e) {
                 System.out.println(e);
             }
+            }
             return null;
         }
 
@@ -334,7 +331,12 @@ public class FriendActivity extends Activity {
         }
 
         protected void onPostExecute(String result) {
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             if (!initializedFriends) {
                 initFriends();
                 initializedFriends = true;
