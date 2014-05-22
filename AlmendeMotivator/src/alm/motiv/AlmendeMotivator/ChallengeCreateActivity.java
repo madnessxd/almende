@@ -293,35 +293,41 @@ public class ChallengeCreateActivity extends Activity {
 
     class DatabaseThread extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            // To connect to mongodb server
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
+            if(Cookie.getInstance().internet){
+                try{
+                    // To connect to mongodb server
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
 
-            //get collection and attach class to it
-            DBCollection challengeCollection = db.getCollection("challenge");
-            challengeCollection.setObjectClass(Challenge.class);
+                    //get collection and attach class to it
+                    DBCollection challengeCollection = db.getCollection("challenge");
+                    challengeCollection.setObjectClass(Challenge.class);
 
-            Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", "null", XPreward);
-            challenge.setStartDate(new Date());
-            challenge.setChallengerName(Cookie.getInstance().userName);
-            challenge.setChallengeeName(challengeeName);
-            challengeCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
+                    Challenge challenge = new Challenge(title, challenger, challengee, content, evidence_amount, evidence_type, reward, status, "null", "null", XPreward);
+                    challenge.setStartDate(new Date());
+                    challenge.setChallengerName(Cookie.getInstance().userName);
+                    challenge.setChallengeeName(challengeeName);
+                    challengeCollection.insert(challenge, WriteConcern.ACKNOWLEDGED);
 
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
 
-            User match = new User();
-            match.put("facebookID", Cookie.getInstance().userEntryId);
+                    User match = new User();
+                    match.put("facebookID", Cookie.getInstance().userEntryId);
 
-            User update = (User) userCollection.findOne(match);
-            int reward = 100;
-            try {
-                update.setXP(update.getXP() + reward);
-            } catch (Exception e) {
-                update.setXP(reward);
+                    User update = (User) userCollection.findOne(match);
+                    int reward = 100;
+                    try {
+                        update.setXP(update.getXP() + reward);
+                    } catch (Exception e) {
+                        update.setXP(reward);
+                    }
+
+                    userCollection.update(match, update);
+                }catch (Exception e){
+                    System.out.println(e);
+                }
             }
-
-            userCollection.update(match, update);
             return null;
         }
 
@@ -333,8 +339,12 @@ public class ChallengeCreateActivity extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            simpleWaitDialog.setMessage("Process completed.");
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             Toast.makeText(getApplicationContext(), "Challenge created!", Toast.LENGTH_LONG).show();
             finish();
             Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
@@ -344,44 +354,50 @@ public class ChallengeCreateActivity extends Activity {
 
     class DatabaseThread2 extends AsyncTask<String, String, String> {
         protected String doInBackground(String... args) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
+            if(Cookie.getInstance().internet){
+                try{
+                    MongoClient client = Database.getInstance();
+                    DB db = client.getDB(Database.uri.getDatabase());
+                    DBCollection userCollection = db.getCollection("user");
+                    userCollection.setObjectClass(User.class);
 
-            Session session = Session.getActiveSession();
+                    Session session = Session.getActiveSession();
 
-            Request request = new Request(session, "me", null, HttpMethod.GET);
-            Response response = request.executeAndWait();
+                    Request request = new Request(session, "me", null, HttpMethod.GET);
+                    Response response = request.executeAndWait();
 
-            User curUser = new User();
-            curUser.put("facebookID", Cookie.getInstance().userEntryId);
-            User newUser = (User) userCollection.find(curUser).toArray().get(0);
-
-
-            if (newUser.get("friends") != null) {
-
-                ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
-
-                String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
-                String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
+                    User curUser = new User();
+                    curUser.put("facebookID", Cookie.getInstance().userEntryId);
+                    User newUser = (User) userCollection.find(curUser).toArray().get(0);
 
 
-                for (int i = 0; i < arrayMessages.toArray().length; i++) {
-                    facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ " + '"' + "facebookID" + '"' + " : " + '"', "").replace('"' + "}", "");
+                    if (newUser.get("friends") != null) {
 
-                    request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
-                    response = request.executeAndWait();
+                        ArrayList<String> arrayMessages = (ArrayList<String>) newUser.get("friends");
 
-                    if (response.getError() != null) {
-                        System.out.println("NOPE");
-                    } else {
-                        GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
-                        facebookFriendsNameTemp[i] = graphUser.getName();
+                        String[] facebookFriendsTemp = new String[arrayMessages.toArray().length];
+                        String[] facebookFriendsNameTemp = new String[arrayMessages.toArray().length];
+
+
+                        for (int i = 0; i < arrayMessages.toArray().length; i++) {
+                            facebookFriendsTemp[i] = arrayMessages.toArray()[i].toString().replace("{ " + '"' + "facebookID" + '"' + " : " + '"', "").replace('"' + "}", "");
+
+                            request = new Request(session, facebookFriendsTemp[i], null, HttpMethod.GET);
+                            response = request.executeAndWait();
+
+                            if (response.getError() != null) {
+                                System.out.println("NOPE");
+                            } else {
+                                GraphUser graphUser = response.getGraphObjectAs(GraphUser.class);
+                                facebookFriendsNameTemp[i] = graphUser.getName();
+                            }
+                        }
+                        facebookFriends = facebookFriendsTemp;
+                        facebookFriendsName = facebookFriendsNameTemp;
                     }
+                }catch (Exception e){
+                    System.out.println(e);
                 }
-                facebookFriends = facebookFriendsTemp;
-                facebookFriendsName = facebookFriendsNameTemp;
             }
 
             return null;

@@ -2,6 +2,7 @@ package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.adapters.FriendsAdapter;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
+import alm.motiv.AlmendeMotivator.facebook.FacebookMainFragment;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.misc.CustomCallback;
 import alm.motiv.AlmendeMotivator.models.User;
@@ -272,6 +273,12 @@ public class FriendActivity extends Activity {
         addFriendsToList(compareFriends());
     }
 
+    public void onInvitePressed(View v){
+        if(Cookie.getInstance().internet){
+                    FacebookMainFragment.sendRequestDialog(this);
+        }
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -283,11 +290,7 @@ public class FriendActivity extends Activity {
         private ProgressDialog simpleWaitDialog;
 
         protected String doInBackground(String... args) {
-            if (!Cookie.getInstance().internet) {
-                System.out.println("I COME HERE");
-                return null;
-            }
-
+            if (Cookie.getInstance().internet) {
             try {
                 MongoClient client = Database.getInstance();
                 DB db = client.getDB(Database.uri.getDatabase());
@@ -316,6 +319,7 @@ public class FriendActivity extends Activity {
             } catch (Exception e) {
                 System.out.println(e);
             }
+            }
             return null;
         }
 
@@ -327,7 +331,12 @@ public class FriendActivity extends Activity {
         }
 
         protected void onPostExecute(String result) {
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             if (!initializedFriends) {
                 initFriends();
                 initializedFriends = true;

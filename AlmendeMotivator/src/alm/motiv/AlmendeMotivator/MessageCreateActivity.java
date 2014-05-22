@@ -279,8 +279,12 @@ public class MessageCreateActivity extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            simpleWaitDialog.setMessage("Process completed.");
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             Toast.makeText(getApplicationContext(), messageText, Toast.LENGTH_LONG).show();
             finish();
             Intent home = new Intent(MessageCreateActivity.this, MessageActivity.class);

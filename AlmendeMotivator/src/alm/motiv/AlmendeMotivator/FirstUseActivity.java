@@ -73,6 +73,8 @@ public class FirstUseActivity extends Activity {
 
             new DatabaseThread().execute();
 
+        } else{
+            Toast.makeText(getApplicationContext(), "Not everything has been filled in correctly.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -103,8 +105,12 @@ public class FirstUseActivity extends Activity {
         }
 
         protected void onPostExecute(String result) {
-            simpleWaitDialog.setMessage("Process completed.");
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
 
             Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
             startActivity(newIntent);

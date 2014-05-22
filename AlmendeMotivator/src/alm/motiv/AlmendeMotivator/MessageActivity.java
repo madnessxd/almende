@@ -139,7 +139,12 @@ public class MessageActivity extends Activity{
 
         @Override
         protected void onPostExecute(String string) {
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             showMessages();
         }
     }

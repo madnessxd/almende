@@ -158,7 +158,12 @@ public class ProfileActivity extends Activity{
         }
 
         protected void onPostExecute(String result) {
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             initLabels();
         }
 

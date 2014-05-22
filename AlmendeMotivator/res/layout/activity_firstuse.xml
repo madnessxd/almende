@@ -78,7 +78,7 @@
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               style="@style/normalText"
-            android:text="Is it for fun, or for example health? Fill in at least two"/>
+            android:text="Fill in at least two"/>
     <EditText android:layout_width="fill_parent"
               android:hint="Motivation"
               android:id="@+id/motivationReason1"
@@ -128,8 +128,7 @@
               style="@style/header"
               android:layout_height="wrap_content"/>
     <TextView android:layout_width="wrap_content"
-              android:text="In about four weeks we would like you to fill in another survey to help our research.
-              We would appreciate it if you fill in a valid email."
+              android:text="In about three weeks we would like you to fill in another survey to help our research. We would appreciate it if you fill in a valid email."
               style="@style/normalText"
               android:layout_height="wrap_content"/>
     <EditText android:layout_width="fill_parent"

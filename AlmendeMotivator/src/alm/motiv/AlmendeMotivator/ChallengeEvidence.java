@@ -257,7 +257,12 @@ public class ChallengeEvidence extends Activity {
         }
 
         protected void onPostExecute(byte[] result) {
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             Intent newIntent = new Intent(ChallengeEvidence.this, ChallengeOverviewActivity.class);
             startActivity(newIntent);
         }

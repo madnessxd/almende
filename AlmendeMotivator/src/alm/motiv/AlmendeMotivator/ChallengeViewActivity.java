@@ -178,13 +178,18 @@ public class ChallengeViewActivity extends Activity implements Serializable {
 
     public void onAcceptPressed(View v) {
         if(Cookie.getInstance().internet){
-            currentChallenge.setStatus("accepted");
-            currentChallenge.updateLoginDate();
-            new DatabaseThread().execute("");
-            updateStatusElements();
-            finish();
-            Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
-            this.startActivity(newIntent);
+            try{
+                currentChallenge.setStatus("accepted");
+                currentChallenge.updateLoginDate();
+                new DatabaseThread().execute("");
+                updateStatusElements();
+                finish();
+                Intent newIntent = new Intent(this, ChallengeOverviewActivity.class);
+                this.startActivity(newIntent);
+            }catch(Exception e ){
+                System.out.println(e);
+            }
+
         }
     }
 
@@ -478,7 +483,12 @@ public class ChallengeViewActivity extends Activity implements Serializable {
         }
 
         protected void onPostExecute(Challenge result) {
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             if (updateUI) {
                 updateUI(challengerName, challengeeName);
             }
