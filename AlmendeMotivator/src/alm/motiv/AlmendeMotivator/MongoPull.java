@@ -143,7 +143,7 @@ public class MongoPull extends IntentService {
                     showNotification();
                     CU.execute();
                 }
-                Thread.sleep(10000);
+                Thread.sleep(120000);
             } catch (Exception e){}
         }
     }

@@ -113,5 +113,8 @@
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/applicationId"/>
+        <service
+                android:name=".MongoPull"
+                android:exported="false"/>
     </application>
 </manifest>
