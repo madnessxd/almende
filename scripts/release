@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd ../AlmendeMotivator
+ant release
+mkdir -p ../release
+cd ../release
+cp ../AlmendeMotivator/bin/AlmendeMotivator-release.apk .
