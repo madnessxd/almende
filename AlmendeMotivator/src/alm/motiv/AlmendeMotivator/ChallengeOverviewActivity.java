@@ -188,12 +188,6 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         protected void onPostExecute(String string) {
             simpleWaitDialog.dismiss();
             initListview();
-
-            /*try{
-                showNotification();
-            }catch (Exception e){
-                System.out.println(e);
-            }*/
         }
 
         @Override

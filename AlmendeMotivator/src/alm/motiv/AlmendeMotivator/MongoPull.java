@@ -19,6 +19,7 @@ import java.util.List;
  * Created by Gebruiker on 21-5-14.
  */
 
+//De super duper Background Service
 public class MongoPull extends IntentService {
 
     //Notification
@@ -33,7 +34,7 @@ public class MongoPull extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("ja");
+        System.out.println("(re)start MongoPull");
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
@@ -134,8 +135,7 @@ public class MongoPull extends IntentService {
         while(true){
             CU = new CheckUpdates();
             try {
-                System.out.println("test");
-                Thread.sleep(10000);
+                System.out.println("Checking for updates.");
                 if(CU.getStatus().toString().equals("FINISHED")){
                     CU = new CheckUpdates();
                 }
@@ -143,6 +143,7 @@ public class MongoPull extends IntentService {
                     showNotification();
                     CU.execute();
                 }
+                Thread.sleep(10000);
             } catch (Exception e){}
         }
     }
