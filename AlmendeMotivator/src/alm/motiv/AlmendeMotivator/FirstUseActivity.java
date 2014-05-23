@@ -104,8 +104,12 @@ public class FirstUseActivity extends Activity {
         }
 
         protected void onPostExecute(String result) {
-            simpleWaitDialog.setMessage("Process completed.");
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
 
             Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
             startActivity(newIntent);

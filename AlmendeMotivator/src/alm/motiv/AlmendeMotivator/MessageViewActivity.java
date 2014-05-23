@@ -158,8 +158,12 @@ public class MessageViewActivity extends Activity{
 
         @Override
         protected void onPostExecute(String result) {
-            simpleWaitDialog.setMessage("Process completed.");
-            simpleWaitDialog.dismiss();
+            try {
+                simpleWaitDialog.dismiss();
+                simpleWaitDialog = null;
+            } catch (Exception e) {
+                // nothing
+            }
             showMessages();
         }
     }

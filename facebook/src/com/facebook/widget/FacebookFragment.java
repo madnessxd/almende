@@ -39,7 +39,7 @@ import java.util.List;
  * <p/>
  * <p>The methods in this class are not thread-safe.</p>
  */
-class FacebookFragment extends Fragment {
+public class FacebookFragment extends Fragment {
 
     private SessionTracker sessionTracker;
 
