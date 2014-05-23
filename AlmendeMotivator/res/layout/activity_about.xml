@@ -8,22 +8,22 @@
     <ScrollView android:layout_width="fill_parent"
                 android:background="@color/darkerWhite"
                 android:layout_height="fill_parent">
-<LinearLayout 
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <TextView android:layout_width="fill_parent"
-              android:id="@+id/aboutHeader"
-              android:text="About Sportopia"
-              style="@style/header"
-              android:layout_height="wrap_content"/>
+            <TextView android:layout_width="fill_parent"
+                      android:id="@+id/aboutHeader"
+                      android:text="About Sportopia"
+                      style="@style/header"
+                      android:layout_height="wrap_content"/>
 
-    <TextView android:layout_width="fill_parent"
-              style="@style/normalText"
-              android:textSize="15dp"
-              android:id="@+id/aboutSportopiaContent"
-              android:text="Thank you for downloading the Sportopia app for android!
+            <TextView android:layout_width="fill_parent"
+                      style="@style/normalText"
+                      android:textSize="15dp"
+                      android:id="@+id/aboutSportopiaContent"
+                      android:text="Thank you for downloading the Sportopia app for android!
 
 Sportopia is a sport app that allows you to send challenges to your friends! How long can they run? How far
 can they swim? You can find out! Send them a challenge today! \n\n
@@ -35,21 +35,26 @@ With that information we can see if you did more or less exercise activities tha
 This is all done for a observation research. To see if a motivational sporting app really encourages people
 to go out and exercise more. We're going to write an official paper about it.\n\n
 
-Sportopia was build in cooperation with Almende and the Hogeschool van Amsterdam. "
-              android:layout_height="wrap_content"/>
-    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:src="@drawable/almende"/>
-        <ImageView android:layout_width="50dp" android:paddingLeft="15dp" android:layout_height="50dp"
-               android:src="@drawable/hva"/>
-    </LinearLayout>
+Sportopia was build in cooperation with Almende and the Hogeschool van Amsterdam. \n\n
+This publication was supported by the Dutch national program COMMIT and Amsterdam Creative Industries Centre of Expertise"
+                      android:layout_height="wrap_content"/>
+            <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                           android:src="@drawable/almende"/>
+                <ImageView android:layout_width="300dp" android:paddingLeft="15dp" android:layout_height="300dp"
+                           android:src="@drawable/hva_logo"/>
+                <ImageView android:layout_width="300dp" android:paddingLeft="15dp" android:layout_height="300dp"
+                           android:src="@drawable/acice_logo"/>
+                <ImageView android:layout_width="300dp" android:paddingLeft="15dp" android:layout_height="300dp"
+                           android:src="@drawable/commit_logo"/>
+            </LinearLayout>
 
-</LinearLayout>
-        </ScrollView>
+        </LinearLayout>
+    </ScrollView>
     <ListView android:id="@+id/left_drawer"
               android:layout_width="240dp"
               android:layout_height="match_parent"
               android:layout_gravity="start"
               style="@style/menu"/>
 
-        </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>
