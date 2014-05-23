@@ -42,4 +42,9 @@ public class TermsActivity extends Activity {
         Intent intent = new Intent(this, FirstUseActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        //Do nothing because people shouldn't cancel this
+    }
 }

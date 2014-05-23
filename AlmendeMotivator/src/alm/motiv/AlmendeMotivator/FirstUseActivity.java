@@ -38,8 +38,7 @@ public class FirstUseActivity extends Activity {
     private Spinner company;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
-
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstuse);
         settings = getSharedPreferences(PREFS_NAME, 0);
@@ -47,21 +46,21 @@ public class FirstUseActivity extends Activity {
 
         //views
 
-        hours = (EditText)findViewById(R.id.hoursInput);
-        motivation1 = (EditText)findViewById(R.id.motivationReason1);
-        motivation2 = (EditText)findViewById(R.id.motivationReason2);
-        motivation3 = (EditText)findViewById(R.id.motivationReason3);
-        motivation4 = (EditText)findViewById(R.id.motivationReason4);
-        partOfTheDay = (Spinner)findViewById(R.id.spPartOfTheDay);
-        gender = (Spinner)findViewById(R.id.spGender);
-        living = (Spinner)findViewById(R.id.spLiving);
-        company = (Spinner)findViewById(R.id.spCompany);
-        reasonsNotToExercise = (EditText)findViewById(R.id.reasonsNoToSport);
-        email = (EditText)findViewById(R.id.email);
+        hours = (EditText) findViewById(R.id.hoursInput);
+        motivation1 = (EditText) findViewById(R.id.motivationReason1);
+        motivation2 = (EditText) findViewById(R.id.motivationReason2);
+        motivation3 = (EditText) findViewById(R.id.motivationReason3);
+        motivation4 = (EditText) findViewById(R.id.motivationReason4);
+        partOfTheDay = (Spinner) findViewById(R.id.spPartOfTheDay);
+        gender = (Spinner) findViewById(R.id.spGender);
+        living = (Spinner) findViewById(R.id.spLiving);
+        company = (Spinner) findViewById(R.id.spCompany);
+        reasonsNotToExercise = (EditText) findViewById(R.id.reasonsNoToSport);
+        email = (EditText) findViewById(R.id.email);
     }
 
-    public void onSubmitFirstUsePressed(View v){
-        if(validation()&&Cookie.getInstance().internet){
+    public void onSubmitFirstUsePressed(View v) {
+        if (validation() && Cookie.getInstance().internet) {
             baseline.setHours(hours.getText().toString());
             baseline.setPartOfTheDay(partOfTheDay.getSelectedItem().toString());
             baseline.setMotivations(motivation1.getText().toString(), motivation2.getText().toString(), motivation3.getText().toString(), motivation4.getText().toString());
@@ -73,20 +72,19 @@ public class FirstUseActivity extends Activity {
 
             new DatabaseThread().execute();
 
-        } else{
+        } else {
             Toast.makeText(getApplicationContext(), "Not everything has been filled in correctly.", Toast.LENGTH_SHORT).show();
         }
     }
 
     //for validation
-    private boolean validation(){
+    private boolean validation() {
         boolean succes = true;
-        if(!Validation.isNumericWithoutLimitations(hours, true))succes=false;
-        if(!Validation.isLetters(motivation1, true))succes=false;
-        if(!Validation.isLetters(motivation2, true))succes=false;
-        if(!Validation.isLetters(motivation3, false))succes=false;
-        if(!Validation.isLetters(motivation4, false))succes=false;
-        if(!Validation.isLetters(reasonsNotToExercise, false))succes=false;
+        if (!Validation.isNumericWithoutLimitations(hours, true)) succes = false;
+        if (!Validation.hasText(motivation1)) succes = false;
+        if (!Validation.hasText(motivation2)) succes = false;
+        if (!Validation.hasText(reasonsNotToExercise)) succes = false;
+        if (!Validation.hasText(email)) succes = false;
         return succes;
     }
 
@@ -97,6 +95,7 @@ public class FirstUseActivity extends Activity {
 
     class DatabaseThread extends AsyncTask<String, String, String> {
         private ProgressDialog simpleWaitDialog;
+
         @Override
         protected void onPreExecute() {
             simpleWaitDialog = ProgressDialog.show(FirstUseActivity.this,
@@ -110,14 +109,14 @@ public class FirstUseActivity extends Activity {
 
             Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
             startActivity(newIntent);
-            editor.putBoolean("firstUse",true);
+            editor.putBoolean("firstUse", true);
             editor.commit();
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(Cookie.getInstance().internet){
-                try{
+            if (Cookie.getInstance().internet) {
+                try {
                     MongoClient client = Database.getInstance();
                     DB db = client.getDB(Database.uri.getDatabase());
 
@@ -127,11 +126,11 @@ public class FirstUseActivity extends Activity {
                     User match = new User();
                     match.put("facebookID", Cookie.getInstance().userEntryId);
 
-                    User update = (User)userCollection.findOne(match);
+                    User update = (User) userCollection.findOne(match);
                     update.put("nulmeting", baseline);
 
                     userCollection.update(match, update);
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println(e);
                 }
             }
