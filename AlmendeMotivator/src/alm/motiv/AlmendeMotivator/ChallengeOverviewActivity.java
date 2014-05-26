@@ -72,8 +72,8 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
 
         DT.execute();
 
-        Intent mServiceIntent = new Intent(ChallengeOverviewActivity.this, MongoPull.class);
-        ChallengeOverviewActivity.this.startService(mServiceIntent);
+        //Intent mServiceIntent = new Intent(ChallengeOverviewActivity.this, MongoPull.class);
+        //ChallengeOverviewActivity.this.startService(mServiceIntent);
     }
 
     //on menu pressed
