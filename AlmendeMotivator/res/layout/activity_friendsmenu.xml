@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Follow more friends +"
             android:id="@+id/followFriends"
+            android:visibility="gone"
             android:onClick="onFollowFriendsPressed"
             style="@style/button"/>
 

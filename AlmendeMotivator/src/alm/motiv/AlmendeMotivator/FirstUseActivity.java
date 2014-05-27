@@ -83,7 +83,7 @@ public class FirstUseActivity extends Activity {
         if (!Validation.isNumericWithoutLimitations(hours, true)) succes = false;
         if (!Validation.hasText(motivation1)) succes = false;
         if (!Validation.hasText(motivation2)) succes = false;
-        if (!Validation.hasText(reasonsNotToExercise)) succes = false;
+        //if (!Validation.hasText(reasonsNotToExercise)) succes = false;
         if (!Validation.hasText(email)) succes = false;
         return succes;
     }
@@ -111,7 +111,7 @@ public class FirstUseActivity extends Activity {
                 // nothing
             }
 
-            Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
+            Intent newIntent = new Intent(FirstUseActivity.this, FollowFriendActivity.class);
             startActivity(newIntent);
             finish();
             editor.putBoolean("firstUse", true);
