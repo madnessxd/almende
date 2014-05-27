@@ -38,6 +38,8 @@ public class FriendActivity extends Activity {
     private boolean initializedFriends = false;
     private int positionSelectedFriend = 0;
 
+    private FriendsUtility friendsUtility;
+
     //buttons
     private Button btnFollowMoreFriends;
 
@@ -54,6 +56,7 @@ public class FriendActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmenu);
         btnFollowMoreFriends = (Button) findViewById(R.id.followFriends);
+        btnFollowMoreFriends.setVisibility(View.VISIBLE);
         lblFriendsYouFollow = (TextView) findViewById(R.id.lblFriendsYouFollow);
 
         //for the menu
@@ -86,12 +89,9 @@ public class FriendActivity extends Activity {
                     ArrayList<GraphUser> usersArray = new ArrayList<GraphUser>();
                     usersArray.addAll(users);
 
-                    //we want to save the facebookfriends in case we need to access it somewhere else?
-                    if (Cookie.getInstance().facebookFriends == null) {
-                        Cookie.getInstance().facebookFriends = hasSportopiaAccount(usersArray);
-                    }
+                    Cookie.getInstance().facebookFriends = friendsUtility.hasSportopiaAccount(usersArray);
 
-                    addFriendsToList(compareFriends());
+                    addFriendsToList(friendsUtility.compareFriends(true));
                 }
                 return null;
             }
@@ -104,16 +104,14 @@ public class FriendActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 friend = adapter.getItem(position);
 
-                if (manageFriends) {
+               // if (manageFriends) {
                     positionSelectedFriend = position;
                     showPopUpUnfollow();
-                } else {
-                    showPopUp(position);
-                }
+                //} //else {
+                   // showPopUp(position);
+               // }
             }
         });
-
-
     }
 
     //we want to sort the usersArray alphabetically
@@ -166,7 +164,7 @@ public class FriendActivity extends Activity {
         helpDialog.dismiss();
     }
 
-    private void showPopUp(final int position) {
+   /* private void showPopUp(final int position) {
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
         helpBuilder.setTitle(friend.getName());
         helpBuilder.setMessage("Do you want to follow " + friend.getName());
@@ -187,12 +185,15 @@ public class FriendActivity extends Activity {
 
         AlertDialog helpDialog = helpBuilder.create();
         helpDialog.show();
-    }
+    }*/
 
     public void addFriendsToList(ArrayList<GraphUser> users) {
-        adapter.setModels(users);
+        if(users!=null){
+            adapter.setModels(users);
+        }
     }
 
+    /*
     public ArrayList compareFriends() {
         ArrayList<GraphUser> facebookFriends = Cookie.getInstance().facebookFriends;
         ArrayList<BasicDBObject> currentFriends = new ArrayList<BasicDBObject>();
@@ -232,7 +233,7 @@ public class FriendActivity extends Activity {
             Collections.sort(result, sortUsers);
             return result;
         }
-        return facebookFriends;
+        return currentFriends;
 
     }
 
@@ -256,21 +257,25 @@ public class FriendActivity extends Activity {
             }
             return result;
         }
-        return null;
-    }
+        return result;
+    }*/
 
     @Override
     public void onBackPressed() {
         finish();
         Intent i = new Intent(FriendActivity.this, ChallengeOverviewActivity.class);
         startActivity(i);
+        finish();
     }
 
     public void onFollowFriendsPressed(View v) {
-        manageFriends = false;
-        btnFollowMoreFriends.setVisibility(View.GONE);
-        lblFriendsYouFollow.setText("Choose friends to follow");
-        addFriendsToList(compareFriends());
+       // manageFriends = false;
+       // btnFollowMoreFriends.setVisibility(View.GONE);
+        //lblFriendsYouFollow.setText("Choose friends to follow");
+        //addFriendsToList(compareFriends());
+        Intent intent = new Intent(this, FollowFriendActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void onInvitePressed(View v){
@@ -302,6 +307,8 @@ public class FriendActivity extends Activity {
                 if (args[0].equals("select")) {
                     user = (User) userCollection.find(match).toArray().get(0);
                     allUsers = userCollection.find().toArray();
+
+                    friendsUtility = new FriendsUtility(user, allUsers);
                 } else {
                     //update the user with new friends/followers
                     User aFriend = new User();

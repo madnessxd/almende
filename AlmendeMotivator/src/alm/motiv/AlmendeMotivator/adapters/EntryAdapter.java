@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import alm.motiv.AlmendeMotivator.Cookie;
 import alm.motiv.AlmendeMotivator.Database;
 import alm.motiv.AlmendeMotivator.R;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
@@ -38,11 +39,10 @@ public class EntryAdapter extends ArrayAdapter<Item> {
         vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        boolean sentChallenge = false;
         View v = convertView;
-       // DatabaseThread db = new DatabaseThread();
         final Item i = items.get(position);
         if (i != null) {
             if (i.isSection()) {
@@ -58,79 +58,29 @@ public class EntryAdapter extends ArrayAdapter<Item> {
 
             } else {
                 Challenge ei = (Challenge) i;
+                if (Cookie.getInstance().userEntryId.equals(ei.getChallenger())) {
+                    sentChallenge = true;
+                }
                 v = vi.inflate(R.layout.list_item_entry, null);
                 final TextView title = (TextView) v.findViewById(R.id.list_item_entry_title);
                 final TextView challengee = (TextView) v.findViewById(R.id.list_item_entry_summary);
                 final TextView status = (TextView) v.findViewById(R.id.list_item_entry_status);
-
-
                 if (title != null)
                     title.setText(ei.getTitle());
-                if (challengee != null)
-                    challengee.setText(ei.getChallengeeName());
 
-                    //This gem gives the challengee's facebookID to the databaseThread. The dbThread then runs so we give the Thread 2 seconds to complete. After that we -
-                    //set the challengeeName with the result of the thread. Added a while loop so application waits until all names are loaded.
-                   /* db.setChallengeeID(ei.getChallengee());
-                db.execute();
-                while (db.getChallengeeName() == null) {
-                    try {
-                        db.get(1000, TimeUnit.MILLISECONDS);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (TimeoutException e) {
-                        e.printStackTrace();
+                if (challengee != null)
+                    if (sentChallenge) {
+                        challengee.setText(ei.getChallengeeName());
+                    } else {
+                        challengee.setText(ei.getChallengerName());
                     }
-                    challengee.setText(db.getChallengeeName());
-                }*/
                 if (status != null)
-                    status.setText("Status: "+ei.getStatus());
+                    status.setText("Status: " + ei.getStatus());
             }
         }
         return v;
     }
-
-   /* class DatabaseThread extends AsyncTask<String, String, String> {
-
-        private String challengeeName;
-        private String challengeeID;
-
-        @Override
-        protected String doInBackground(String... strings) {
-            MongoClient client = Database.getInstance();
-            DB db = client.getDB(Database.uri.getDatabase());
-            DBCollection userCollection = db.getCollection("user");
-            userCollection.setObjectClass(User.class);
-
-            User curUser = new User();
-            curUser.put("facebookID", challengeeID);
-            User newUser = (User) userCollection.find(curUser).toArray().get(0);
-            setChallengeeName(newUser.getName());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-        }
-
-        public String getChallengeeName() {
-            return challengeeName;
-        }
-
-        public void setChallengeeName(String challengeeName) {
-            this.challengeeName = challengeeName;
-        }
-
-        public String getChallengeeID() {
-            return challengeeID;
-        }
-
-        public void setChallengeeID(String challengeeID) {
-            this.challengeeID = challengeeID;
-        }
-    }*/
-
 }
+
+
+
