@@ -53,7 +53,7 @@ public class FollowFriendActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmenu);
         lblFriendsYouFollow = (TextView) findViewById(R.id.lblFriendsYouFollow);
-        lblFriendsYouFollow.setText("Select a friend to follow");
+        lblFriendsYouFollow.setText("Select friends you wish to follow");
 
         //for the menu
         mMenuOptions = getResources().getStringArray(R.array.profile_array);

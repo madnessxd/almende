@@ -111,7 +111,7 @@ public class FirstUseActivity extends Activity {
                 // nothing
             }
 
-            Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
+            Intent newIntent = new Intent(FirstUseActivity.this, FollowFriendActivity.class);
             startActivity(newIntent);
             finish();
             editor.putBoolean("firstUse", true);
