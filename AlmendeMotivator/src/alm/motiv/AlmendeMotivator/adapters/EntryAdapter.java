@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import alm.motiv.AlmendeMotivator.Cookie;
 import alm.motiv.AlmendeMotivator.Database;
 import alm.motiv.AlmendeMotivator.R;
 import alm.motiv.AlmendeMotivator.models.ChallengeHeader;
@@ -57,6 +58,9 @@ public class EntryAdapter extends ArrayAdapter<Item> {
 
             } else {
                 Challenge ei = (Challenge) i;
+                if (Cookie.getInstance().userEntryId.equals(ei.getChallenger())) {
+                    sentChallenge = true;
+                }
                 v = vi.inflate(R.layout.list_item_entry, null);
                 final TextView title = (TextView) v.findViewById(R.id.list_item_entry_title);
                 final TextView challengee = (TextView) v.findViewById(R.id.list_item_entry_summary);
@@ -66,7 +70,7 @@ public class EntryAdapter extends ArrayAdapter<Item> {
 
                 if (challengee != null)
                     if (sentChallenge) {
-                        challengee.setText(ei.getChallengee());
+                        challengee.setText(ei.getChallengeeName());
                     } else {
                         challengee.setText(ei.getChallengerName());
                     }
