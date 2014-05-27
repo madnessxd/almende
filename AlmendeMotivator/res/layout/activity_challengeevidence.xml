@@ -18,7 +18,7 @@
         <EditText android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:id="@+id/txtAmountHours"
                   android:inputType="numberDecimal"
-                  android:hint="Amount of hours"/>
+                  android:hint="Amount of minutes"/>
         <TextView android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   style="@style/header"
