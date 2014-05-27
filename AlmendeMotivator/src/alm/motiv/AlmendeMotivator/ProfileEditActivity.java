@@ -1,8 +1,5 @@
 package alm.motiv.AlmendeMotivator;
 
-import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
-import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
-import alm.motiv.AlmendeMotivator.models.Level;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -15,9 +12,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 import com.mongodb.*;
-import org.w3c.dom.Text;
-
-import java.util.concurrent.ExecutionException;
 
 public class ProfileEditActivity extends Activity{
     //menu

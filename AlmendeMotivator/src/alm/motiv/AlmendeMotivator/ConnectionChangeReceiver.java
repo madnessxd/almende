@@ -1,6 +1,5 @@
 package alm.motiv.AlmendeMotivator;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,23 +22,13 @@ public class ConnectionChangeReceiver extends BroadcastReceiver
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(     ConnectivityManager.TYPE_MOBILE );
 
-        if(!(connectivityManager.getActiveNetworkInfo() != null &&
-                connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting())){
+        if(!(activeNetInfo != null && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting())){
             Cookie.getInstance().internet=false;
             Toast.makeText( context, "You don't have internet. Please connect and reload." , Toast.LENGTH_LONG ).show();
 //            showError(context);
         }else{
             Cookie.getInstance().internet=true;
         }
-
-        /*if ( activeNetInfo != null )
-        {
-            Toast.makeText(context, "Active Network Type : " + activeNetInfo.getTypeName(), Toast.LENGTH_SHORT).show();
-        }
-        if( mobNetInfo != null )
-        {
-            Toast.makeText( context, "Mobile Network Type : " + mobNetInfo.getTypeName() , Toast.LENGTH_LONG ).show();
-        }*/
     }
 
     public static void showError(final Context context){

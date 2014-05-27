@@ -92,9 +92,11 @@ public class ChallengeOverviewActivity extends Activity implements OnItemClickLi
         //if we don't have an agreement yet on the terms of use, we redirect the user
         if (!redirect) {
             Intent intent = new Intent(this, TermsActivity.class);
+            finish();
             startActivity(intent);
         } else if (!firstUse) {
             Intent intent = new Intent(this, FirstUseActivity.class);
+            finish();
             startActivity(intent);
         }
 

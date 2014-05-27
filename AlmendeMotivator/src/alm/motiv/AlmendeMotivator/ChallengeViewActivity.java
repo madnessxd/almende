@@ -1,8 +1,6 @@
 package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.adapters.MessageAdapter;
-import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
-import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.Message;
 import alm.motiv.AlmendeMotivator.models.User;

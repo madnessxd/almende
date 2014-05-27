@@ -1,7 +1,5 @@
 package alm.motiv.AlmendeMotivator;
 
-import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
-import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.models.Challenge;
 import alm.motiv.AlmendeMotivator.models.User;
 import android.app.Activity;
@@ -9,17 +7,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.facebook.*;
@@ -34,7 +27,6 @@ import java.util.Date;
  * Created by Kevin on 02/04/2014.
  */
 public class ChallengeCreateActivity extends Activity {
-    Intent k;
     private String[] mMenuOptions;
     private ListView mDrawerList;
 
@@ -102,23 +94,6 @@ public class ChallengeCreateActivity extends Activity {
             }
         });
 
-        /*spinnerFriends = (Spinner) findViewById(R.id.spinner_getFriends);
-        //GET FRIENDS
-        spinnerFriends.setOnTouchListener(Spinner_OnTouch);
-
-        spinnerFriends.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                challengee = facebookFriends[spinnerFriends.getSelectedItemPosition()];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });*/
-
         DatabaseThread2 dbT = new DatabaseThread2();
         dbT.execute();
 
@@ -169,20 +144,6 @@ public class ChallengeCreateActivity extends Activity {
             Menu.selectItem(position, ChallengeCreateActivity.this);
         }
     }
-
-    /*private View.OnTouchListener Spinner_OnTouch = new View.OnTouchListener() {
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                updateFriends();
-            }
-            return false;
-        }
-    };
-
-   /* public void updateFriends() {
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, facebookFriendsName);
-        spinnerFriends.setAdapter(spinnerArrayAdapter);
-    }*/
 
     public void createChallenge() {
         if (validation()) {
@@ -399,7 +360,6 @@ public class ChallengeCreateActivity extends Activity {
                     System.out.println(e);
                 }
             }
-
             return null;
         }
     }

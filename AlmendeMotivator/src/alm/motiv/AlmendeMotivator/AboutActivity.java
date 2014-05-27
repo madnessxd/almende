@@ -1,7 +1,5 @@
 package alm.motiv.AlmendeMotivator;
 
-import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
-import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

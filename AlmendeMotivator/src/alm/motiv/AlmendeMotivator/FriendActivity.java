@@ -1,7 +1,6 @@
 package alm.motiv.AlmendeMotivator;
 
 import alm.motiv.AlmendeMotivator.adapters.FriendsAdapter;
-import alm.motiv.AlmendeMotivator.facebook.FacebookMainActivity;
 import alm.motiv.AlmendeMotivator.facebook.FacebookMainFragment;
 import alm.motiv.AlmendeMotivator.facebook.FacebookManager;
 import alm.motiv.AlmendeMotivator.misc.CustomCallback;
@@ -14,18 +13,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
-import com.facebook.model.GraphObject;
 import com.facebook.model.GraphUser;
 import com.mongodb.*;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class FriendActivity extends Activity {
@@ -135,19 +129,6 @@ public class FriendActivity extends Activity {
 
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
         helpBuilder.setView(inflater.inflate(R.layout.popup_friend, null));
-        /*helpBuilder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-        helpBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing
-            }
-        });*/
 
         helpDialog = helpBuilder.create();
         helpDialog.show();
@@ -157,6 +138,7 @@ public class FriendActivity extends Activity {
         Intent displayFriend = new Intent(this, ProfileActivity.class);
         displayFriend.putExtra("viewFriendProfile", true);
         displayFriend.putExtra("facebookIdFriend", friend.getId());
+        finish();
         startActivity(displayFriend);
     }
 

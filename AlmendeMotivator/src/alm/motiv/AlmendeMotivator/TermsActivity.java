@@ -39,6 +39,7 @@ public class TermsActivity extends Activity {
         editor.commit();
 
         //redirect user to first use screen
+        finish();
         Intent intent = new Intent(this, FirstUseActivity.class);
         startActivity(intent);
     }
