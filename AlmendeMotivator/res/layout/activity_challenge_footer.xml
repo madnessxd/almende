@@ -35,7 +35,7 @@
               android:visibility="gone"
               android:id="@+id/txtEvidence"
               style="@style/normalText"
-              android:text="The evidence will be downloaded to the download directory of your SD cart"
+              android:text="The evidence will be downloaded to the download directory of your SD card"
               android:layout_height="wrap_content"/>
         <Button android:id="@+id/btnApprove"
                 android:layout_width="fill_parent"
