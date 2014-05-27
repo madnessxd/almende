@@ -113,6 +113,7 @@ public class FirstUseActivity extends Activity {
 
             Intent newIntent = new Intent(FirstUseActivity.this, FriendActivity.class);
             startActivity(newIntent);
+            finish();
             editor.putBoolean("firstUse", true);
             editor.commit();
         }
