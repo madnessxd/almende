@@ -204,7 +204,8 @@
                       android:id="@+id/txtReward"
                       style="@style/editText"
                     />
-            <Button android:layout_width="fill_parent" android:layout_height="wrap_content"
+            <Button android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/btnCreateChallenge"
                     android:text="Create the challenge +"
                     style="@style/button"/>

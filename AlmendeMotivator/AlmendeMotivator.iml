@@ -24,8 +24,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="mongo-java-driver-2.11.0" level="project" />
-    <orderEntry type="library" name="picasso-2.2.0" level="project" />
+    <orderEntry type="library" name="libGoogleAnalyticsServices" level="project" />
   </component>
 </module>
 

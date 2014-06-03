@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
@@ -75,6 +76,20 @@ public class FirstUseActivity extends Activity {
         } else {
             Toast.makeText(getApplicationContext(), "Not everything has been filled in correctly.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //google analytics
+        EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //google analytics
+        EasyTracker.getInstance(this).activityStop(this);  // Add this method.
     }
 
     //for validation

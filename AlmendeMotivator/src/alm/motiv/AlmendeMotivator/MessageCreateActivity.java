@@ -21,6 +21,7 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.mongodb.*;
 import com.squareup.picasso.Picasso;
 
@@ -131,6 +132,20 @@ public class MessageCreateActivity extends Activity {
             return false;
         }
     };*/
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //google analytics
+        EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //google analytics
+        EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+    }
 
     public void updatePicture(String id, String name, ImageView userPic, TextView userName) {
         userName.setText(name);

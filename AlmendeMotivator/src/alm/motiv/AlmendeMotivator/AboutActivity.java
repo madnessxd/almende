@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  * Created by AsterLaptop on 4/22/14.
@@ -33,6 +34,19 @@ public class AboutActivity extends Activity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //google analytics
+        EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //google analytics
+        EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+    }
 
     //on menu pressed
     public boolean onKeyUp(int keyCode, KeyEvent event) {

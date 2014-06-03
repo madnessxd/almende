@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.mongodb.*;
 
 public class ProfileActivity extends Activity{
@@ -54,6 +55,19 @@ public class ProfileActivity extends Activity{
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        //google analytics
+        EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //google analytics
+        EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+    }
 
     //on menu pressed
     public boolean onKeyUp(int keyCode, KeyEvent event) {

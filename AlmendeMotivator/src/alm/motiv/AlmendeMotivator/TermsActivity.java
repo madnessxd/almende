@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  * Created by AsterLaptop on 4/23/14.
@@ -14,6 +15,20 @@ public class TermsActivity extends Activity {
     private static String PREFS_NAME = "sportopiaprefs";
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //google analytics
+        EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //google analytics
+        EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+    }
 
     @Override
         public void onCreate(Bundle savedInstanceState){

@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.*;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.mongodb.*;
 import com.squareup.picasso.Picasso;
 
@@ -70,6 +72,8 @@ public class ChallengeCreateActivity extends Activity {
 
     private ProgressDialog simpleWaitDialog;
 
+    private EasyTracker easyTracker;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +122,20 @@ public class ChallengeCreateActivity extends Activity {
         btnCreateChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // May return null if a EasyTracker has not yet been initialized with a
+                // property ID.
+
+                // MapBuilder.createEvent().build() returns a Map of event fields and values
+                // that are set and sent with the hit.
+                easyTracker.send(MapBuilder
+                        .createEvent("ui_action",     // Event category (required)
+                                "button_press",  // Event action (required)
+                                "create_challenge",   // Event label
+                                null)            // Event value
+                        .build()
+                );
+
                 createChallenge();
             }
         });
@@ -311,6 +329,23 @@ public class ChallengeCreateActivity extends Activity {
             Intent goBack = new Intent(ChallengeCreateActivity.this, ChallengeOverviewActivity.class);
             startActivity(goBack);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //google analytics
+        easyTracker = EasyTracker.getInstance(this);  // Add this method.
+        easyTracker.activityStart(this);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //google analytics
+        //EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+        easyTracker.activityStop(this);
     }
 
     class DatabaseThread2 extends AsyncTask<String, String, String> {
